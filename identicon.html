@@ -1,9 +1,12 @@
-<div style="text-align:center"><input type="text" style="font-size:36px; width: 500px;" placeholder="Enter text here" oninput="generate();" id="text" /><br />
-<input type="number" style="font-size:36px; width: 500px;" placeholder="Pseudo-random seed" oninput="generate();" id="salt" /><br />
+<div style="text-align:center"><input type="text" style="font-size:36px; width: 570px;" placeholder="Enter text here" oninput="generate();" id="text" /><br />
+<input type="number" style="font-size:36px; width: 450px;" placeholder="Pseudo-random seed" oninput="generate();" id="salt" /><input type="button" style="font-size:36px; width: 120px;" value="seed" onclick="genSeed();generate();" id="salt" /><br />
 <canvas width="420" height="420" id="identicon"></canvas></div>
 <script>
 var generate = function () {
     render(document.getElementById("text").value, parseInt(document.getElementById("salt").value))
+}
+var genSeed = function () {
+    document.getElementById("salt").value = (Math.random()*100000 + 1) | 0;
 }
 var hash = function (text, seed) {
    var initseed = 1097700957, temp; // from http://www.randomnumbers.info

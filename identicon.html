@@ -1,7 +1,6 @@
-<div style="text-align:center"><input type="text" style="font-size:36px; width: 570px;" placeholder="Enter text here" oninput="generate();" id="text" /><br />
-<input type="number" style="font-size:36px; width: 450px;" placeholder="Pseudo-random seed" oninput="generate();" id="salt" /><input type="button" style="font-size:36px; width: 120px;" value="seed" onclick="genSeed();generate();" id="salt" /><br />
-<canvas width="420" height="420" id="identicon"></canvas></div>
-<script>
+<html>
+<head>
+<script type="text/javascript">
 var generate = function () {
     render(document.getElementById("text").value, parseInt(document.getElementById("salt").value))
 }
@@ -64,4 +63,23 @@ var render = function (text, seed) {
         (pattern & table[i * 3 + 2]) && (b.fillRect(175, 35 + 70 * i, 70, 70));
     }
 }
+var downloadURL = function () {
+    var c = document.getElementById("identicon");
+    // var ctx = c.getContext("2d");
+	location.href = c.toDataURL("image/png").replace(/image\/png/gi, "application/octet-stream");
+}
+var viewURL = function () {
+    var c = document.getElementById("identicon");
+    // var ctx = c.getContext("2d");
+	location.href = c.toDataURL("image/png")//.replace(/image\/png/gi, "application/octet-stream");
+}
 </script>
+</head>
+<body>
+<div style="text-align:center"><input type="text" style="font-size:36px; width: 570px;" placeholder="Enter text here" oninput="generate();" id="text" /><br />
+<input type="number" style="font-size:36px; width: 450px;" placeholder="Pseudo-random seed" oninput="generate();" id="salt" /><input type="button" style="font-size:36px; width: 120px;" value="seed" onclick="genSeed();generate();" id="salt" /><br />
+<canvas width="420" height="420" id="identicon"></canvas><br />
+<a href="javascript:void(0);" onclick="downloadURL();">download image</a>
+<a href="javascript:void(0);" onclick="viewURL();">view image</a></div>
+</body>
+</html>

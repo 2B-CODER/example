@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="LifeViewer" content="viewer textarea 60 hide" />
+		<script src="http://lazyslug.no-ip.biz/lifeview/plugin/js/lv-plugin.js"></script>
+		<script src="ViewerCode.js"></script>
+		<script>
+			temp = sessionStorage.getItem("viewer_code");
+			if (temp != null) {
+				LifeViewerCode = temp;
+			} else {
+				temp = location.search.match("[?&]viewer_code=([^&=]*)");
+				if (temp != null) {
+					LifeViewerCode = decodeURIComponent(temp[1]);
+				}
+			}
+			// sessionStorage.removeItem("viewer_code");
+		</script>
+		<title>LifeViewer Plugin Tests</title>
+	</head>
+	<body>
+		<h1>LifeViewer Plugin Tests</h1>
+		<!-- h2>LifeViewer test</h2 -->
+		<div class="viewer">
+			<a href="" onclick="updateViewer(this); return false;">View Standalone</a><br />
+			<a href="javascript:void(0);" onclick="sessionStorage.setItem('viewer_code', document.getElementById('InputViewerCode').value);location.href=location.href.replace(/\?.*/,'');/*location.reload();*/">Submit code</a><br />
+			<script type="text/javascript">document.write("<textarea rows='10' cols='70' id='InputViewerCode' ",/*readonly='readonly',*/">",LifeViewerCode.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"),"</textarea>");</script>
+			<br />
+			<canvas width="480" height="560" id="LifeViewerCanvas"></canvas> 
+		</div>
+		<br />
+		<br />
+		<p>LifeViewer Plugin by Chris Rowett</p>
+	</body>
+</html>

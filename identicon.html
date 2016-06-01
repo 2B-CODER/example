@@ -8,7 +8,7 @@ var genSeed = function () {
     document.getElementById("salt").value = (Math.random()*100000 + 1) | 0;
 }
 var hash = function (text, seed) {
-   var initseed = 1097700957, temp; // from http://www.randomnumbers.info
+   var initseed = 1528656379, temp; // from http://www.randomnumbers.info
    seed = (((seed * 19116) << 15) + (seed * 31049)) | 0;
    seed = seed % 2147483647;
    for (var i = 0, len = text.length; i < len; ++i) {
@@ -19,11 +19,14 @@ var hash = function (text, seed) {
    initseed += initseed << 5;
    initseed ^= initseed << 5;
    initseed += initseed << 7;
-   initseed ^= initseed >> 3;
+   initseed ^= initseed >>> 3;
    initseed += initseed << 4;
    initseed ^= initseed << 7;
    initseed = initseed * 19;
    initseed ^= initseed >>> 6;
+   initseed += initseed << 1;
+   initseed ^= initseed >>> 3;
+   initseed *= 23;
    return initseed | 0;
 }
 var colors = [

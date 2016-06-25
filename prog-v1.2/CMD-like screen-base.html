@@ -194,7 +194,7 @@ if (!String.prototype.repeat) {
 	  var xlat2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	  fn_list = [drawChar,drawInline,drawRepeatH,drawRepeatV,drawMultiline,clearScreen,undefined,function(code) {
 		var p1, p2, p3, r;
-		for (var i = 0; i < 6000; i++) {
+		for (var i = 0; i < 2000; i++) {
 		  p1 = xlatTable[code.charCodeAt(3*i)];
 		  p2 = xlatTable[code.charCodeAt(3*i+1)];
 		  p3 = xlatTable[code.charCodeAt(3*i+2)];
@@ -206,7 +206,7 @@ if (!String.prototype.repeat) {
 		var r, p1, p2, p3, s = "";
 		for (var y = 0; y < 25; ++y) {
 		  for (var x = 0; x < 80; ++x) {
-			r = screen_memory[x+y*80];
+			r = screen_memory[x+y*80] & 0xffff;
 			p3 = (r / 2704) | 0;
 			r %= 2704;
 			p2 = (r / 52) | 0;
@@ -225,10 +225,11 @@ function(a) {return a.replace(/\r?\n/g,"\r\n")},
 function(a) {return a.replace(/%([\s\S]{2})/g,function(a,b){return String.fromCharCode(parseInt(b, 16))}).replace(/[\r\n]/g,"");},
 function(a) {
     a = a.split('');
-	for (var i = 0, j = a.length, b = "", c; c = a[i], i < j; ++i) {
+	for (var i = 0, j = a.length, b = "", c, p = true; c = a[i], i < j; ++i) {
 		if (c === "\\") {
 			var d = a[++i], e;
 			switch (d) {
+				case ".": b += "\x04"; break;
 				case "a": b += "\x07"; break;
 				case "b": b += "\x08"; break;
 				case "t": b += "\t"; break;
@@ -238,8 +239,10 @@ function(a) {
 				case "r": b += "\r"; break;
 				case "<": b += "\x0E"; break;
 				case ">": b += "\x0F"; break;
+				case "d": b += "\x10"; break;
 				case "e": b += "\x1B"; break;
-				case "c": b += String.fromCharCode(a[i].charCodeAt(0) ^ 0x40); break;
+				case "c": b += String.fromCharCode(a[++i].charCodeAt(0) ^ 0x40); break;
+				case "i": p = !p; break;
 				case "x": b += String.fromCharCode(parseInt(a[++i]+a[++i],16)); break;
 				case "y": b += String.fromCharCode(26, parseInt(a[++i]+a[++i],16)); break;
 				case "z": b += "\x1F"; break;
@@ -253,7 +256,7 @@ function(a) {
 				case "'": while (e = (d = a[++i]) !== "\n") { if (i >= j) {break;} b += d; }; b += "\r\n"; break;
 				case "\n": break;
 			}
-		} else if (c === "#") {
+		} else if (c === "#" && p) {
 			var d;
 			while (i < j && (d = a[++i] !== "\n")) {}
 			--i;

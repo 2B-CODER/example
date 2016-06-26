@@ -1,0 +1,202 @@
+<script type="text/javascript">
+var $ = function(id) { return document.getElementById(id); };
+var atoi = function(a) { return a.charCodeAt(0); };
+var itoa = function(i) { return String.fromCharCode(i); };
+var f06 = function() { $("b07").value = itoa($("b06").value); sbmt1(); };
+var f07 = function() { $("b06").value = atoi($("b07").value); sbmt1(); };
+var sbmt1 = function() { $("b06").value = $("b06").value & 255;
+$("at1").value = 
+$("b15").checked<<15|
+$("b14").checked<<14|
+$("b13").checked<<13|
+$("b12").checked<<12|
+$("b11").checked<<11|
+$("b10").checked<<10|
+$("b09").checked<<9|
+$("b08").checked<<8|
+(+$("b06").value);
+$("at2").value = cv2(+$("at1").value);
+}
+var xlatTable = [
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,
+-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1,
+];
+var xlat2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+var cv1 = function(code) {
+	var p1, p2, p3;
+	p1 = xlatTable[code.charCodeAt(0)];
+	p2 = xlatTable[code.charCodeAt(1)];
+	p3 = xlatTable[code.charCodeAt(2)];
+	var r = p1 + p2*52 + p3*2704;
+	$("b16").checked = r >> 16;
+	return r & 0xffff;
+};
+var cv2 = function (r) {
+	r += $("b16").checked << 16;
+	var p1, p2, p3;
+	p3 = (r / 2704) | 0;
+	r %= 2704;
+	p2 = (r / 52) | 0;
+	p1 = r % 52;
+	return xlat2.charAt(p1) + xlat2.charAt(p2) + xlat2.charAt(p3);
+}
+var sbmt2 = function () { $("at1").value = $("at1").value & 0xffff; $("at2").value = cv2(+$("at1").value); cv3(); }
+var sbmt3 = function () { $("at1").value = cv1($("at2").value); cv3(); }
+var cv3 = function () {
+	$("b15").checked = ($("at1").value >> 15) & 1;
+	$("b14").checked = ($("at1").value >> 14) & 1;
+	$("b13").checked = ($("at1").value >> 13) & 1;
+	$("b12").checked = ($("at1").value >> 12) & 1;
+	$("b11").checked = ($("at1").value >> 11) & 1;
+	$("b10").checked = ($("at1").value >> 10) & 1;
+	$("b09").checked = ($("at1").value >> 9) & 1;
+	$("b08").checked = ($("at1").value >> 8) & 1;
+	$("b06").value = $("at1").value & 0xff;
+	$("b07").value = itoa($("at1").value & 0xff);
+}
+var saveMem = new Int32Array(2000);
+var stackPart = new Int32Array(65536);
+var stackPointer = 0;
+var d2b = function (num) {
+var d2btable = "0123456789ABCDEF", a0 = "";
+var a1 = d2btable.charAt((num>>12)&15);
+var a2 = d2btable.charAt((num>>8)&15);
+var a3 = d2btable.charAt((num>>4)&15);
+var a4 = d2btable.charAt(num&15);
+if (num >= 40960) {a0 = "0";}
+return a0+a1+a2+a3+a4+"h";
+}
+var pushArr = function() {
+stackPointer = (stackPointer + 65535) % 65536;
+$("at3").value = d2b(stackPointer);
+stackPart[stackPointer] = ($("at1").value | ($("b16").checked << 16));
+}
+var popArr = function() {
+$("at1").value = stackPart[stackPointer] & 65535
+$("b16").checked = stackPart[stackPointer] >> 16;
+sbmt2();
+stackPointer = (stackPointer + 1) % 65536;
+$("at3").value = d2b(stackPointer);
+}
+var pushPos = function() {
+stackPointer = (stackPointer + 65535) % 65536;
+$("at3").value = d2b(stackPointer);
+stackPart[stackPointer] = ($("at4").value | ($("at5").value << 8));
+}
+var popPos = function() {
+$("at4").value = (stackPart[stackPointer] & 255) % 80;
+$("at5").value = ((stackPart[stackPointer] >> 8) & 255) % 25;
+stackPointer = (stackPointer + 1) % 65536;
+$("at3").value = d2b(stackPointer);
+}
+var sbmt4 = function (obj, mod) {
+	obj.value %= mod
+}
+var loadArr = function() {
+var address = +$("at4").value + 80 * $("at5").value;
+$("at1").value = saveMem[address] & 65535
+$("b16").checked = saveMem[address] >> 16;
+sbmt2();
+}
+var storeArr = function() {
+var address = +$("at4").value + 80 * $("at5").value;
+$("at3").value = d2b(stackPointer);
+saveMem[address] = ($("at1").value | ($("b16").checked << 16));
+}
+
+var cv4 = function(code) {
+	var p1, p2, p3;
+	p1 = xlatTable[code.charCodeAt(0)];
+	p2 = xlatTable[code.charCodeAt(1)];
+	p3 = xlatTable[code.charCodeAt(2)];
+	var r = p1 + p2*52 + p3*2704;
+	return r;
+};
+var cv5 = function (r) {
+	var p1, p2, p3;
+	p3 = (r / 2704) | 0;
+	r %= 2704;
+	p2 = (r / 52) | 0;
+	p1 = r % 52;
+	return xlat2.charAt(p1) + xlat2.charAt(p2) + xlat2.charAt(p3);
+}
+var generCPart = function () {
+var b = "";
+for (var i = 0; i < 2000; ++i) {
+b += cv5(saveMem[i]);
+}
+$("at6").value = b;
+}
+var parseCPart = function () {
+var b = $("at6").value;
+var B = b.length % 3;
+B > 0 && (b += "A");
+B === 1 && (b += "A");
+for (var i = 0, o = 0; i < 2000; ++i, o += 3) {
+saveMem[i] = cv4(b.substring(o, o+3));
+}
+}
+var b2d = function (str) {
+var fcc = str.charCodeAt(0);
+if(fcc >= 48 && fcc < 58) { return parseInt( str.match(/^[0-9a-fA-F]+(?:h)$|0x[0-9a-fA-F]+/), 16 ) & 0xFFFF; }
+return 0;
+}
+var cv6 = function(obj, mod) { sbmt4(obj, 65536); $("at8").value = d2b(+obj.value); }
+var cv7 = function(obj) {$("at7").value = b2d($("at8").value)}
+</script>
+<table cellpadding="2" border="1" style="border:1px solid black;border-collapse:collapse;">
+<tr>
+<td>
+<pre>
+   blinking: <input type="checkbox" id="b16" onclick="sbmt1()" /> 
+ background: { I=<input type="checkbox" id="b15" onclick="sbmt1()" />, R=<input type="checkbox" id="b14" onclick="sbmt1()" />, G=<input type="checkbox" id="b13" onclick="sbmt1()" />, B=<input type="checkbox" id="b12" onclick="sbmt1()" /> }
+ foreground: { I=<input type="checkbox" id="b11" onclick="sbmt1()" />, R=<input type="checkbox" id="b10" onclick="sbmt1()" />, G=<input type="checkbox" id="b09" onclick="sbmt1()" />, B=<input type="checkbox" id="b08" onclick="sbmt1()" /> }
+  character: <input type="text" id="b07" style="width:22px" oninput="f07()" />, character code=<input type="number" id="b06" style="width:44px" max="255" min="0" oninput="f06()" />
+</pre>
+</td>
+<td rowspan="2">
+<pre>
+ attribute number: <input type="number" id="at1" style="width:70px" max="65535" min="0" oninput="sbmt2()" />
+   attribute code: <input type="text" id="at2" style="width:70px" maxlength="3" oninput="sbmt3()" />
+    stack pointer: <input type="text" id="at3" style="width:70px" readonly="readonly" value="0000h" />
+<div style="text-align: center; margin-bottom: -1.25em"><input type="button" onclick="pushArr();" value="push" /> <input type="button" onclick="popArr();" value="pop" /></div>
+------------------------------
+ X: <input type="number" id="at4" style="width:70px" max="79" min="0" oninput="sbmt4(this, 80)" value="0" /> Y: <input type="number" id="at5" style="width:70px" max="24" min="0" oninput="sbmt4(this, 25)" value = "0" />
+<div style="text-align: center; margin-bottom: -1.75em"><input type="button" onclick="storeArr();" value="store" /> <input type="button" onclick="loadArr();" value="load"
+/> <input type="button" onclick="pushPos();" value="push" /> <input type="button" onclick="popPos();" value="pop" /></div>
+</pre>
+</td>
+</tr>
+<tr>
+<td><div style="text-align: center;">code:
+<input type="button" onclick="generCPart()" value="generate" />
+<input type="button" onclick="parseCPart()" value="parse" />
+<br />
+<textarea id="at6" style="width: 100%; height: 150px;"></textarea></div></td>
+</tr>
+<tr>
+<td colspan="2">
+<div style="text-align: center;">
+<input type="number" oninput="cv6(this, 65536)" id="at7" placeholder="decimal" />
+&lt;--&gt;
+<input type="text" oninput="cv7(this)" id="at8" placeholder="hexadecimal" />
+<br />
+<input type="button" onclick="$('at7').value = stackPointer; $('at7').oninput();" value="stack pointer" />
+<input type="button" onclick="$('at7').value = stackPart[+$('at7').value]&gt;&gt;&gt;16; $('at7').oninput();" value="view high 16 bits" />
+<input type="button" onclick="$('at7').value = stackPart[+$('at7').value]&amp;0xFFFF; $('at7').oninput();" value="view low 16 bits" />
+<br />
+<input type="button" onclick="$('at7').value = (+$('at7').value + 1)&amp;0xFFFF; $('at7').oninput();" value="increment by 1" />
+<input type="button" onclick="$('at7').value = ($('at7').value - 1)&amp;0xFFFF; $('at7').oninput();" value="decrement by 1" />
+<br />
+<input type="button" onclick="$('at7').value = (+$('at7').value + prompt('enter a number:'))&amp;0xFFFF; $('at7').oninput();" value="increment by prompt()" />
+<input type="button" onclick="$('at7').value = ($('at7').value - prompt('enter a number:'))&amp;0xFFFF; $('at7').oninput();" value="decrement by prompt()" />
+</div>
+</td>
+</tr>
+</table>

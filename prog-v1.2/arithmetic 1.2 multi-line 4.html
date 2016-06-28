@@ -579,7 +579,9 @@ var evalString = function (x) {
 		  parenStack[++parenPtr] = "(concatenating)";
 		} else if (x[i] === "n") {
 		  Cstr += "\n";
-		} else {
+		} else if (x[i] === "u") {
+		  Cstr += String.fromCharCode(parseInt(x[++i] + x[++i] + x[++i] + x[++i], 16));
+        } else {
 		  Cstr += x[i];
 		}
 	  } else {
@@ -660,7 +662,27 @@ var evalString = function (x) {
 		  numStack[++numPtr] = prevs[(iID+ii)%13] * sign;
 		  numMode = 1;
 		  prefix = 0;
-		  pointMode = 1;
+		  // pointMode = 1;
+		break;
+		case "!":
+		  openParen = 0;
+		  if (!vars) {
+			++numPtr;
+		  }
+		  vars = 1;
+		  name = x[i+1] === "!" ? (++i, "bool") : "not";
+		  prefix = 0;
+		  numMode = 1
+		  var subvarF = x[i+1] != null ? x[i+1].charCodeAt(0) : " ", subvar;
+		  if (!QTable[subvarF] && subvarF > 64) {
+			subvar = x[++i];
+			while (!QTable[x[i+1] != null ? x[i+1].charCodeAt(0) : 32]) {
+			  subvar += x[++i];
+			}
+			numStack[numPtr] = maths[name](maths[subvar]);
+			break;
+		  }
+		  numStack[numPtr] = ((typeof maths_var_func(name) === "number") ? maths_var_func(name) * sign : maths_var_func(name));
 		break;
 		case "(":
 		  openParen = 1;

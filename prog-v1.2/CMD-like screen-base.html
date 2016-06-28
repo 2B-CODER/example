@@ -58,6 +58,10 @@ attr[3]:<input type="number" id="rep3" style="width:60px;" />
 </div>
 </div>
 <script type="text/javascript">
+var swapchar = {"(":")",")":"(","[":"]","]":"[","<":">",">":"<","{":"}","}":"{"}
+var swapping = function (a) {
+	return swapchar[a] || a;
+}
 var show_hide = function (that) {
 	$("options1").style.display = ["none","inline"][+that.checked]
 }
@@ -162,7 +166,7 @@ if (!String.prototype.repeat) {
 	  }
 	  drawMultiline = function (x, y, str, attr, attr2) {
 		if (attr2 & 1) {clearScreen();}
-		var orig_attr = attr, attr_ptr = -1, attr_stack = [], func1;
+		var orig_attr = attr, attr_ptr = -1, attr_stack = [], func1, func2, func3;
 		l97:
 	    for (var i = 0, j = 0, k = 0, len = str.length; i < len; ++i) {
 		  var charCode = str.charCodeAt(i)&255;
@@ -182,7 +186,32 @@ if (!String.prototype.repeat) {
               attr_stack.length = attr_ptr--;
             break;
 			case  26: attr = str.charCodeAt(++i); break;
-			case  27: func1 = str.charCodeAt(++i)&255; break;
+			case  27: func1 = str.charCodeAt(++i)&255;
+			  switch (func1) {
+				case 47: k = (k + 24) % 25; break;
+				case 63: ++j; break;
+				case 64: func2 = str.charCodeAt(++i)&255;
+				  while (func2--) {
+					// setBlinkingBit((x + j) % 80, (y + k) % 25, part_blink);
+					drawChar((x + j) % 80, (y + k) % 25, (attr<<8)|str.charCodeAt(++i)&255); ++j;
+				  }
+				break;
+				case 65:
+					func2 = ((str.charCodeAt(++i)+128)&255) - 128;
+					func3 = ((str.charCodeAt(++i)+128)&255) - 128;
+					j = (j + func2 + 160) % 80;
+					k = (k + func2 + 150) % 25;
+				break;
+				case 66:
+					j = (((str.charCodeAt(++i)+128)&255) + 32) % 80;
+					k = (((str.charCodeAt(++i)+128)&255) + 22) % 25;
+				break;
+				case 67:
+					j = (str.charCodeAt(++i)&255) - x;
+					k = (str.charCodeAt(++i)&255) - y;
+				break;
+			  }
+			break;
 			case  31: attr = orig_attr; break;
 			case 127: attr = ((attr & 15)<<4) | (attr >> 4)& 15; break;
 			case  16: charCode = str.charCodeAt(++i)&255;
@@ -245,40 +274,53 @@ if (!String.prototype.repeat) {
     ctx2.fillStyle="#000000";
 	ctx2.fillRect(0,0,640,300);
 	var color_list = [0,0,0, 0,0,170, 0,170,0, 0,170,170, 170,0,0, 170,0,170, 170,170/*-85*/,0, 170,170,170, 85,85,85, 85,85,255, 85,255,85, 85,255,255, 255,85,85, 255,85,255, 255,255,85, 255,255,255];
+	var swapchar = {"(":")",")":"(","[":"]","]":"[","<":">",">":"<","{":"}","}":"{"}
+	var swapping = function (a) {
+		return swapchar[a] || a;
+	}
 	var decode = [
 function(a) {return a.replace(/\r?\n/g,"\r\n")},
 function(a) {return a.replace(/%([\s\S]{2})/g,function(a,b){return String.fromCharCode(parseInt(b, 16))}).replace(/[\r\n]/g,"");},
 function(a) {
     a = a.split('');
-	for (var i = 0, j = a.length, b = "", c, p = true; c = a[i], i < j; ++i) {
+	for (var i = 0, j = a.length, b = "", c, p = true, q = [], r = -1, s = [], RTL = false; c = a[i], i < j; ++i) {
 		if (c === "\\") {
 			var d = a[++i], e;
 			switch (d) {
-				case ".": b += "\x04"; break;
-				case "a": b += "\x07"; break;
-				case "b": b += "\x08"; break;
-				case "t": b += "\t"; break;
-				case "n": b += "\n"; break;
-				case "v": b += "\v"; break;
-				case "f": b += "\x0C"; break;
-				case "r": b += "\r"; break;
-				case "<": b += "\x0E"; break;
-				case ">": b += "\x0F"; break;
-				case "d": b += "\x10"; break;
-				case "e": b += "\x1B"; break;
-				case "c": b += String.fromCharCode(a[++i].charCodeAt(0) ^ 0x40); break;
+				case ".": RTL ? (b = "\x04" + b) : (b += "\x04"); break;
+				case "a": RTL ? (b = "\x07" + b) : (b += "\x07"); break;
+				case "b": RTL ? (b = "\x08" + b) : (b += "\x08"); break;
+				case "t": RTL ? (b = "\t" + b) : (b += "\t"); break;
+				case "n": RTL ? (b = "\n" + b) : (b += "\n"); break;
+				case "v": RTL ? (b = "\x0B" + b) : (b += "\x0B"); break;
+				case "f": RTL ? (b = "\x0C" + b) : (b += "\x0C"); break;
+				case "r": RTL ? (b = "\r" + b) : (b += "\r"); break;
+				case "<": RTL ? (b = "\x0F" + b) : (b += "\x0E"); break;
+				case ">": RTL ? (b = "\x0E" + b) : (b += "\x0F"); break;
+				case "d": RTL ? (b = "\x10" + b) : (b += "\x10"); break;
+				case "e": RTL ? (b = "\x1B" + b) : (b += "\x1B"); break;
+				case "c": var hex = String.fromCharCode(a[++i].charCodeAt(0) ^ 0x40); RTL ? (b = hex + b) : (b += hex); break;
 				case "i": p = !p; break;
-				case "x": b += String.fromCharCode(parseInt(a[++i]+a[++i],16)); break;
-				case "y": b += String.fromCharCode(26, parseInt(a[++i]+a[++i],16)); break;
-				case "z": b += "\x1F"; break;
-				case "\\": b += "\\"; break;
-				case "\#": b += "\#"; break;
-				case "*": b += "\x7F"; break;
+				case "x": var hex = String.fromCharCode(parseInt(a[++i]+a[++i],16)); RTL ? (b = hex + b) : (b += hex); break;
+				case "y": var hex = String.fromCharCode(26, parseInt(a[++i]+a[++i],16)); RTL ? (b = hex + b) : (b += hex); break;
+				case "z": RTL ? (b = "\x1F" + b) : (b += "\x1F"); break;
+				case "\\": RTL ? (b = "\\" + b) : (b += "\\"); break;
+				case "\#": RTL ? (b = "\#" + b) : (b += "\#"); break;
+				case "*": RTL ? (b = "\x7F" + b) : (b += "\x7F"); break;
 				case "0": case "1": case "2": case "3": case "4": case "5": case "6": case "7": case "8": case "9":
 					var e = a[++i]; b += a[++i].repeat(d*10+(+e));
 				break;
 				case "`": while (e = (d = a[++i]) !== "\n") { if (i >= j) {break;} b += d; }; break;
 				case "'": while (e = (d = a[++i]) !== "\n") { if (i >= j) {break;} b += d; }; b += "\r\n"; break;
+				case "{": ++r;
+					q[r] = RTL; RTL = true; s[r] = b; b = "";
+				break;
+				case "}": ++r;
+					q[r] = RTL; RTL = false; s[r] = b; b = "";
+				break;
+				case ";":
+					RTL = q[r]; q[r] ? (b += s[r]) : (b = s[r] + b); r--;
+				break;
 				case "\n": break;
 			}
 		} else if (c === "#" && p) {
@@ -286,7 +328,7 @@ function(a) {
 			while (i < j && (d = a[++i] !== "\n")) {}
 			--i;
 		} else {
-			b += c;
+			RTL ? (b = swapping(c) + b) : (b += c);
 		}
 	}
 	return b;

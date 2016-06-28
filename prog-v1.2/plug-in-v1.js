@@ -1,4 +1,7 @@
 /*@cc_on @*/
+maths.tab = "\x09";
+maths.ttab = "\x09\x09";
+maths.tttab = "\x09\x09\x09";
 maths.log1p = function (x) {
   if (x < -1.0) {
 	return 0 / 0;
@@ -548,19 +551,25 @@ maths.printAsText = function (str) {
 	   outstr += "\n";
 	}
 }
-maths.multilines_template = function (_var, n) {
+var templateMode;
+maths.multilines_template = function (_var, n, _mode) {
 	multiLineOutput = "";
 	if (n === 0) {maths_var_set(_var, ""); return ""}
 	if (n < 0 || (typeof n !== "number")) {throw "Error"}
 	__VariableName = _var;
 	remainLines = n;
 	extendedFlag = "__MultiLine_Template__";
-	
+	templateMode = _mode;
 }
 plugin.__MultiLine_Template__ = function (str) {
 	if (remainLines !== 0) {
-		multiLineOutput += fromTemplate(str) + "\n";
+		if (templateMode === 0 || templateMode == null) {
+		    multiLineOutput += fromTemplate(str) + "\n";
+		} else {
+			multiLineOutput += tempList[templateMode-1](str);
+		}
 	}
+	textStyle = 0;
 	/*alert*/(--remainLines);
 	if (remainLines === 0) {
 		extendedFlag = false;
@@ -617,4 +626,37 @@ var fromTemplate = function (str) {
 	}
 	if (newStrPtr !== 0) {throw "Error";}
 	return newStrStack[0];
+}
+var tempList = [];
+tempList[0] = function (str) {
+	str = str.split(''); var newStr = "";
+	for (var i = 0, j = str.length; i < j; ++i) {
+		switch (str[i]) {
+		  case "#":
+			++i;
+			if (str[i] == null) {
+			   return newStr;
+		    }
+		    switch (str[i]) {
+			  case "#": newStr += "#"; break;
+			  case "B": newStr += prog_version; break;
+			  case "C": newStr += "<span class='code-font-1'>"; break;
+			  case "E": newStr += "</span>"; break;
+			  case "I": newStr += "<span style='font-style:italic;'>"; break;
+			  case "N": newStr += maths.prog_name; break;
+			  case "O": newStr += maths.originator; break;
+			  case "T": newStr += prog_title; break;
+			  case "W": newStr += "<span style='font-weight:bold;'>"; break;
+			  case "^": newStr += "<span class='white-text black-background'>"; break;
+			  case "_": newStr += "<span style='text-decoration:underline;'>"; break;
+			}
+		  break;
+		  case "&": newStr += "&amp;"; break;
+		  case "<": newStr += "&lt;"; break;
+		  case ">": newStr += "&gt;"; break;
+		  default:
+		  newStr += str[i];
+		}
+	}
+	return newStr += "\n";
 }

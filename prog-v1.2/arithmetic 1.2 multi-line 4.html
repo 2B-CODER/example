@@ -1,0 +1,1500 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" /> <!-- HTML 5 -->
+<style type="text/css">
+.box {
+  border: 1px solid rgb(169, 169, 169); box-sizing: border-box;
+}
+.text-center {
+  text-align: center;
+}
+.table {
+  display: table;
+}
+.table-cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+.no-margin {
+  margin: 0;
+}
+.half-width {
+  width: 49.8%;
+  width: -webkit-calc(50% - 1px);
+}
+</style>
+<link rel="stylesheet" href="extra.css" />
+</head>
+<body>
+<div style="height: 577px; float:left;" class="box half-width">
+<div style="width: 100%; height: 23px; background-color:#FAD; color:#000;" class="box text-center table"><div class="table-cell">Program</div></div>
+<textarea id="input1" type="text" style="width: 100%; height: 250px; background-color:#BDA; color:#000;"></textarea>
+<textarea id="output1" type="text" style="width: 100%; height: 250px; background-color:#FF0; color:#000;"></textarea>
+<textarea id="error1" type="text" style="width: 100%; height: 30px; background-color:#F00; color:#FF0;" readonly="readonly" ></textarea>
+<input type="button" style="width: 100%; height: 22px;" onclick="sendCommand()" value="&#20844;&#24335;&#35745;&#31639;" />
+</div>
+<div style="height: 577px; float:right;" class="box half-width">
+<div style="width: 100%; height: 23px; background-color:#FAD; color:#000;" class="box text-center table"><div class="table-cell">Standard output</div></div>
+<pre id="stdout_1" class="no-margin box" style="height: 530px; overflow: auto; padding:4px"></pre>
+<input type="button" style="width: 100%; height: 22px;" onclick="sendToLifeViewer()" value="&#25552;&#20132;&#21040; LifeViewer" />
+</div>
+<script type="text/javascript">
+//<![CDATA[
+
+// Production steps of ECMA-262, Edition 5, 15.4.4.14
+// Reference: http://es5.github.io/#x15.4.4.14
+
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function(searchElement, fromIndex) {
+
+	var k;
+
+	// 1. Let O be the result of calling ToObject passing
+	//    the this value as the argument.
+	if (this == null) {
+	  throw new TypeError('"this" is null or not defined');
+	}
+
+	var O = Object(this);
+
+	// 2. Let lenValue be the result of calling the Get
+	//    internal method of O with the argument "length".
+	// 3. Let len be ToUint32(lenValue).
+	var len = O.length >>> 0;
+
+	// 4. If len is 0, return -1.
+	if (len === 0) {
+	  return -1;
+	}
+
+	// 5. If argument fromIndex was passed let n be
+	//    ToInteger(fromIndex); else let n be 0.
+	var n = +fromIndex || 0;
+
+	if (Math.abs(n) === Infinity) {
+	  n = 0;
+	}
+
+	// 6. If n >= len, return -1.
+	if (n >= len) {
+	  return -1;
+	}
+
+	// 7. If n >= 0, then Let k be n.
+	// 8. Else, n<0, Let k be len - abs(n).
+	//    If k is less than 0, then let k be 0.
+	k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+	// 9. Repeat, while k < len
+	while (k < len) {
+	  // a. Let Pk be ToString(k).
+	  //   This is implicit for LHS operands of the in operator
+	  // b. Let kPresent be the result of calling the
+	  //    HasProperty internal method of O with argument Pk.
+	  //   This step can be combined with c
+	  // c. If kPresent is true, then
+	  //    i.  Let elementK be the result of calling the Get
+	  //        internal method of O with the argument ToString(k).
+	  //   ii.  Let same be the result of applying the
+	  //        Strict Equality Comparison Algorithm to
+	  //        searchElement and elementK.
+	  //  iii.  If same is true, return k.
+	  if (k in O && O[k] === searchElement) {
+		return k;
+	  }
+	  k++;
+	}
+	return -1;
+  };
+}
+
+var prevValue, prevs = [], plugin = {};
+var maths = {
+  /* constants */
+  pi: Math.PI,
+  "\u5706\u5468\u7387": Math.PI,
+  "\u03c0": Math.PI,
+  deg: Math.PI / 180,
+  degree: Math.PI / 180,
+  degrees: Math.PI / 180,
+  e: Math.E,
+  phi: (Math.sqrt(5) + 1) / 2,
+  phiInv: 2 / (Math.sqrt(5) + 1),
+  sqrt2: Math.sqrt(2),
+  sqrt3: Math.sqrt(3),
+  sqrt1_2: 1 / Math.sqrt(2),
+  sqrt1_3: 1 / Math.sqrt(3),
+  "true": true,
+  "false": false,
+  "null": null,
+  "undefined": undefined,
+  "NaN": NaN,
+  "inf": Infinity,
+  "infinity": Infinity,
+  zero: 0,
+  epsilon: 2.220446049250313080847263336181640625e-16,
+  one: 1,
+
+  /* trigonometry function */
+  sin: function(x) {return Math.sin(x)},
+  cos: function(x) {return Math.cos(x)},
+  tan: function(x) {return Math.tan(x)},
+  cot: function(x) {return 1 / Math.tan(x)},
+  asin: function(x) {return Math.asin(x)},
+  acos: function(x) {return Math.acos(x)},
+  atan: function(x) {return Math.atan(x)},
+  acot: function(x) {return Math.PI / 2 - Math.atan(x)},
+  atan2: function(x, y) {return Math.atan2(x, y)},
+  toRadians: function(x) {return x/180*Math.PI},
+  toDegrees: function(x) {return x/Math.PI*180},
+
+  /* logarithms */
+  ln: function(x) {return Math.log(x)},
+  log: function(b, x) {return Math.log(x) / Math.log(b)},
+  log2: function(x) {return Math.log(x) * Math.LOG2E},
+  log10: function(x, y) {return Math.log(x) * Math.LOG10E},
+  exp: function(x) {return Math.exp(x)},
+  pow: function(x, y) {return Math.pow(x, y)},
+
+  /* rounding */
+  floor: function(x) {return Math.floor(x)},
+  ceil: function(x) {return Math.ceil(x)},
+  round: function(x) {return Math.round(x)},
+
+  /* roots */
+  sqrt: function(x) {return Math.sqrt(x)},
+  cbrt: function(x) {
+	var y = Math.pow(Math.abs(x), 1/3);
+	return x < 0 ? -y : y;
+  },
+  root: function(x, y) {return Math.pow(x, 1/y)},
+
+  /* hyperbolic function */
+  sinh: function(x) {
+	var y = Math.exp(x);
+	return (y - 1 / y) / 2;
+  },
+  cosh: function(x) {
+	var y = Math.exp(x);
+	return (y + 1 / y) / 2;
+  },
+  tanh: function(x) {
+	if (x === Infinity) {
+	  return 1;
+	} else if (x === -Infinity) {
+	  return -1;
+	} else {
+	  var y = Math.exp(2 * x);
+	  return (y - 1) / (y + 1);
+	}
+  },
+  asinh: function(x) {
+	if (x === -Infinity) {
+	  return x;
+	} else {
+	  return Math.log(x + Math.sqrt(x * x + 1));
+	}
+  },
+  acosh: function(x) {
+	return Math.log(x + Math.sqrt(x * x - 1));
+  },
+  atanh: function(x) {
+	return Math.log((1+x)/(1-x)) / 2;
+  },
+  recip: function(x) { return 1 / x; },
+
+  /* logical operator */
+  ident: function(x) { return x; },
+  not: function(x) { return !x; },
+  notb: function(x) { return ~x; },
+  and: function(x, y) { return x && y; },
+  andb: function(x, y) { return x & y; },
+  nand: function(x, y) { return !(x && y); },
+  nandb: function(x, y) { return ~(x & y); },
+  or: function(x, y) { return x || y; },
+  orb: function(x, y) { return x | y; },
+  nor: function(x, y) { return !(x || y); },
+  norb: function(x, y) { return ~(x | y); },
+  xor: function(x, y) { return x != y; },
+  xorb: function(x, y) { return x ^ y; },
+  xnor: function(x, y) { return x == y; },
+  xnorb: function(x, y) { return ~(x ^ y); },
+  leftb: function(x, n) { return x << n; },
+  rightb: function(x, n) { return x >> n; },
+  rightu: function(x, n) { return x >>> n; },
+
+  /* condition functions */
+
+  "ifeq": function(c, d, t, f) {
+	return (c === d) ? t : f;
+  },
+  "ifneq": function(c, d, t, f) {
+	return (c !== d) ? t : f;
+  },
+  "iflss": function(c, d, t, f) {
+	return (c < d) ? t : f;
+  },
+  "ifleq": function(c, d, t, f) {
+	return (c <= d) ? t : f;
+  },
+  "ifgtr": function(c, d, t, f) {
+	return (c > d) ? t : f;
+  },
+  "ifgeq": function(c, d, t, f) {
+	return (c >= d) ? t : f;
+  },
+  "ifrange": function(c, d, e, t, f) {
+	return (c <= d && d <= e) ? t : f;
+  },
+  "ifnrange": function(c, d, e, t, f) {
+	return (c > d || d > e) ? t : f;
+  },
+  isNegativeZero: function (obj) {
+	return typeof obj == "number" && obj === 0 && 1 / obj < 0;
+  },
+  isNaN: function (obj) {
+	return typeof obj == "number" && isNaN(obj);
+  },
+  isInfinity: function (obj) {
+	return typeof obj == "number" && 1 / obj === 0;
+  },
+
+  /* other functions */
+  quasilog: function(x) {
+	if (x === Infinity || x === -Infinity) {
+	  return x;
+	} else if (x >= 0) {
+	  return Math.log(x / 2 + Math.sqrt(x * x / 4 + 1));
+	} else {
+	  return Math.log(-x / 2 + Math.sqrt(x * x / 4 + 1));
+	}
+  },
+  quasiexp: function(x) {
+	return Math.exp(x) - Math.exp(-x);
+  },
+  regex: function(x, y) { return RegExp(x, y); },
+  bool: function(x) { return !!x; },
+  sinc: function(x) { return x ? Math.sin(x) / x : 1; },
+  sincinv: function(x) {
+	 var min = 0, max = 4.49340945790906417531, scv, med = max / 2;
+	 if (x < -0.217233628211221657408 || x > 1) { return NaN; };
+	 if (x == 1) { return 0; }
+	 if (x == -0.217233628211221657408) { return 4.49340945790906417531; }
+	 for (var i = 0; (i < 54 && ( scv = maths.sinc(med)) != x ); ++i) {
+		if (scv < x) { max = med } else { min = med }
+		med = (min + max) / 2;
+	 }
+	 return med;
+  },
+  erfinv: function(x) {
+	 var min = 0, max = 8, scv, med = max / 2;
+	 if (x < 0) { return -erfinv(-x); };
+	 if (x < 4.0e-9) { return x / 1.128379167095512586316; };
+	 if (x > 1) { return NaN; };
+	 if (x == 1) { return Infinity; }
+	 for (var i = 0; (i < 80 && ( scv = maths.erf(med)) != x ); ++i) {
+		if (scv > x) { max = med } else { min = med }
+		med = (min + max) / 2;
+	 }
+	 return med;
+  },
+  array: function(x, y) {
+	var temp = [].slice;
+	return temp.call(arguments)
+  },
+  abs: function(x) {
+	return Math.abs(x);
+  },
+  sign: function(x) {
+	x = +x; // convert to a number
+	if (x === 0 || isNaN(x)) {
+	  return x;
+	}
+	return x > 0 ? 1 : -1;
+  },
+  slice: function(x, y, z) {
+	return x.slice(y, z);
+  },
+  length: function(x) {
+	return x.length;
+  },
+  concat: function() {
+	return "".concat.apply("", arguments);
+  },
+  repeat: function(mainStr, count) {
+	'use strict';
+	if (mainStr == null) {
+	  throw new TypeError('can\'t convert ' + this + ' to object');
+	}
+	var str = '' + mainStr;
+	count = +count;
+	if (count != count) {
+	  count = 0;
+	}
+	if (count < 0) {
+	  throw new RangeError('repeat count must be non-negative');
+	}
+	if (count == Infinity) {
+	  throw new RangeError('repeat count must be less than infinity');
+	}
+	count = Math.floor(count);
+	if (str.length == 0 || count == 0) {
+	  return '';
+	}
+	// Ensuring count is a 31-bit integer allows us to heavily optimize the
+	// main part. But anyway, most current (August 2014) browsers can't handle
+	// strings 1 << 28 chars or longer, so:
+	if (str.length * count >= 1 << 28) {
+	  throw new RangeError('repeat count must not overflow maximum string size');
+	}
+	var rpt = '';
+	for (;;) {
+	  if ((count & 1) == 1) {
+		rpt += str;
+	  }
+	  count >>>= 1;
+	  if (count == 0) {
+		break;
+	  }
+	  str += str;
+	}
+	return rpt;
+  },
+  toCharCode: function(s, n) {
+	return s.charCodeAt(n)
+  },
+  fromCharCode: function() {
+   return String.fromCharCode.apply(null, arguments)
+  },
+  replace: function (x, y, z) {
+	 return ("" + x).replace(y, z);
+  },
+  substitute: function (x, y, z) {
+	 return ("" + x).replace(RegExp(String(y).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1'), "g"), z);
+  },
+  split: function (str, delim) {
+	return ("" + str).split(delim);
+  },
+  join: function (array, delim) {
+	var temp = [].slice;
+	return temp.call(array).join(delim);
+  },
+
+  "index": function(s, n) {
+	return String(s).charAt(n);
+  },
+
+  quotient: function(x, y) {
+	return (x - x % y) / y;
+  },
+  mod: function(x, y) {
+	return x % y;
+  },
+
+  average: function () {
+	var n = arguments.length;
+	var sum = 0;
+	for(i=0; i<n; i++){
+	  sum += Number(arguments[i]);
+	}
+	return sum/n;
+  },
+  avg: function () { return maths.average.apply (null, arguments); },
+
+  sumsq: function() {
+	var y = 0;
+	var length = arguments.length;
+
+	for (var i = 0; i < length; i++) {
+	  if (arguments[i] === Infinity || arguments[i] === -Infinity) {
+		return Infinity;
+	  }
+	  y += arguments[i] * arguments[i];
+	}
+	return y;
+  },
+  hypot: function () { return Math.sqrt(maths.sumsq.apply (null, arguments)); },
+
+  num: function(x) { return +x; },
+  int: function(x) { return x | 0; },
+  uint: function(x) { return x >>> 0; },
+  str: function(x) { return "" + x; },
+  offset: function(x) { return arguments[x + 1]; },
+  atomname: function(x) { return ["Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", "Aluminium", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", "Tellurium", "Iodine", "Xenon", "Caesium", "Barium", "Lanthanum", "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", "Copernicium", "Japonium", "Flerovium", "Ununpentium", "Livermorium",
+"Ununseptium", "Ununoctium"][x - 1]; },
+  atomnum: function(x) { return [
+"hydrogen", "helium", "lithium", "beryllium", "boron", "carbon", "nitrogen", "oxygen", "fluorine", "neon", "sodium", "magnesium", "aluminium", "silicon", "phosphorus", "sulfur", "chlorine", "argon", "potassium", "calcium", "scandium", "titanium", "vanadium", "chromium", "manganese", "iron", "cobalt", "nickel", "copper", "zinc", "gallium", "germanium", "arsenic", "selenium", "bromine", "krypton", "rubidium", "strontium", "yttrium", "zirconium", "niobium", "molybdenum", "technetium", "ruthenium", "rhodium", "palladium", "silver", "cadmium", "indium", "tin", "antimony", "tellurium", "iodine", "xenon", "caesium", "barium", "lanthanum", "cerium", "praseodymium", "neodymium", "promethium", "samarium", "europium", "gadolinium", "terbium", "dysprosium", "holmium", "erbium", "thulium", "ytterbium", "lutetium", "hafnium", "tantalum", "tungsten", "rhenium", "osmium", "iridium", "platinum", "gold", "mercury", "thallium", "lead", "bismuth", "polonium", "astatine", "radon", "francium", "radium", "actinium", "thorium", "protactinium", "uranium", "neptunium", "plutonium", "americium", "curium", "berkelium", "californium", "einsteinium", "fermium", "mendelevium", "nobelium", "lawrencium", "rutherfordium", "dubnium", "seaborgium", "bohrium", "hassium", "meitnerium", "darmstadtium", "roentgenium", "copernicium", "japonium", "flerovium", "ununpentium", "livermorium",
+"ununseptium", "ununoctium"].indexOf(x.toLowerCase()) + 1; },
+  factorial: function(n) {
+	if (n < 0) return NaN;
+	if (n < 2) return 1;
+	n = n << 0;
+	var i;
+	i = n;
+	var f = n;
+	while (i-- > 2) {
+		f *= i;
+	}
+	return f;
+  },
+  fib: function (n) {
+	var a = 0; b = 1;
+	if (n > 1476 || n < -1476) {
+	  return NaN;
+	} else if (n % 1) {
+	  return (Math.pow((Math.sqrt(5) + 1) / 2, n) - Math.pow(2 / (Math.sqrt(5) + 1), n) * Math.cos(Math.PI * n)) / Math.sqrt(5);
+	} else if (n > 1) {
+	  for (var i = 1; i < n; ++i) {
+		b += a;
+		a = b - a;
+	  }
+	  return b;
+	} else if (n > -1) {
+	  return n;
+	} else {
+	  for (var i = 0; i > n; --i) {
+		a = b - a;
+		b -= a;
+	  }
+	  return a;
+	}
+  },
+  fibder: function (x) {
+	return Math.pow(maths.phi, -x) / Math.sqrt(5) * ((Math.pow(maths.phi, 2 * x) + Math.cos(Math.PI * x)) * Math.log(maths.phi) + Math.PI * Math.sin(Math.PI * x));
+  },
+  fib_g: function (a, b, n) {
+	return a * maths.fib(n - 1) + b * maths.fib(n);
+  },
+  arg_len: function () {
+	var temp = Array.prototype.slice;
+	return temp.call (arguments).length;
+  }
+};
+
+maths.raw = function (str) {
+  /* use raw string */
+  // ...
+  return "" + str; 
+}
+maths.unraw = function (str) {
+  /* no use raw string */
+  // ...
+  return "" + str; 
+}
+// maths.template = function (str) {
+  /* use template string */
+  // ...
+  // return "" + str; 
+// }
+maths["(concatenating)"] = function (str) {
+  /* concatenating string */
+  // ...
+  return str; 
+}
+var BackUpStack = [];
+var BackUpPointer = -1;
+var BackUpSetLocal = function () {
+  BackUpStack[++BackUpPointer] = {}
+}
+var BackUpEndLocal = function () {
+  if (BackUpPointer < 0) {
+     throw "Error: underflow";
+  }
+  BackUpStack.length = BackUpPointer--;
+}
+
+var maths_var_func = function (str) {
+   for (var i = BackUpPointer;i>=0;--i) {
+	  if (BackUpStack[BackUpPointer][str] != null) {return BackUpStack[BackUpPointer][str]}
+   }
+   return maths[str];
+}
+var maths_var_set = function (a, b) {
+   if (a === "setlocal" || a === "endlocal") { throw "Error"; }
+   if (BackUpPointer >= 0) { BackUpStack[BackUpPointer][a] = b; return; }
+   maths[a] = b;
+}
+var prog_version = "1.2b4";
+var prog_title = "Program interpreter";
+var evalString = function (x) {
+
+  var QTable = [
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
+	1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+  ]
+
+  /* variables */
+  maths.prev = prevValue;
+  maths.prev_prev = prevs[(iID+11)%13];
+  maths.prev_prev_prev = prevs[(iID+10)%13];
+  maths.date = new Date();
+  maths.setlocal = function () {
+	BackUpSetLocal();
+  }
+  maths.endlocal = function () {
+	BackUpEndLocal();
+  }
+
+  var LEFTPAREN = 0, ADD = 1, SUB = 2, MUL = 3, DIV = 4, POW = 5, CONCAT = 6;
+  var numStack = [], oprStack = [], parenStack = [], numPtr = -1, oprPtr = -1, parenPtr = -1, numMode = 1, strMode = 0, strQuote, escapeMode, Cstr, pointMode, scale = 1, sign = 1, prefix = 1, name = "", vars = 0, openParen = 0;
+  parenStack[-2] = 1;
+  var signStack = [], signPtr = -1, nfrac, rawState = false; rawStack = [], rawPtr = -1, /* templateState = false, */ tempCStr = [], strStack = -1, Fid = 0;
+  signStack[-1] = 1;
+  MainLoop1:
+  for(var i = 0, j = x.length + 1; i < j; ++i) {
+	if(strMode) {
+	  if (!escapeMode) {
+		if (x[i] === "\\") {
+		  rawState && (Cstr += "\\");
+		  escapeMode = 1;
+		} else if (x[i] === strQuote) {
+		  strMode = 0;
+		  numPart = 0;
+		  // prefix = true;
+		  numStack[++numPtr] = Cstr;
+		} else {
+		  Cstr += x[i];
+		}
+	  } else if (!rawState) {
+		escapeMode = 0
+		if (x[i] === "\\") {
+		  Cstr += "\\";
+		} else if (x[i] === '(' && strQuote === '"') {
+		  openParen = 1;
+		  strMode = 0;
+		  signStack[++signPtr] = sign;
+		  sign = 1;
+		  prefix = 1;
+		  numMode = 1;
+		  oprStack[++oprPtr] = LEFTPAREN;
+		  tempCStr[++strStack] = Cstr;
+		  parenStack[++parenPtr] = 1;
+		  parenStack[++parenPtr] = "(concatenating)";
+		} else if (x[i] === "n") {
+		  Cstr += "\n";
+		} else {
+		  Cstr += x[i];
+		}
+	  } else {
+	    escapeMode = 0
+		Cstr += x[i];
+	  }
+	} else {
+	  switch (x[i]) {
+		case '"':
+		  prefix = 0;
+		  strMode = 1;
+		  Cstr = "", openParen = 0, strQuote = '"';
+		break;
+		case "0": case "1": case "2":
+		case "3": case "4": case "5":
+		case "6": case "7": case "8":
+		case "9":
+		  openParen = 0;
+		  if (!vars) {
+			if (!numMode || prefix) {
+			  /* create number part */
+			  numMode = 1;
+			  pointMode = 0;
+			  numStack[++numPtr] = 0;
+			  scale = 1;
+			  prefix = 0;
+			}
+			if (!pointMode) {
+			  /* integer part */
+			  numStack[numPtr] *= 10;
+			  numStack[numPtr] += x[i] * sign;
+			} else {
+			  /* fractional part */
+			  scale *= 10;
+			  numStack[numPtr] += x[i] / scale * sign;
+			}
+		  } else {
+			name += x[i];
+			numStack[numPtr] = maths_var_func(name);
+		  }
+		break;
+		case "\u00bc":
+		case "\u00bd":
+		case "\u00be":
+		  nfrac = (x[i].charCodeAt(0) - 0xBB) / 4;
+		  openParen = 0;
+		  if (!numMode || prefix) {
+			/* create number part */
+			numMode = 1;
+			pointMode = 0;
+			numStack[++numPtr] = 0;
+			prefix = 0;
+		  }
+		  numStack[numPtr] += nfrac * sign;
+		break;
+		case "\u00B2":
+		  numStack[numPtr] *= numStack[numPtr];
+		break;
+		case "\u00B3":
+		  numStack[numPtr] *= numStack[numPtr] * numStack[numPtr];
+		break;
+		case "\u2074": /* biquadratic */
+		  numStack[numPtr] *= numStack[numPtr];
+		  numStack[numPtr] *= numStack[numPtr];
+		break;
+		case ".":
+		  openParen = 0;
+		  if (!numMode || prefix) { numStack[++numPtr] = 0; }
+		  numMode = 1;
+		  prefix = 0;
+		  pointMode = 1;
+		break;
+		case "%":
+		  openParen = 0;
+		  for (var ii = 12; x[i+1] === "%" && ii > 0; --ii) {
+			 ++i;
+		  }
+		  numStack[++numPtr] = prevs[(iID+ii)%13] * sign;
+		  numMode = 1;
+		  prefix = 0;
+		  pointMode = 1;
+		break;
+		case "(":
+		  openParen = 1;
+		  signStack[++signPtr] = sign;
+		  sign = 1;
+		  prefix = 1;
+		  numMode = 1;
+		  oprStack[++oprPtr] = LEFTPAREN;
+		  parenStack[++parenPtr] = 1;
+		  parenStack[++parenPtr] = name;
+		  if (vars) { --numPtr; }
+		  if (name === "raw") { rawStack[++rawPtr] = rawState; rawState = true; }
+		  if (name === "unraw") { rawStack[++rawPtr] = rawState; rawState = false; }
+		  // if (name === "template") { rawStack[++rawPtr] = templateState; templateState = true; }
+		  vars = 0; name = ""; scale = 1;
+		break;
+		case "+":
+		  vars = 0; name = ""; scale = 1, openParen = 0;
+		  if (numMode && !prefix) {
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === ADD) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = +numStack[numPtr] + +numStack[numPtr + 1] ;
+		 } else if (oprStack[oprPtr] === SUB) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] -= numStack[numPtr + 1] ;
+		  }
+			oprStack[++oprPtr] = ADD;
+			sign = 1;
+		  }
+		  numMode = 0;
+		break;
+		case "-":
+		  vars = 0; name = ""; scale = 1, openParen = 0;
+		  if (numMode && !prefix) {
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === ADD) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = +numStack[numPtr] + +numStack[numPtr + 1] ;
+		 } else if (oprStack[oprPtr] === SUB) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] -= numStack[numPtr + 1] ;
+		  }
+			oprStack[++oprPtr] = SUB;
+			sign = 1;
+		  } else {
+			sign *= -1
+		  }
+		  numMode = 0;
+		break;
+		case " ": case "\t": break;
+		case "'":
+		  if (!numMode || prefix) {
+			prefix = 0;
+			strMode = 1;
+			Cstr = "", openParen = 0, strQuote = "'";
+		  } else {
+			// numMode = 1;
+			// prefix = 0;
+			openParen = 0;
+		  }
+		break;
+		case "*":
+		case "\u00D7":
+		  vars = 0; name = "", openParen = 0;
+		  if (x[i + 1] !== "*") {
+			scale = 1;
+			while (oprStack[oprPtr] === POW) {
+			  --oprPtr
+			  --numPtr;
+			  numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+			}
+			if (oprStack[oprPtr] === MUL) {
+			  --oprPtr;
+			  --numPtr;
+			  numStack[numPtr] *= numStack[numPtr + 1] ;
+			} else if (oprStack[oprPtr] === DIV) {
+			  --oprPtr;
+			  --numPtr;
+			  numStack[numPtr] /= numStack[numPtr + 1] ;
+			}
+			oprStack[++oprPtr] = MUL;
+		  } else {
+			oprStack[++oprPtr] = POW;
+			++i;
+		  }
+		  sign = 1;
+		  numMode = 0;
+		break;
+		case "/":
+		case "\u00F7":
+		  vars = 0; name = ""; scale = 1, openParen = 0;
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  oprStack[++oprPtr] = DIV;
+		  sign = 1;
+		  numMode = 0;
+		break;
+		case "^":
+		  vars = 0; name = "";
+		  oprStack[++oprPtr] = POW;
+		  sign = 1;
+		  numMode = 0;
+		break;
+		case "&":
+		  vars = 0; name = ""; scale = 1, openParen = 0;
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === ADD) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = +numStack[numPtr] + +numStack[numPtr + 1];
+		  } else if (oprStack[oprPtr] === SUB) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] -= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === CONCAT) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] += "" + numStack[numPtr + 1];
+		  }
+		  oprStack[++oprPtr] = CONCAT;
+		  sign = 1;
+		  numMode = 0;
+		break;
+		case "#":
+		  i = x.length - 1;
+		break;
+		case ")":
+		case null:
+		case undefined:
+		  if ((/^(un)?raw$/).test(parenStack[parenPtr])) { rawState = rawStack[rawPtr--]; }
+		  if (openParen) { --parenStack[parenPtr - 1] }
+		  openParen = 0;
+		  vars = 0; name = ""; scale = 1;
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === ADD) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = +numStack[numPtr] + +numStack[numPtr + 1];
+		  } else if (oprStack[oprPtr] === SUB) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] -= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === CONCAT) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] += "" + numStack[numPtr + 1];
+		  }
+		  numMode = 0;
+			--oprPtr;
+			numPtr -= (parenStack[parenPtr - 1] - 1);
+			parenPtr -= 2;
+			prefix = 0;
+			numMode = 1;
+			parenStack[parenPtr + 2] && (numStack[numPtr] = maths_var_func(parenStack[parenPtr + 2]).apply(null, numStack.slice(numPtr, numPtr + parenStack[parenPtr + 1])));
+			(typeof numStack[numPtr] === "function") && (vars = 1, name = "(temp" + (++Fid) + ")", maths_var_set(name, numStack[numPtr]), sign = 1);
+			(typeof numStack[numPtr] === "number") && (numStack[numPtr] *= signStack[signPtr--]);
+			if ("(concatenating)" === parenStack[parenPtr + 2]) { strMode = 1; Cstr = tempCStr[strStack--] + numStack[numPtr]; --numPtr; }
+		break;
+		case ",":
+		  openParen = 0, sign = 1;
+		  while (oprStack[oprPtr] === POW) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = Math.pow(numStack[numPtr], numStack[numPtr + 1]);
+		  }
+		  if (oprStack[oprPtr] === MUL) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] *= numStack[numPtr + 1] ;
+		  } else if (oprStack[oprPtr] === DIV) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] /= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === ADD) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] = +numStack[numPtr] + +numStack[numPtr + 1];
+		  } else if (oprStack[oprPtr] === SUB) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] -= numStack[numPtr + 1] ;
+		  }
+		  if (oprStack[oprPtr] === CONCAT) {
+			--oprPtr;
+			--numPtr;
+			numStack[numPtr] += "" + numStack[numPtr + 1];
+		  }
+		  ++parenStack[parenPtr - 1];
+		  prefix = 1;
+		  numMode = 1;
+		  scale = 1;
+		  name = ""; vars = 0;
+		break;
+		default:
+		  if (x[i].charCodeAt(0) < 128 && QTable[x[i].charCodeAt(0)]) { throw "Error"; }
+		  openParen = 0;
+		  if (!vars) {
+			++numPtr;
+		  }
+		  vars = 1;
+		  name += x[i];
+		  prefix = 0;
+		  numMode = 1;
+		  numStack[numPtr] = ((typeof maths_var_func(name) === "number") ? maths_var_func(name) * sign : maths_var_func(name));
+	  }
+	}
+  }
+  return numStack[0];
+}
+var checkCode = function (x) {
+  if (typeof x === "string") { return x; };
+  if (typeof x === "number" && x === x) { return ("" + x).replace(/e\+?(\-?\d+)/i, " \u00D7 10 ^ ($1)"); };
+  if (x === null) { return "\u00D8"; };
+  if (x === void 0) { return "???"; };
+  if (typeof x === "function") { return "unable to access the function directly."; };
+  if (x.constructor === Array) { return "array length: " + x.length; };
+  if (x.constructor === Date) { return x; };
+  if (x.constructor === RegExp) { return ("" + x).replace(/^\/(.*)\/.*$/, "$1"); };
+  if (x === true) { return "T"; };
+  if (x === false) { return "F"; };
+  if (isNaN(x)) { return "???"; };
+}
+maths["evaluate"] = function(x) {
+  return evalString(String(x));
+}
+maths["eval"] = maths["evaluate"];
+
+maths.erf = function (x) {
+
+/* c = (float)0.84506291151 */
+  var erx = 8.45062911510467529297e-01, /* 0x3FEB0AC1, 0x60000000 */
+/*
+ * Coefficients for approximation to  erf on [0,0.84375]
+ */
+  efx = 1.28379167095512586316e-01, /* 0x3FC06EBA, 0x8214DB69 */
+  pp = [ 1.28379167095512558561e-01, /* 0x3FC06EBA, 0x8214DB68 */
+	   -3.25042107247001499370e-01, /* 0xBFD4CD7D, 0x691CB913 */
+	   -2.84817495755985104766e-02, /* 0xBF9D2A51, 0xDBD7194F */
+	   -5.77027029648944159157e-03, /* 0xBF77A291, 0x236668E4 */
+	   -2.37630166566501626084e-05 ], /* 0xBEF8EAD6, 0x120016AC */
+  qq = [ 0.0, 3.97917223959155352819e-01, /* 0x3FD97779, 0xCDDADC09 */
+	   6.50222499887672944485e-02, /* 0x3FB0A54C, 0x5536CEBA */
+	   5.08130628187576562776e-03, /* 0x3F74D022, 0xC4D36B0F */
+	   1.32494738004321644526e-04, /* 0x3F215DC9, 0x221C1A10 */
+	   -3.96022827877536812320e-06 ], /* 0xBED09C43, 0x42A26120 */
+/*
+ * Coefficients for approximation to  erf  in [0.84375,1.25]
+ */
+  pa = [ -2.36211856075265944077e-03, /* 0xBF6359B8, 0xBEF77538 */
+	   4.14856118683748331666e-01, /* 0x3FDA8D00, 0xAD92B34D */
+	   -3.72207876035701323847e-01, /* 0xBFD7D240, 0xFBB8C3F1 */
+	   3.18346619901161753674e-01, /* 0x3FD45FCA, 0x805120E4 */
+	   -1.10894694282396677476e-01, /* 0xBFBC6398, 0x3D3E28EC */
+	   3.54783043256182359371e-02, /* 0x3FA22A36, 0x599795EB */
+	   -2.16637559486879084300e-03 ], /* 0xBF61BF38, 0x0A96073F */
+  qa = [ 0.0, 1.06420880400844228286e-01, /* 0x3FBB3E66, 0x18EEE323 */
+	   5.40397917702171048937e-01, /* 0x3FE14AF0, 0x92EB6F33 */
+	   7.18286544141962662868e-02, /* 0x3FB2635C, 0xD99FE9A7 */
+	   1.26171219808761642112e-01, /* 0x3FC02660, 0xE763351F */
+	   1.36370839120290507362e-02, /* 0x3F8BEDC2, 0x6B51DD1C */
+	   1.19844998467991074170e-02 ], /* 0x3F888B54, 0x5735151D */
+/*
+ * Coefficients for approximation to  erfc in [1.25,1/0.35]
+ */
+  ra = [ -9.86494403484714822705e-03, /* 0xBF843412, 0x600D6435 */
+	   -6.93858572707181764372e-01, /* 0xBFE63416, 0xE4BA7360 */
+	   -1.05586262253232909814e+01, /* 0xC0251E04, 0x41B0E726 */
+	   -6.23753324503260060396e+01, /* 0xC04F300A, 0xE4CBA38D */
+	   -1.62396669462573470355e+02, /* 0xC0644CB1, 0x84282266 */
+	   -1.84605092906711035994e+02, /* 0xC067135C, 0xEBCCABB2 */
+	   -8.12874355063065934246e+01, /* 0xC0545265, 0x57E4D2F2 */
+	   -9.81432934416914548592e+00 ], /* 0xC023A0EF, 0xC69AC25C */
+  sa = [ 0.0, 1.96512716674392571292e+01, /* 0x4033A6B9, 0xBD707687 */
+	   1.37657754143519042600e+02, /* 0x4061350C, 0x526AE721 */
+	   4.34565877475229228821e+02, /* 0x407B290D, 0xD58A1A71 */
+	   6.45387271733267880336e+02, /* 0x40842B19, 0x21EC2868 */
+	   4.29008140027567833386e+02, /* 0x407AD021, 0x57700314 */
+	   1.08635005541779435134e+02, /* 0x405B28A3, 0xEE48AE2C */
+	   6.57024977031928170135e+00, /* 0x401A47EF, 0x8E484A93 */
+	   -6.04244152148580987438e-02 ], /* 0xBFAEEFF2, 0xEE749A62 */
+/*
+ * Coefficients for approximation to  erfc in [1/.35,28]
+ */
+  rb = [ -9.86494292470009928597e-03, /* 0xBF843412, 0x39E86F4A */
+	   -7.99283237680523006574e-01, /* 0xBFE993BA, 0x70C285DE */
+	   -1.77579549177547519889e+01, /* 0xC031C209, 0x555F995A */
+	   -1.60636384855821916062e+02, /* 0xC064145D, 0x43C5ED98 */
+	   -6.37566443368389627722e+02, /* 0xC083EC88, 0x1375F228 */
+	   -1.02509513161107724954e+03, /* 0xC0900461, 0x6A2E5992 */
+	   -4.83519191608651397019e+02 ], /* 0xC07E384E, 0x9BDC383F */
+  sb = [ 0.0, 3.03380607434824582924e+01, /* 0x403E568B, 0x261D5190 */
+	   3.25792512996573918826e+02, /* 0x40745CAE, 0x221B9F0A */
+	   1.53672958608443695994e+03, /* 0x409802EB, 0x189D5118 */
+	   3.19985821950859553908e+03, /* 0x40A8FFB7, 0x688C246A */
+	   2.55305040643316442583e+03, /* 0x40A3F219, 0xCEDF3BE6 */
+	   4.74528541206955367215e+02, /* 0x407DA874, 0xE79FE763 */
+	   -2.24409524465858183362e+01 ] ; /* 0xC03670E2, 0x42712D62 */
+
+  if (x < 0) { return -maths.erf(-x); }
+  if (x < 3.7252902984619140625e-9) {
+	return x + efx * x;
+  }
+  if (x < 0.84375) {
+	var z = x * x;
+	var r1 = pp[0] + z * pp[1], z2 = z * z;
+	var r2 = pp[2] + z * pp[3], z4 = z2 * z2;
+	var s1 = 1 + z * qq[1];
+	var s2 = qq[2] + z * qq[3];
+	var s3 = qq[4] + z * qq[5];
+	var r = r1 + z2 * r2 + z4 * pp[4];
+	var s = s1 + z2 * s2 + z4 * s3;
+	var y = r / s;
+	return x + x * y;
+  }
+  if (x < 1.25) {
+	  var s2, s4, s6, P1, P2, P3, P4, Q1, Q2, Q3, Q4;
+	  var s = Math.abs (x) - 1;
+	  var P1 = pa[0] + s * pa[1], s2 = s * s;
+	  var Q1 = 1 + s * qa[1],   s4 = s2 * s2;
+	  var P2 = pa[2] + s * pa[3], s6 = s4 * s2;
+	  var Q2 = qa[2] + s * qa[3];
+	  var P3 = pa[4] + s * pa[5];
+	  var Q3 = qa[4] + s * qa[5];
+	  var P4 = pa[6];
+	  var Q4 = qa[6];
+	  var P = P1 + s2 * P2 + s4 * P3 + s6 * P4;
+	  var Q = Q1 + s2 * Q2 + s4 * Q3 + s6 * Q4;
+	  return erx + P / Q;
+  }
+  if (x >= 6) { return 1; /* inexact result */ }
+  x = Math.abs(x);
+  var s = 1 / (x * x);
+  if (x < 2.857142857142857142857) {
+	  var R1, R2, R3, R4, S1, S2, S3, S4, s2, s4, s6, s8;
+	  var R1 = ra[0] + s * ra[1], s2 = s * s;
+	  var S1 = 1 + s * sa[1],  s4 = s2 * s2;
+	  var R2 = ra[2] + s * ra[3], s6 = s4 * s2;
+	  var S2 = sa[2] + s * sa[3], s8 = s4 * s4;
+	  var R3 = ra[4] + s * ra[5];
+	  var S3 = sa[4] + s * sa[5];
+	  var R4 = ra[6] + s * ra[7];
+	  var S4 = sa[6] + s * sa[7];
+	  var R = R1 + s2 * R2 + s4 * R3 + s6 * R4;
+	  var S = S1 + s2 * S2 + s4 * S3 + s6 * S4 + s8 * sa[8];
+  }
+  else                  /* |x| >= 1/0.35 */
+  {
+	  var R1, R2, R3, S1, S2, S3, S4, s2, s4, s6;
+	  var R1 = rb[0] + s * rb[1], s2 = s * s;
+	  var S1 = 1 + s * sb[1],  s4 = s2 * s2;
+	  var R2 = rb[2] + s * rb[3], s6 = s4 * s2;
+	  var S2 = sb[2] + s * sb[3];
+	  var R3 = rb[4] + s * rb[5];
+	  var S3 = sb[4] + s * sb[5];
+	  var S4 = sb[6] + s * sb[7];
+	  var R = R1 + s2 * R2 + s4 * R3 + s6 * rb[6];
+	  var S = S1 + s2 * S2 + s4 * S3 + s6 * S4;
+  }
+  z = x;
+  var r = Math.exp (-z * z - 0.5625) * Math.exp ((z - x) * (z + x) + R / S);
+  return 1 - r / x;
+}
+
+Float32Array && (maths.fround = Math.fround || (function (array) {
+  return function(x) {
+	return array[0] = x, array[0];
+  };
+})(new Float32Array(1)));
+
+maths.imul = Math.imul || function(a, b) {
+  var ah = (a >>> 16) & 0xffff;
+  var al = a & 0xffff;
+  var bh = (b >>> 16) & 0xffff;
+  var bl = b & 0xffff;
+  // the shift by 0 fixes the sign on the high part
+  // the final |0 converts the unsigned value into a signed value
+  return ((al * bl) + (((ah * bl + al * bh) << 16) >>> 0)|0);
+};
+
+maths.setvar = function(name, value) {
+  maths_var_set(name, value);
+  return "";
+}
+maths.setI   = function(value) { maths.i = value; }
+maths.storeI = function() { callStack[++callPtr] = maths.i; }
+maths.loadI  = function() { maths.i = callStack[callPtr--]; return maths.i; }
+maths.incrI  = function(value) { ++maths.i; }
+maths.decrI  = function(value) { --maths.i; }
+maths.incr   = function(value) { maths_var_set(value, +maths_var_func(value) + 1); }
+maths.decr   = function(value) { maths_var_set(value,  maths_var_func(value) - 1); }
+maths.add1   = function(value) { return +value + 1; }
+maths.sub1   = function(value) { return  value - 1; }
+maths.setx   = function(value) { maths.x = value; }
+maths.sety   = function(value) { maths.y = value; }
+maths.setz   = function(value) { maths.z = value; }
+maths.definefunc = function (code) {
+  return function (x, y, z) {
+	maths.x = x;
+	maths.y = y;
+	maths.z = z;
+	return evalString(code);
+  }
+}
+
+var line, callStack, callPtr, splited, tagHash, extendedFlag, iID = 0;
+
+var sendCommand = function () {
+  maths.stdout = "";
+  maths.prog_name = "anonymous";
+  maths.originator = "anonymous";
+  extendedFlag = false; outstr = "";
+  callStack = [], callPtr = -1, splited = input1.value.split("\n"), tagHash = {}, conds = [], condptr = -1;
+  var callingLines = 0, callingModulo = 0, quest;
+  CommandLoop:
+  for (line = 0, length = splited.length; line < length && callPtr >= -1; ++line) {
+	++callingModulo;
+	if (callingModulo === 100000) {
+	  quest = confirm("continue?");
+	  if (!quest) {
+	    break CommandLoop;
+	  } else {
+	    callingModulo -= 100000;
+		callingLines  += 100000;
+	  }
+	}
+	if (extendedFlag === false) {
+	  try {
+		prevValue = evalString(splited[line]);
+		prevs[iID] = prevValue;
+		iID = (iID + 1) % 13;
+		output1.value = checkCode(prevValue);
+		error1.value = "";
+	  } catch (__err) {
+		output1.value = "";
+		error1.value = __err + " at line " + (line + 1);
+		break CommandLoop;
+	  }
+	} else {
+	  try {
+		output1.value = plugin[extendedFlag](splited[line]);
+	  } catch (__err) {
+		output1.value = "";
+		error1.value = __err + " at line " + (line + 1);
+		break CommandLoop;
+	  }
+	}
+  }
+  callingLines += callingModulo;
+  (outstr !== "") && (maths.stdout = outstr);
+  BackUpPointer = -1;
+  console.log("\u5df2\u8c03\u7528\u884c\u6570: %d", callingLines);
+}
+
+plugin.evalJS = function (str) {
+  return (eval(String(str)));
+}
+
+maths.menu = function () {
+  extendedFlag = "__XMenu__";
+  return "Menu";
+}
+
+plugin.__XMenu__ = function (prog) {
+  extendedFlag = (prog === "return" ? false : prog);
+  return "<" + prog + ">";
+}
+
+maths.const_calc = function (x) {
+  return function (y) {
+	return x;
+  }
+}
+
+maths.subst_calc = function (x) {
+  return function (y) {
+	return function (z) {
+	  return x(z)(y(z));
+	}
+  }
+}
+
+maths.xchgfunc = function () {
+  var a = arguments
+  return function (f) {
+	return f.apply(null, a);
+  }
+}
+
+maths.arrayindex = function (a,b) {
+  return a[+b];
+}
+
+maths.jump = function (lines) {
+  line += lines;
+}
+
+maths["return"] = function (value) {
+  callPtr = -2;
+  return value
+}
+
+maths.callret = function () {
+  line = callStack[callPtr--];
+}
+
+maths.call = function (jump_line) {
+  callStack[++callPtr] = line;
+  line = jump_line - 1;
+}
+
+maths.blockif = function (condition) {
+   var matching = 1;
+   for (var l = splited.length; ++line, (!condition && line < l && matching);) {
+	  if (RegExp("^\\s*blockif\\b").test(splited[line])) { ++matching; }
+	  if (RegExp("^\\s*endif\\b").test(splited[line])) { --matching; }
+   }
+   --line;
+   if (line >= l) { throw("no matching 'if'"); }
+}
+maths.endif = null;
+
+var conds = [], condptr = -1;
+
+maths.blockwhile = function (condition) {
+   matching = 1; condition && (callStack[++callPtr] = line - 1);
+   for (var l = splited.length; ++line, (!condition && line < l && matching);) {
+	  if (RegExp("^\\s*blockwhile\\b").test(splited[line])) { ++matching; }
+	  if (RegExp("^\\s*endwhile\\b").test(splited[line])) { --matching; }
+   }
+   --line;
+   if (line >= l) { throw("no matching 'while'"); }
+}
+maths.endwhile = maths.callret;
+
+maths.findtag = function (tag) {
+  var currL = line, finding;
+  if (tagHash[tag] == null) {
+	for (var i = 0, l = splited.length; (currL - i >= 0 || currL + i < l); ++i) {
+	  if (RegExp("^\\s*#\\s*" + tag + "\\s*:\\s*$").test(splited[finding = currL + i])) { return tagHash[tag] = finding; }
+	  if (RegExp("^\\s*#\\s*" + tag + "\\s*:\\s*$").test(splited[finding = currL - i])) { return tagHash[tag] = finding; }
+	}
+	throw("no found!");
+  } else {
+	return tagHash[tag];
+  }
+}
+
+maths.blockcomment = function (condition) {
+   var matching = 1;
+   for (var l = splited.length; ++line, (line < l && matching);) {
+	  if (RegExp("^\\s*blockcomment\\b").test(splited[line])) { ++matching; }
+	  if (RegExp("^\\s*endcomment\\b").test(splited[line])) { --matching; }
+   }
+   --line;
+   if (line >= l) { throw("no matching comment delimiters"); }
+}
+maths.endcomment = null;
+
+maths.jumptag = function (tag) {
+  line = maths.findtag(tag);
+}
+maths.conditionalJump = function (condition, lines) {
+  condition && (line += lines);
+}
+maths.conditionalJumptag = function (condition, lines) {
+  condition && (line = maths.findtag(tag));
+}
+maths.conditionalCall = function (condition, jump_line) {
+  condition && (callStack[++callPtr] = line, line = jump_line - 1);
+}
+
+var buffer = new ArrayBuffer(8);
+buffer.int8a = new Int8Array(buffer);
+buffer.int8c = new Uint8ClampedArray(buffer);
+buffer.int16a = new Int16Array(buffer);
+buffer.int32a = new Int32Array(buffer);
+buffer.uint8a = new Uint8Array(buffer);
+buffer.uint16a = new Uint16Array(buffer);
+buffer.uint32a = new Uint32Array(buffer);
+buffer.float32a = new Float32Array(buffer);
+buffer.float64a = new Float64Array(buffer);
+Object.defineProperty(buffer, 'hex', {
+  get: function () {
+	var temp, result = "0x";
+	for (var i = 7; i >= 0; i--) {
+	  if ((temp = buffer.uint8a[i]) < 16) {
+	  result += "0";
+	  }
+	  result += temp.toString(16);
+	}
+  return result;
+  },
+  set: function (hex) {
+	var temp = ("" + hex).replace('0x', '');
+	buffer.uint32a[1] = parseInt(temp.slice(-16,-8),16);
+	buffer.uint32a[0] = parseInt(temp.slice(-8),16);
+  }
+});
+Object.defineProperty(buffer, 'int64', {
+  get: function () {
+	var part0 = buffer.uint32a[0];
+	var part1 = buffer.uint16a[2];
+	var part2 = buffer.int16a[3];
+	var high = part2 * 28147;
+	var low = part2 * 4976710656 + part1 * 0x100000000 + part0;
+	high = high + (low - low % 10000000000) / 10000000000;
+	low = low % 10000000000;
+	if (part2 < 0 && low > 0) {
+	  ++high;
+	  low -= 10000000000;
+	}
+	if (high !== 0) {
+	  return high + ("000000000" + (low < 0 ? -low : low)).slice(-10);
+	} else {
+	  return "" + low
+	}
+  },
+  set: function (x) {
+	if (0x100000000 > x && x >= 0) {
+	  buffer.int32a[0] = x
+	  buffer.int32a[1] = 0
+	} else if (-0x100000000 <= x && x < 0) {
+	  buffer.int32a[0] = x
+	  buffer.int32a[1] = -1
+	} else {
+	  var fullInt = ("" + x).match(/\d+/)[0];
+	  var sign = (x < 0 ? -1 : 1);
+	  var part0 = (sign * fullInt.slice(-10));
+	  var part1 = (sign * fullInt.slice(-15,-10));
+	  var part2 = (sign * fullInt.slice(0,-15));
+	  var high = part1 * 2 + part2 * 232830
+	  var low = part0 + part1 * 1410065408 + part2 * 2764472320
+	  buffer.int32a[1] = high + (low - (low % 0x100000000 + 0x100000000) % 0x100000000) / 0x100000000
+	  buffer.int32a[0] = low % 0x100000000
+	}
+  }
+});
+var bits2float16 = function (int16) {
+  var sign = !!(int16 & 0x8000);
+  var exponent = (int16 & 0x7c00) >>> 10;
+  var mantissa = int16 & 0x3ff;
+  var result;
+  if (exponent == 31) {
+	result = mantissa ? NaN : Infinity;
+  } else if (exponent > 0) {
+	result = (1 + mantissa / 1024) * Math.pow (2, exponent - 15);
+  } else {
+	result = mantissa * 0.000000059604644775390625; /* 1 / 2^24 */
+  }
+  return sign ? -result : result;
+};
+var float162bits = function (float16) {
+  float16 = +float16;
+  var sign = float16 < 0 || 1 / float16 < 0;
+  var exponent = 32, min = 65536;
+  while (--exponent && min > float16 && min > -float16) {
+	min /= 2;
+  }
+  float16 < 0 && (float16 = -float16);
+  var pre_result = sign << 15 | exponent << 10;
+  var result;
+  if (isNaN(float16)) {result = pre_result + 512;}
+  else if (exponent == 31) {result = pre_result;}
+  else if (exponent == 0) {result = pre_result + Math.round(float16 * 16777216);}
+  else {result = pre_result + Math.round(float16 * Math.pow(2, (25 - exponent))) - 1024;}
+  return result;
+}
+
+buffer.float16a = []
+Object.defineProperty(buffer.float16a, 0, {
+   get: function () {
+	 return bits2float16(buffer.int16a[0]);
+   },
+   set: function (x) {
+	 buffer.int16a[0] = float162bits(x);
+   },
+});
+Object.defineProperty(buffer.float16a, 1, {
+   get: function () {
+	 return bits2float16(buffer.int16a[1]);
+   },
+   set: function (x) {
+	 buffer.int16a[1] = float162bits(x);
+   },
+});
+Object.defineProperty(buffer.float16a, 2, {
+   get: function () {
+	 return bits2float16(buffer.int16a[2]);
+   },
+   set: function (x) {
+	 buffer.int16a[2] = float162bits(x);
+   },
+});
+Object.defineProperty(buffer.float16a, 3, {
+   get: function () {
+	 return bits2float16(buffer.int16a[3]);
+   },
+   set: function (x) {
+	 buffer.int16a[3] = float162bits(x);
+   },
+});
+
+
+maths.int64 = function (x) {
+  buffer.int64 = x;
+  return buffer.int64;
+};
+maths.hex2int64 = function (x) {
+  buffer.hex = x;
+  return buffer.int64;
+};
+maths.int642hex = function (x) {
+  buffer.int64 = x;
+  return buffer.hex;
+};
+maths.f16round = function (x) {
+  return bits2float16(float162bits(x));
+};
+
+
+maths.callfunc = function (x) {
+  var temp = [].slice;
+  return x.apply(undefined, temp.call(arguments, 1))
+}
+maths['var'] = function (x) {
+  return maths[x];
+}
+outstr = "";
+Object.defineProperty(maths, "stdout", {
+   get: function () {
+	 return document.getElementById("stdout_1").innerHTML
+   },
+   set: function (x) {
+	 document.getElementById("stdout_1").innerHTML = x;
+   }
+})
+maths.print = function (str) {
+	var a = arguments;
+	if (a.length === 1) {
+	   outstr += str + "\n"
+	} else {
+	   for (var i = 0, j = a.length; i < j; ++i) {
+	      outstr += a[i];
+	   }
+	   outstr += "\n";
+	}
+}
+maths.printinline = function (str) {
+	var a = arguments;
+	if (a.length === 1) {
+	   outstr += str;
+	} else {
+	   for (var i = 0, j = a.length; i < j; ++i) {
+	      outstr += a[i];
+	   }
+	}
+}
+var sendToLifeViewer = function () { sessionStorage.removeItem("viewer_code"); location.href = "LifeViewer.html?viewer_code=" + encodeURIComponent(
+	maths.stdout.replace(/<br\s*\/?>/g,"\n").replace(/<span( [^<>]*)>/g,"").replace(/<\/span>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&nbsp;|\xa0/g," ").replace(/&amp;/g,"&") //;
+); }
+//]]>
+</script>
+<script src="plug-in-v1.js" ></script>
+</body>
+</html>

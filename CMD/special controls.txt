@@ -1,0 +1,61 @@
+^@             | \Z           | null
+^D             | \.           | terminator
+^G             | \a           | beep
+^H             | \b           | cursor back (CSI "D")
+^I             | \t           | tabulation
+^J             | \n           | cursor down (CSI "B")
+^L             | \f           | clear (CSI "J")
+^M             | \r           | carriage return
+^N             | \<           | push
+^O             | \>           | pop
+^P [data]      | \d           | escape [data]
+^Z [attr]      | \y [attr]    | substitute color
+^[             | \e           | extended
+^[ ^G          | \e\a         | extended beep
+^[ ^I          | \e\t         | extended beep delay
+^[ ^Z [attr]   | \e\y [attr]  | extended substitute color
+^[ "!"         | \e!          | set stack pointer
+^[ '"'         | \e"          | + 2.8s
+^[ "'"         | \e'          | + 0.8s
+^[ "("         | \e(          | push frame
+^[ ")"         | \e)          | pop frame
+^[ "*"         | \e*          | toggle blink
+^[ "+"         | \e+          | enable blink
+^[ "-"         | \e-          | disable blink
+^[ "/"         | \e/          | cursor up (CSI "A")
+^[ "="         | \e=          | + 9.8s
+^[ "?"         | \e?          | cursor right (CSI "C")
+^[ "@" [len]   | \e@ [len]    | "raw" data sequence
+^[ "A" [attr]  | \eA [attr]   | cursor relative
+^[ "B" [attr]  | \eB [attr]   | cursor absolute
+^[ "C" [attr]  | \eC [attr]   | cursor fixed
+^[ "D"         | \eD          | single custom character set 1
+^[ "E" [attr]  | \eE [attr]   | single custom character set [attr]
+^[ "K"         | \eK          | restore cursor position
+^[ "L" [attr]  | \eL [attr]   | set cursor position (relative)
+^[ "M" [attr]  | \eM [attr]   | set cursor position (fixed)
+^[ "[" [attr]  | \e[ [attr]   | ANSI-like CSI sequence
+^[ "^"         | \e^          | (partial) no-op
+^^             | \c^          | (partial) comment
+^_             | \z           | default attribute (CSI "0m")
+^?             | \*           | toggle reverse (CSI "7m" / CSI "27m")
+---------------|--------------|--------------------------------------------
+               | #            | single-line comment
+               | ##           | multi-line comment
+               | \`           | "raw" string sequence w/o newline
+               | \'           | "raw" string sequence with newline
+               | \x [hex]     | hexadecimal encoding
+               | \o [oct]     | octal encoding
+               | \k [dec]     | decimal encoding
+               | \k?          | obfuscated
+               | \i           | toggle "comment" function
+               | \j [base64]  | base64 encoding
+               | \s [NNN]     | switch
+               | \}           | left to right override
+               | \{           | right to left override
+               | \;           | pop directional formatting
+               | \ <newline>  | line continuation
+---------------------------------------------------------------------------
+\x( [:] [hex-string] )                  | hexadecimal literal string
+\y: [attr, char]                        | character with attribute
+\y( [attr, char, [attr, char [...]]] )  | hex. string with attribute

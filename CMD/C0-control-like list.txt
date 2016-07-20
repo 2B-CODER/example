@@ -1,0 +1,38 @@
+\f\
+0x00 \<\y0e\d\Z\>\r\n\
+0x01 \<\y0e\d\cA \y0d\xda\>\r\n\
+0x02 \<\y0e\d\cB \y0d\xbf\>\r\n\
+0x03 \<\y0e\d\cC \y0d\xc0\>\r\n\
+0x04 \<\y0e\d\. \y0d\xd9\>\r\n\
+0x05 \<\y0e\d\cE \y0d\xb3\>\r\n\
+0x06 \<\y0e\d\cF \y0d\xc4\>\r\n\
+0x07 \<\y0e\d\a\>\r\n\
+0x08 \<\y0e\d\b\>\r\n\
+0x09 \<\y0e\d\t\>\r\n\
+0x0a \<\y0e\d\n\>\r\n\
+0x0b \<\y0e\d\v\>\r\n\
+0x0c \<\y0e\d\f\>\r\n\
+0x0d \<\y0e\d\r\>\r\n\
+0x0e \<\y0e\d\<\>\r\n\
+0x0f \<\y0e\d\>\>\r\n\
+
+0x7f \<\y0e\d\*\>\
+\eL\f\c@\
+0x10 \<\y0e\d\cP \y0d\xc5\>\r\n\
+0x11 \<\y0e\d\cQ\>\r\n\
+0x12 \<\y0e\d\cR\>\r\n\
+0x13 \<\y0e\d\cS\>\r\n\
+0x14 \<\y0e\d\cT\>\r\n\
+0x15 \<\y0e\d\cU \y0d\xc1\>\r\n\
+0x16 \<\y0e\d\cV \y0d\xc2\>\r\n\
+0x17 \<\y0e\d\cW \y0d\xb4\>\r\n\
+0x18 \<\y0e\d\cX\>\r\n\
+0x19 \<\y0e\d\cY \y0d\xc3\>\r\n\
+0x1a \<\y0e\d\cZ\>\r\n\
+0x1b \<\y0e\d\e\>\r\n\
+0x1c \<\y0e\d\c\\>\r\n\
+0x1d \<\y0e\d\c]\>\r\n\
+0x1e \<\y0e\d\c^\>\r\n\
+0x1f \<\y0e\d\c_\>\
+\eK\
+\.

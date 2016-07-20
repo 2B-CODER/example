@@ -1,0 +1,75 @@
+  nop
+! mov reg, imm
+" mov reg, reg
+# mov reg, rand
+$ push reg
+% pop reg
+& xchg reg, reg
+' mov reg(l), reg(l)
+( mov reg(l), reg(h)
+) mov reg(h), reg(l)
+* mov reg(h), reg(h)
++ print(char) reg(l)
+, print(char) reg(h)
+- print(dec) reg
+. print(dec) reg padding
+/ print(hex) reg
+0 add reg, reg
+1 or reg, reg
+2 adc reg, reg
+3 sbb reg, reg
+4 and reg, reg
+5 sub reg, reg
+6 xor reg, reg
+7 cmp reg, reg
+8 jmp $+reg
+9 test reg
+: jpe/jc/jb/jnae reg
+; jpo/jnc/jae/jnb reg
+< jz reg
+= jnz reg
+> jo reg
+? jno reg
+@ jl/jnge reg
+A jnl/jge reg
+B jle/jng reg
+C jnle/jg reg
+D call(relative) reg
+E ret
+F imul reg, reg
+G idiv reg, reg
+H shl reg, reg(l)
+I shr reg, reg(l)
+J sar reg, reg(l)
+K rol reg, reg(l)
+L ror reg, reg(l)
+M neg reg
+N not reg
+O inc reg
+P dec reg
+Q inc reg(l)
+R dec reg(l)
+S inc reg(h)
+T dec reg(h)
+U mov [reg], reg
+V mov reg, [reg]
+W mov [sp-reg], reg
+X mov reg, [sp-reg]
+Y mov reg, sp
+Z mov sp, reg
+[ input(hex) reg
+\ input(dec) reg
+] input(char) reg(l)
+^ input(char) reg(h)
+_ print(unsigned) reg
+` print(unsigned) reg padding
+a print(hex) reg(l)
+b print(hex) reg(h)
+c print(dec) reg(l)
+d print(dec) reg(h)
+e print(unsigned) reg(l) padding
+f print(unsigned) reg(h) padding
+g cbw reg
+h mov reg(l), imm
+i mov reg(h), imm
+~ hlt

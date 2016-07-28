@@ -12,6 +12,8 @@ var decode = function(str) {
     if (a === 49) { break; }
     if (a === 50) { a = 95; }if (b === 50) { b = 95; }
     if (c === 50) { c = 95; }if (d === 50) { d = 95; }
+    if (a === 62) { a = 61; }if (b === 62) { b = 61; }
+    if (c === 62) { c = 61; }if (d === 62) { d = 61; }
     a &= 63; b &= 63; c &= 63; d &= 63;
     m = d & 3; n = d & 12; o = d & 48;
     dest[j++] = m << 6 | c;

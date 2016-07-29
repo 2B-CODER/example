@@ -26,6 +26,9 @@ start:
 	mov ax, 1003h
     mov bx, 0
     int 10h
+    mov ch, 32
+    mov ah, 1
+    int 10h
     
     mov ax, return
     push ax
@@ -104,6 +107,10 @@ start:
     ; call far ptr [bp-4]
     ; add sp, ax
     
+    xor ax, ax
+    int 51
+    mov ax, 1
+    int 51
     hang:
     jmp hang
     

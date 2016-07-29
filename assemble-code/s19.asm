@@ -1,8 +1,11 @@
 ; multi-segment executable file template.
 
 xdata segment
-    sptr  dw  0
-    mulc  dw  0
+    sptr     dw   0
+    mulc     dw   0
+    curx     dw   0
+    cury     dw   0
+    ptrstate db 255
 ends    
     
 sseg segment stack ; data segment for stack
@@ -111,8 +114,13 @@ start:
     int 51
     mov ax, 1
     int 51
-    hang:
-    jmp hang
+    key:
+        mov ah, 1
+        int 16h
+        jz key
+        call chkkey
+    jmp key
+    keyl:
     
     add bp, ax
     mov sp, bp
@@ -121,14 +129,41 @@ start:
     retf
     
     subp1 proc
-        dec al
-        and al, 3fh
-        test al, 20h
-        jz c1
-        sub al, 6 ; 32 - 6 = 26    
-    c1:
-        ret 
-    subp1 endp   
+          dec al
+          and al, 3fh
+          test al, 20h
+          jz c1
+          sub al, 6 ; 32 - 6 = 26    
+       c1:
+          ret 
+    subp1 endp
+    
+    chkkey proc
+          cmp ax, 1c0ah
+          jnz chkn1c0a
+          not ptrstate
+          mov al, ptrstate
+          test al, al
+          jz hidden
+       ; show pointer:
+          mov cx, curx
+          mov dx, cury
+          mov ax, 4
+          int 51
+          mov ax, 1
+          int 51
+          ret
+       hidden:
+          mov ax, 3
+          int 51
+          mov curx, cx
+          mov cury, dx
+          mov ax, 2
+          int 51
+          ret
+       chkn1c0a:  
+          ret
+    chkkey endp
 ends
 
 return segment

@@ -37,7 +37,9 @@ start:
     mov bp, sp
     sub sp, ax
     sub bp, ax
+    mov cx, 80*25
     
+    d0:
     push ax
     mov ah, 7
     
@@ -94,6 +96,7 @@ start:
     popa
     pop es
     pop ds
+    loop d0
     
     ; sub sp, ax
     ; mov w. [bp-2], exseg1

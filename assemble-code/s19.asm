@@ -146,7 +146,7 @@ start:
           not ptrstate
           mov al, ptrstate
           test al, al
-          jz hidden
+          jnz hidden
        ; show pointer:
           mov cx, curx
           mov dx, cury

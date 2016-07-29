@@ -139,6 +139,8 @@ start:
     subp1 endp
     
     chkkey proc
+          xor ah, ah
+          int 16h
           cmp ax, 1c0ah
           jnz chkn1c0a
           not ptrstate

@@ -1,0 +1,1321 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  body {background-color: black;}
+  .div {
+    width: 640px;
+    height: 400px;
+    position: relative;
+    border: 2px solid white;
+  }
+  .div>canvas { position: absolute; }
+  .notice {
+	padding: 0;
+	background: #7F744C;
+	border: 2px #ffe070 solid;
+	color: #ffffff;
+	margin-bottom: 5px;
+	width: 700px;
+  }
+  .center { text-align: -webkit-center; }
+</style>
+<meta charset="utf-8" />
+<script src="head-script-1.js"></script>
+<script src="head-script-2.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+var beep = function () {
+	try { var ac = new AudioContext() || new webkitAudioContext(); } catch (err) {}
+	if (!ac) { document.write('<div class="center"><div class="notice"><p>Your browser does not support AudioContext().</p></div></div>'); return false; }
+	var real = new Float32Array(2);
+	var imag = new Float32Array(2);
+	var freq = 440;
+	var a = 0;
+	real[0] = 0; imag[0] = 0;
+	real[1] = 0.5; imag[1] = 0;
+	var main = function(beeptime) {
+		if (!main.sound_switch) {return 0;}
+		beeptime == null && (beeptime = 0.17);
+		var osc = ac.createOscillator();
+		osc.frequency.value = freq;
+		var wave = ac.createPeriodicWave(real, imag, {disableNormalization: true});
+		osc.setPeriodicWave(wave);
+		osc.connect(ac.destination);
+		osc.start(a+0);
+		osc.stop(a+beeptime);
+		a += beeptime + 0.03;
+	}
+	main.setfreq = function (n) {
+		freq = n;
+	}
+	main.setlogf = function (n) {
+		freq = 440 * Math.pow(2, n/12);
+	}
+	main.setvol = function (n) {
+		real[1] = n;
+	}
+	main.loadTime = function () {
+		var b = ac.currentTime;
+		a < b && (a = b);
+	}
+	main.audioDelay = function (n) {
+		a = a + n;
+	}
+	main.close = function () {
+		return ac.close();
+	}
+	main.sound_switch = true;
+	return main;
+}();
+var insert = function(myField, myValue) {
+	myValue += "";
+    if (document.selection) { //IE support
+        myField.focus();
+        sel = document.selection.createRange();
+        sel.text = myValue;
+    } else if (myField.selectionStart || myField.selectionStart == 0) { //MOZILLA/NETSCAPE support
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
+        myField.value = myField.value.substring(0, startPos) + myValue
+        + myField.value.substring(endPos, myField.value.length);
+        startPos += myValue.length;
+        myField.selectionStart = myField.selectionEnd = startPos;
+    } else {
+        myField.value += myValue;
+    }
+    myField.focus();
+}
+var _alternate = false, _extraEsc, _extraELen, _extraEscTable = {
+	"_": "##(direct alt)##",
+	"_xr": "\\r\\n\\\n",
+	"_xe": "\\e",
+	"_xt": "\\t",
+	"_x8": "\\b",
+	"_0": "\\c@",
+	"_100_116": "\\:r\\:s",
+	"_xb_99_111_108_111_114": "\\y",
+	"_xb_98_108_105_110_107": "\\e*",
+	"_xb_104_111_109_101": "\\d\\*",
+	"_xb_98_xu": "\\e+",
+	"_xb_98_xd": "\\e-",
+	"_xb_0": "\\.",
+	"_xb_x8": "\\f",
+	"_xb_xu": "\\d\\cX",
+	"_xb_xd": "\\d\\cY",
+	"_xb_xr": "\\d\\cZ",
+	"_xb_xl": "\\d\\e",
+	"_xb_xb_xu": "\\d\\x1e",
+	"_xb_xb_xd": "\\d\\x1f",
+	"_xb_xb_xr": "\\d\\d",
+	"_xb_xb_xl": "\\d\\cQ",
+	"_xb_33_33": "\\d\\cS",
+	"_xb_xu_xd": "\\d\\cR",
+	"_xb_76": "\\d\\x1c",
+	"_xb_xl_xr": "\\d\\x1d",
+	"_115_111": "\\d\\cU",
+	"_83_79": "\\d\\cU",
+	"_80_80": "\\d\\cT",
+	"_80_33": "\\d\\cT",
+	"_112_33": "\\d\\cT",
+	"_39_39": '"',
+	"_43_43": "\\#",
+	"_65_84": "@",
+	"_40_40": "[",
+	"_47_47": "\\\\",
+	"_47_60": "\\\\",
+	"_60_47": "\\\\",
+	"_41_41": "]",
+	"_32_62": "^",
+	"_62_32": "^",
+	"_32_94": "^",
+	"_94_32": "^",
+	"_32_96": "`",
+	"_96_32": "`",
+	"_45_40": "{",
+	"_40_45": "{",
+	"_108_118": "|",
+	"_118_108": "|",
+	"_76_86": "|",
+	"_86_76": "|",
+	"_47_94": "|",
+	"_94_47": "|",
+	"_46_40": "}",
+	"_40_46": "}",
+	"_32_126": "~",
+	"_45_32": "~",
+	"_126_32": "~",
+	"_44_67": "\\x80",
+	"_34_117": "\\x81",
+	"_27_100": "\\x82",
+	"_94_97": "\\x83",
+	"_34_97": "\\x84",
+	"_96_97": "\\x85",
+	"_111_97": "\\x86",
+	"_42_97": "\\x86",
+	"_97_42": "\\x86",
+	"_44_99": "\\x87",
+	"_94_101": "\\x88",
+	"_34_101": "\\x89",
+	"_96_101": "\\x8a",
+	"_34_105": "\\x8b",
+	"_94_105": "\\x8c",
+	"_96_105": "\\x8d",
+	"_34_65": "\\x8e",
+	"_111_65": "\\x8f",
+	"_39_69": "\\x90",
+	"_97_101": "\\x91",
+	"_65_69": "\\x92",
+	"_94_111": "\\x93",
+	"_34_111": "\\x94",
+	"_96_111": "\\x95",
+	"_94_117": "\\x96",
+	"_96_117": "\\x97",
+	"_34_121": "\\x98",
+	"_34_79": "\\x99",
+	"_34_85": "\\x9a",
+	"_99_124": "\\x9b",
+	"_45_76": "\\x9c",
+	"_61_89": "\\x9d",
+	"_80_116": "\\x9e",
+	"_xb_102": "\\x9f",
+	"_39_97": "\\xa0",
+	"_39_105": "\\xa1",
+	"_39_111": "\\xa2",
+	"_39_117": "\\xa3",
+	"_126_110": "\\xa4",
+	"_126_78": "\\xa5",
+	"_94_95_97": '\\xa6',
+	"_94_95_111": '\\xa7',
+	"_63_63": '\\xa8',
+	"_xb_44_45": '\\xa9',
+	"_xb_45_44": '\\xa9',
+	"_44_45": '\\xaa',
+	"_45_44": '\\xaa',
+	"_49_50": '\\xab',
+	"_49_52": '\\xac',
+	"_33_33": '\\xad',
+	"_60_60": "\\xae",
+	"_62_62": "\\xaf",
+	"_xb_49": "\\xb0",
+	"_xb_50": "\\xb1",
+	"_xb_51": "\\xb2",
+	"_xb_124": "\\xb3",
+	"_xb_43_xl": "\\xb4",
+	"_xb_xb_124": "\\xba",
+	"_xb_43_xd_xl": "\\xbf",
+	"_xb_43_xl_xd": "\\xbf",
+	"_xb_43_xu_xr": "\\xc0",
+	"_xb_43_xr_xu": "\\xc0",
+	"_xb_43_xu": "\\xc1",
+	"_xb_43_xd": "\\xc2",
+	"_xb_43_xr": "\\xc3",
+	"_xb_45": "\\xc4",
+	"_xb_43": "\\xc5",
+	"_xb_xb_45": "\\xcd",
+	"_xb_xb_43": "\\xce",
+	"_xb_124_45": "\\xd7",
+	"_xb_45_124": "\\xd8",
+	"_xb_43_xu_xl": "\\xd9",
+	"_xb_43_xl_xu": "\\xd9",
+	"_xb_43_xd_xr": "\\xda",
+	"_xb_43_xr_xd": "\\xda",
+	"_xb_52": "\\xdb",
+	"_xb_52_xd": "\\xdc",
+	"_xb_52_xl": "\\xdd",
+	"_xb_52_xr": "\\xde",
+	"_xb_52_xu": "\\xdf",
+	"_xb_97": "\\xe0",
+	"_xb_98": "\\xe1",
+	"_115_115": "\\xe1",
+	"_xb_71": "\\xe2",
+	"_112_105": "\\xe3",
+	"_115_117_109": "\\xe4",
+	"_xb_115": "\\xe5",
+	"_109_117": "\\xe6",
+	"_47_117": "\\xe6",
+	"_117_47": "\\xe6",
+	"_xb_116": "\\xe7",
+	"_111_124": "\\xe8",
+	"_124_111": "\\xe8",
+	"_79_124": "\\xe8",
+	"_124_79": "\\xe8",
+	"_111_45": "\\xe9",
+	"_45_111": "\\xe9",
+	"_79_45": "\\xe9",
+	"_45_79": "\\xe9",
+	"_95_45": "\\xea",
+	"_45_95": "\\xea",
+	"_xb_100": "\\xeb",
+	"_100_104": "\\xeb",
+	"_56_56": "\\xec",
+	"_47_111": "\\xed",
+	"_111_47": "\\xed",
+	"_xb_101": "\\xee",
+	"_xb_85": "\\xef",
+	"_xb_61": "\\xf0",
+	"_43_45": "\\xf1",
+	"_43_95": "\\xf1",
+	"_45_43": "\\xf1",
+	"_62_95": "\\xf2",
+	"_62_61": "\\xf2",
+	"_95_62": "\\xf2",
+	"_60_95": "\\xf3",
+	"_60_61": "\\xf3",
+	"_95_60": "\\xf3",
+	"_xu_105": "\\xf4",
+	"_xb_117_105": "\\xf4",
+	"_xd_105": "\\xf5",
+	"_xb_100_105": "\\xf5",
+	"_45_58": "\\xf6",
+	"_126_126": "\\xf7",
+	"_111_111": "\\xf8",
+	"_xb_42": "\\xf9",
+	"_46_94": "\\xfa",
+	"_115_113": "\\xfb",
+	"_94_110": "\\xfc",
+	"_94_50": "\\xfd",
+	"_xb_xb_52": "\\xfe",
+	"_32_32": "\\xff",
+};
+var extraKFn = function (ev) {
+	if (ev.keyCode === 18) {
+		_alternate = !_alternate;
+		_alternate || insert($("data1"), _extraEscTable["_" + _extraEsc.join("_")]);
+		_extraEsc = []; _extraELen = 0;
+		return false;
+	}
+}
+var extraKFn2 = function (ev) {
+	if (!event.altKey && _alternate && ev.keyCode === 116) {
+		_alternate = false;
+		insert($("data1"), ""+new Date())
+		return false;
+	}
+	if (_alternate) {
+		if (ev.keyCode === 231) {
+			_extraEsc[_extraELen++] = "xp"; return false;
+		}
+		if (ev.keyCode === 13) {
+			_extraEsc[_extraELen++] = "xr"; return false;
+		}
+		if (ev.keyCode === 27 && !ev.shiftKey) {
+			_extraEsc[_extraELen++] = "xe"; return false;
+		}
+		if (ev.keyCode === 27 && ev.shiftKey) {
+			_extraEsc[_extraELen++] = "xb"; return false;
+		}
+		if (ev.keyCode === 37) {
+			_extraEsc[_extraELen++] = "xl"; return false;
+		}
+		if (ev.keyCode === 38) {
+			_extraEsc[_extraELen++] = "xu"; return false;
+		}
+		if (ev.keyCode === 39) {
+			_extraEsc[_extraELen++] = "xr"; return false;
+		}
+		if (ev.keyCode === 40) {
+			_extraEsc[_extraELen++] = "xd"; return false;
+		}
+		if (ev.keyCode === 8) {
+			_extraEsc[_extraELen++] = "x8"; return false;
+		}
+		if (ev.keyCode === 9) {
+			_extraEsc[_extraELen++] = "xt"; return false;
+		}
+		if (event.ctrlKey && ev.keyCode === 50) {
+			_extraEsc[_extraELen++] = 0; return false;
+		}
+	}
+}
+var parseKey = function (ev) {
+    if (_alternate) { _extraEsc[_extraELen++] = ev.keyCode; }
+    return !_alternate;
+};
+//-->
+</script>
+<noscript>
+<div class="center"><div class="notice"><p>Your browser does not support JavaScript.</p></div></div>
+</noscript>
+<div style="padding: 0 -webkit-calc(50% - 320px); padding: 0 calc(50% - 320px);">
+<div class="div">
+<canvas style="z-index: 2;" id="L1" width="640" height="400" onclick="getXY(event)"></canvas>
+<canvas style="z-index: 1;" id="L2" width="640" height="400"></canvas>
+</div>
+</div>
+<div style="text-align: -webkit-center;">
+<div style="color:#ff0">
+function:
+<select id="_func">
+  <option>drawChar</option>
+  <option>drawInline</option>
+  <option>drawRepeatH</option>
+  <option>drawRepeatV</option>
+  <option selected="selected">drawMultiline</option>
+  <option>clearScreen</option>
+  <option>setBlinkingBit</option>
+  <option>import code</option>
+  <option>export code</option>
+  <option>fillPattern</option>
+</select> , 
+data encoding:
+<select id="_enc">
+  <option>"raw"</option>
+  <option>URI</option>
+  <option selected="selected">backslash escaping #1</option>
+</select>
+</div>
+<div style="color:#ccc">
+X:<input type="number" id="X1" style="width:60px;" />,
+Y:<input type="number" id="Y1" style="width:60px;" />,
+more attributes:<input type="checkbox" checked="checked" onclick="show_hide(this)" />
+<br />
+<span id="options1">
+attr[0]:<input type="number" id="attr1" style="width:60px;" />,
+attr[1]:<input type="number" id="rep1" style="width:60px;" />,
+attr[2]:<input type="number" id="rep2" style="width:60px;" />,
+attr[3]:<input type="number" id="rep3" style="width:60px;" />
+</span>
+<br />
+<input type="button" onclick="getFunc()" value="render" />
+<input type="button" onclick="setBlink()" value="toggle blinking" />
+<input type="button" onclick="beep.sound_switch = !beep.sound_switch" value="toggle sound" />
+<input type="button" value="alt"
+onclick="extraKFn({keyCode:18});$('data1').focus()" />
+<input type="button" value="extended"
+onclick="_extraEsc[_extraELen++] = 'xb'; $('data1').focus()" />
+<!-- <input type="button" onclick="switchCP()" value="switch code page" /> -->
+<br />
+<textarea id="data1" style="width:600px;height:400px;background-color:inherit;color:inherit"
+onkeyup="extraKFn(event);" onkeypress="return parseKey(event);"
+onkeydown="return extraKFn2(event);" ></textarea>
+</div>
+</div>
+<script type="text/javascript">
+(function() {
+    function B() {
+        this.key = new Uint8Array(256);
+        this.Oi = this.Mi = 0
+    }
+    B.prototype.seed = function(t) {
+        var h, n, p, c = this.key;
+        for (h = 0; 256 > h; h += 1)
+            c[h] = h;
+        for (h = n = 0; 256 > h; h += 1)
+            n = n + c[h] + t.charCodeAt(h % t.length) & 255,
+            p = c[h],
+            c[h] = c[n],
+            c[n] = p;
+        this.Oi = this.Mi = 0
+    };
+    B.prototype.random = function() {
+        var t, h, n = 0, p = 1, c = this.key, e = this.Mi, b = this.Oi;
+        for (t = 0; 8 > t; t += 1)
+            e = e + 1 & 255,
+            b = b + c[e] & 255,
+            h = c[e],
+            c[e] = c[b],
+            c[b] = h,
+            n += c[c[e] + c[b] & 255] * p,
+            p *= 256;
+        this.Mi = e;
+        this.Oi = b;
+        return n / 1.8446744073709552E19
+    };
+	B.prototype.randint = function(min, max) {
+		var z = max - min + 1;
+        var t, h, n = 0, p = 1, c = this.key, e = this.Mi, b = this.Oi;
+        for (t = 0; 8 > t; t += 1)
+            e = e + 1 & 255,
+            b = b + c[e] & 255,
+            h = c[e],
+            c[e] = c[b],
+            c[b] = h,
+            n += c[c[e] + c[b] & 255] * p,
+            p = (p * 256) % z,
+			p || ++p;
+        this.Mi = e;
+        this.Oi = b;
+        return n % z + min;
+    };
+    window.myRand = new B
+})();
+myRand.seed(Date.now().toString());
+
+var tPadding = function (i, p) {
+	if (i<10) { i = p + i; }
+	return i
+}
+var tPadding2 = function (i, p, l) {
+	if (i<1000 && l >= 4) { i = p + i; }
+	if (i<100 && l >= 3) { i = p + i; }
+	if (i<10) { i = p + i; }
+	return i
+}
+
+var base64DecodeChars = [
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
+    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
+    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+    -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1];
+
+function base64decode(str) {
+    var c1, c2, c3, c4;
+    var i, len, out;
+
+    len = str.length;
+    i = 0;
+    out = "";
+    while(i < len) {
+    /* c1 */
+    do {
+        c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+    } while(i < len && c1 == -1);
+    if(c1 == -1)
+        break;
+
+    /* c2 */
+    do {
+        c2 = base64DecodeChars[str.charCodeAt(i++) & 0xff];
+    } while(i < len && c2 == -1);
+    if(c2 == -1)
+        break;
+
+    out += String.fromCharCode((c1 << 2) | ((c2 & 0x30) >> 4));
+
+    /* c3 */
+    do {
+        c3 = str.charCodeAt(i++) & 0xff;
+        if(c3 == 61)
+        return out;
+        c3 = base64DecodeChars[c3];
+    } while(i < len && c3 == -1);
+    if(c3 == -1)
+        break;
+
+    out += String.fromCharCode(((c2 & 0XF) << 4) | ((c3 & 0x3C) >> 2));
+
+    /* c4 */
+    do {
+        c4 = str.charCodeAt(i++) & 0xff;
+        if(c4 == 61)
+        return out;
+        c4 = base64DecodeChars[c4];
+    } while(i < len && c4 == -1);
+    if(c4 == -1)
+        break;
+    out += String.fromCharCode(((c3 & 0x03) << 6) | c4);
+    }
+    return out;
+}
+var swapchar = {"(":")",")":"(","[":"]","]":"[","<":">",">":"<","{":"}","}":"{"}
+var swapping = function (a) {
+	return swapchar[a] || a;
+}
+var show_hide = function (that) {
+	$("options1").style.display = ["none","inline"][+that.checked]
+}
+var getXY = function (e) {
+var f, g;
+$("X1").value = f = (e.offsetX / 8) | 0;
+$("Y1").value = g = (e.offsetY /16) | 0;
+$("attr1").value = screen_memory[f + g * 80] & 65535;
+$("rep1").value = (1 & blink_mem[(f>>3) + g*10] >> (f & 7)) << 8 | cPageTable[f + g * 80];
+}
+if (!String.prototype.repeat) {
+  String.prototype.repeat = function(count) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError('can\'t convert ' + this + ' to object');
+    }
+    var str = '' + this;
+    count = +count;
+    if (count != count) {
+      count = 0;
+    }
+    if (count < 0) {
+      throw new RangeError('repeat count must be non-negative');
+    }
+    if (count == Infinity) {
+      throw new RangeError('repeat count must be less than infinity');
+    }
+    count = Math.floor(count);
+    if (str.length == 0 || count == 0) {
+      return '';
+    }
+    // Ensuring count is a 31-bit integer allows us to heavily optimize the
+    // main part. But anyway, most current (August 2014) browsers can't handle
+    // strings 1 << 28 chars or longer, so:
+    if (str.length * count >= 1 << 28) {
+      throw new RangeError('repeat count must not overflow maximum string size');
+    }
+    var rpt = '';
+    for (;;) {
+      if ((count & 1) == 1) {
+        rpt += str;
+      }
+      count >>>= 1;
+      if (count == 0) {
+        break;
+      }
+      str += str;
+    }
+    // Could we try:
+    // return Array(count + 1).join(this);
+    return rpt;
+  }
+}
+    var $ = function(id) { return document.getElementById(id); };
+	var c1 = $('L1')
+	var ctx1 = c1.getContext("2d");
+	var c2 = $('L2')
+	var ctx2 = c2.getContext("2d");
+	// var hiddenContext;
+	var screen_memory = new Int16Array(80*25), blink_mem = new Int8Array(10*25);
+	for (var i = 0; i < 80*25; ++i) {
+	    screen_memory[i] = 0;
+	}
+	for (var i = 0; i < 10*25; ++i) {
+	    blink_mem[i] = 0;
+	}
+	var drawChar, drawInline, drawRepeatH, drawRepeatV, drawMultiline, clearScreen, setBlinkingBit, fillPattern, storeMem, fn_list;
+	
+	var imgs = [];
+    imgs[0] = new Image();
+    imgs[0].src = "cp437-b.png";
+	imgs[1] = new Image();
+    imgs[1].src = "cp65280-b.png";
+	imgs[2] = new Image();
+    imgs[2].src = "cp65281-b.png";
+	imgs[255] = new Image();
+    imgs[255].src = "hex_fallback.png";
+	
+	imgMode = 0;
+	var cPageTable = new Uint8Array(2000);
+	
+	imgs[0].onload = function() {
+	  /*
+        // 使用离屏canvas中缓存图片
+        var hiddenCanvas = document.createElement("canvas");
+        hiddenCanvas.height = 192;
+        hiddenCanvas.width = 2048;
+        hiddenContext = hiddenCanvas.getContext("2d")
+        hiddenContext.drawImage(img,0,0);
+	  */
+      drawChar = function (x, y, data) {
+		var d2 = cPageTable[x+y*80];
+		var character  = data & 255;
+		var attribute  = (data >> 8) & 255;
+		var foreground = attribute & 15;
+		var background = attribute >> 4;
+		ctx2.fillStyle = "rgb("+color_list[3*background]+","+color_list[3*background+1]+","+color_list[3*background+2]+")";
+        ctx2.fillRect(x*8, y*16, 8, 16);
+		ctx1.clearRect(x*8, y*16, 8, 16);
+		ctx1.drawImage(imgs[d2], 8*character, 16*foreground, 8, 16, 8*x, 16*y, 8, 16)
+	  }
+	  var storeMem = function (x, y, data, d2) {
+		screen_memory[80*y + x] = data;
+		d2 != null && (cPageTable[x+y*80] = d2);
+	  }
+	  drawInline = function (x, y, str, attr) {
+	    for (var i = 0, len = str.length; i < len; ++i) {
+	      storeMem((x + i) % 80, y, (attr<<8)|(str.charCodeAt(i)&255));
+		}
+	  }
+	  drawRepeatH = function (x, y, _char, attr, len) {
+	    for (var i = 0; i < len; ++i) {
+	      storeMem((x + i) % 80, y, (attr<<8)|(_char.charCodeAt(0)&255));
+		}
+	  }
+	  drawRepeatV = function (x, y, _char, attr, len) {
+	    for (var i = 0; i < len; ++i) {
+	      storeMem(x, (y + i) % 25, (attr<<8)|(_char.charCodeAt(0)&255));
+		}
+	  }
+	  drawMultiline = function (x, y, str, attr, attr2) {
+	    if (attr2 & 1) {clearScreen();}
+		var orig_attr = attr, attr_ptr = -1, attr_base, attr_stack = [], func1, func2, func3, func4, blink_state = 0, part_blink = 0, longA = 0, longD, ansiesc, nestLevel;
+		l97:
+	    for (var i = 0, j = 0, k = 0, X2 = 0, len = str.length; i < len; ++i) {
+		  var charCode = str.charCodeAt(i)&255;
+		  switch (charCode) {
+			case   0: break;
+			case   4: break l97;
+			case   7: beep((17 + longA)/100); longA = 0; break;
+		    case   8: j = (j + 79) % 80; break;
+		    case   9: j = j + 4 - j % 4; break;
+		    case  10: ++k; break;
+		    case  12: clearScreen(); j = 0; k = 0; break;
+			case  13: j = 0; break;
+			case  14:
+              attr_stack[++attr_ptr] = attr;
+			  attr_stack[++attr_ptr] = blink_state;
+            break;
+			case  15:
+			  blink_state = attr_stack[attr_ptr--];
+			  attr = attr_stack[attr_ptr];
+              /* attr_stack.length = */ attr_ptr--;
+            break;
+			case  26: attr = str.charCodeAt(++i); break;
+			case  27: func1 = str.charCodeAt(++i)&255;
+			  switch (func1) {
+				case  7:
+					func2 = str.charCodeAt(++i)&255;
+					func3 = str.charCodeAt(++i)&255;
+					beep.setvol(func3/255); beep.setlogf(func2-128);
+					beep((17 + longA)/100);
+					beep.setvol(0.5); beep.setlogf(0);
+					longA = 0;
+				break;
+				case  9:
+					func2 = str.charCodeAt(++i)&255;
+					if (func2 < 128) {
+						longD = func2;
+					} else {
+						func3 = str.charCodeAt(++i)&255;
+						longD = ((func2 - 128) << 8) + func3;
+					} 
+					beep.audioDelay(longD / 10);
+				break;
+				case 26:
+					func2 = str.charCodeAt(++i)&255;
+					func3 = str.charCodeAt(++i)&255;
+					func4 = (~attr & func2) | (attr & ~func3);
+					attr = func4; break;
+				break;
+				case 33: attr_ptr += (str.charCodeAt(++i) + 128) % 256 - 128; break;
+				case 34: longA += 280; break;
+				case 39: longA += 80; break;
+				case 40: attr_stack[++attr_ptr] = attr_base; attr_base = attr_ptr; break;
+				case 41: attr_ptr = attr_base; attr_base = attr_stack[attr_ptr--]; break;
+				case 42: part_blink = blink_state = 1 - blink_state; break;
+				case 43: part_blink = blink_state = 1; break;
+				case 45: part_blink = blink_state = 0; break;
+				case 46: longA += 20; break;
+				case 47: k = (k + 24) % 25; break;
+				case 58: part_blink = 1 - blink_state; break;
+				case 61: longA += 980; break;
+				case 63: ++j; break;
+				case 64: func2 = str.charCodeAt(++i)&255;
+				  while (func2--) {
+					setBlinkingBit((x + j) % 80, (y + k) % 25, part_blink);
+					storeMem((x + j) % 80, (y + k) % 25, (attr<<8)|str.charCodeAt(++i)&255, X2); ++j;
+				  }
+				  X2 = 0;
+				break;
+				case 65:
+					func2 = ((str.charCodeAt(++i)+128)&255) + 32;
+					func3 = ((str.charCodeAt(++i)+128)&255) + 22;
+					j = (j + func2) % 80;
+					k = (k + func3) % 25;
+				break;
+				case 66:
+					j = (((str.charCodeAt(++i)+128)&255) + 32) % 80;
+					k = (((str.charCodeAt(++i)+128)&255) + 22) % 25;
+				break;
+				case 67:
+					j = (str.charCodeAt(++i)&255) - x;
+					k = (str.charCodeAt(++i)&255) - y;
+				break;
+				case 68: X2 = 1; break;
+				case 69: X2 = str.charCodeAt(++i); break;
+				case 75:
+					var tmp = attr_stack[attr_ptr--];
+					j = tmp >> 8;
+					k = tmp & 255;
+					tmp = attr_stack[attr_ptr--];
+					x = tmp >> 8;
+					y = tmp & 255;
+				break;
+				case 76:
+				case 77:
+					var j2, k2, isRel = 77 - func1;
+					j = (j % 80 + 80) % 80;
+					k = (k % 25 + 25) % 25;
+					attr_stack[++attr_ptr] = x << 8 | y;
+					attr_stack[++attr_ptr] = j << 8 | k;
+					j = 0; k = 0, j2 = str.charCodeAt(++i), k2 = str.charCodeAt(++i);
+					x = isRel ? (x + ((j2+128)&255) + 32) % 80 : j2;
+					y = isRel ? (y + ((k2+128)&255) + 22) % 25 : k2;
+				break;
+				case 91:
+					var args = [0], argsPtr = 0, reargsPtr = 0, pp, ansiesc = true;
+					for (;i < len && ansiesc;) {
+						pp = str.charCodeAt(++i)
+						pp === 59 ? (args[++argsPtr] = 0) :
+						(pp >= 48 && pp <= 57) ? (args[argsPtr] = (args[argsPtr] * 10 + pp - 48) & 255) : ansiesc = false;
+					}
+					++argsPtr;
+					switch (pp) {
+						case 66: k = (k + args[0]) % 25; break;
+						case 65: k = (k + 275 - args[0]) % 25; break;
+						case 68: j = (j + 320 - args[0]) % 80; break;
+						case 67: j = (j + args[0]) % 80; break;
+						case 72: case 102: k = args[0]; j = args[1]; break;
+						case 74: clearScreen(); j = 0; k = 0; break;
+						case 109: 
+							for (;argsPtr > reargsPtr; ++reargsPtr) {
+								switch (args[reargsPtr]) {
+									case 0: attr = orig_attr; part_blink = blink_state = 0; break;
+									case 1: attr |= 0x08; break;
+									case 2: attr &= 0xf7; break;
+									case 5: part_blink = blink_state = 1; break;
+									case 7: attr = ((attr & 15)<<4) | (attr >> 4)& 15; break;
+									case 25: part_blink = blink_state = 0; break;
+									case 30: attr &= 0xf8; break;
+									case 31: attr &= 0xf8; attr |= 0x04; break;
+									case 32: attr &= 0xf8; attr |= 0x02; break;
+									case 33: attr &= 0xf8; attr |= 0x06; break;
+									case 34: attr &= 0xf8; attr |= 0x01; break;
+									case 35: attr &= 0xf8; attr |= 0x05; break;
+									case 36: attr &= 0xf8; attr |= 0x03; break;
+									case 37: attr |= 0x07; break;
+									case 40: attr &= 0x8f; break;
+									case 41: attr &= 0x8f; attr |= 0x40; break;
+									case 42: attr &= 0x8f; attr |= 0x20; break;
+									case 43: attr &= 0x8f; attr |= 0x60; break;
+									case 44: attr &= 0x8f; attr |= 0x10; break;
+									case 45: attr &= 0x8f; attr |= 0x50; break;
+									case 46: attr &= 0x8f; attr |= 0x30; break;
+									case 47: attr |= 0x70; break;
+									case 70: attr |= 0x80; break;
+									case 71: attr &= 0x7f; break;
+								}
+							}
+						break;
+						case 115:
+							j = (j % 80 + 80) % 80;
+							k = (k % 25 + 25) % 25;
+							attr_stack[++attr_ptr] = j << 8 | k;
+						break;
+						case 117:
+							var tmp = attr_stack[attr_ptr--];
+							j = tmp >> 8;
+							k = tmp & 255;
+						break;
+					}
+				break;
+				case 94: ++i; break;
+			  }
+			break;
+			case  30:
+			  for (nestLevel = 1; i < len && nestLevel;) {
+				func1 = str.charCodeAt(++i)&255;
+				if (func1 ===  0) { nestLevel--; }
+				if (func1 === 30) { ++nestLevel; }
+			  }
+			break;
+			case  31: attr = orig_attr; break;
+			case 127: attr = ((attr & 15)<<4) | (attr >> 4)& 15; break;
+			case  16: charCode = str.charCodeAt(++i)&255;
+		    default:
+			  setBlinkingBit((x + j) % 80, (y + k) % 25, part_blink);
+	          storeMem((x + j) % 80, (y + k) % 25, (attr<<8)|charCode, X2); ++j;
+			  part_blink = blink_state; X2 = 0;
+		  }
+		}
+		attr_stack.length = 0;
+	  }
+	  clearScreen = function () {
+	    for (var i = 0; i < 80*25; ++i) {
+	      screen_memory[i] = 0;
+	    }
+		ctx1.clearRect(0,0,640,300);
+		ctx2.clearRect(0,0,640,300);
+	  }
+	  fillPattern = function (x, y, attr, Hlen, Vlen, attr2) {
+		if (attr2 === 1) { Hlen = (Hlen - x + 80) % 80; Vlen = (Vlen - y + 25) % 25; }
+	    for (var i = 0; i < Hlen; ++i) {
+		  for (var j = 0; j < Vlen; ++j) {
+			storeMem((x + i) % 80, (y + j) % 25, attr);
+		  }
+		}
+	  }
+	  setBlinkingBit = function (x, y, attr) {
+	    attr = +attr;
+	    var t = blink_mem[(x>>3) + y*10];
+		if (attr > 0) {
+		  blink_mem[(x>>3) + y*10] = t |  (1 << (x&7));
+		} else if (attr < 0) {
+		  blink_mem[(x>>3) + y*10] = t ^  (1 << (x&7));
+		} else {
+		  blink_mem[(x>>3) + y*10] = t & ~(1 << (x&7));
+		}  
+	  }
+	  var xlatTable = [
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,
+-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1,
+	  ];
+	  var xlat2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	  fn_list = [storeMem,drawInline,drawRepeatH,drawRepeatV,drawMultiline,clearScreen,setBlinkingBit,function(code) {
+		var p1, p2, p3, p4, r, x3;
+		for (var i = 0, x3 = 0, xc, xC; i < 2000; i++, x3 += 3) {
+		  xZ = 0;
+		  for (;;) {
+			var xc = code.charCodeAt(x3) - 48;
+			if (!(xc >= 0 && xc <= 9)) {break;}
+			xZ = xZ * 10 + xc;
+			x3++;
+		  }
+		  cPageTable[i] = xZ;
+		  p1 = xlatTable[code.charCodeAt(x3)];
+		  p2 = xlatTable[code.charCodeAt(x3+1)];
+		  p3 = xlatTable[code.charCodeAt(x3+2)];
+		  r = p1 + p2*52 + p3*2704;
+		  setBlinkingBit(i % 80, (i / 80) | 0, r>>16);
+		  storeMem(i % 80, (i / 80) | 0, r&0xffff);
+		}
+	  }, function () {
+		var r, p1, p2, p3, p4, s = "";
+		for (var y = 0; y < 25; ++y) {
+		  for (var x = 0; x < 80; ++x) {
+			var xy80 = x+y*80;
+			p4 = cPageTable[xy80];
+			p4 === 0 && (p4 = "");
+			r = ((1 & blink_mem[(x>>3) + y*10] >> (x & 7)) << 16) | screen_memory[xy80] & 0xffff;
+			p3 = (r / 2704) | 0;
+			r %= 2704;
+			p2 = (r / 52) | 0;
+			p1 = r % 52;
+			s += p4 + xlat2.charAt(p1) + xlat2.charAt(p2) + xlat2.charAt(p3);
+		  }
+		}
+		$("data1").value = s;
+	  },fillPattern];
+    }
+    ctx2.fillStyle="#000000";
+	ctx2.fillRect(0,0,640,300);
+	var color_list = [0,0,0, 0,0,170, 0,170,0, 0,170,170, 170,0,0, 170,0,170, 170,170/*-85*/,0, 170,170,170, 85,85,85, 85,85,255, 85,255,85, 85,255,255, 255,85,85, 255,85,255, 255,255,85, 255,255,255];
+	var u2420 = [32,127,32,32,10,127,26];
+	var regsTable = new Int16Array(64);
+	var regs8b = new Int8Array(regsTable.buffer);
+	var decode = [
+function(a) {return a.replace(/\r?\n/g,"\r\n").replace(/[\u2420-\u243f]/g,function(a){return String.fromCharCode(u2420[a.charCodeAt(0)-0x2420]);
+}).replace(/[\uff00-\uff5e]/g,function(a){return String.fromCharCode(a.charCodeAt(0)-0xfee0);})},
+function(a) {return a.replace(/%([\s\S]{2})/g,function(a,b){return String.fromCharCode(parseInt(b, 16))}).replace(/[\r\n]/g,"");},
+function(a) {
+	var ctime = new Date(),
+	timeData1 = ctime.getMilliseconds() | (ctime.getSeconds() << 10),
+	timeData2 = ctime.getMinutes() | (ctime.getHours() << 6) | (ctime.getDate() << 11),
+	timeData3 = ctime.getMonth() | (ctime.getFullYear() << 4);
+	var temp1, temp2, temp3;
+	a = a.split('');
+	for (var i = 0, j = a.length, b = "", c, p = true, q = [], r = -1, s = [], RTL = false, sgn = 0, r_flag = 0; c = a[i], i < j; ++i) {
+		if (c === "\\") {
+			var d = a[++i], e, e2, e3, e4, e5;
+			switch (d) {
+				case "Z": RTL ? (b = "\x00" + b) : (b += "\x00"); break;
+				case ".": RTL ? (b = "\x04" + b) : (b += "\x04"); break;
+				case "a": RTL ? (b = "\x07" + b) : (b += "\x07"); break;
+				case "b": RTL ? (b = "\x08" + b) : (b += "\x08"); break;
+				case "t": RTL ? (b = "\t" + b) : (b += "\t"); break;
+				case "n": RTL ? (b = "\n" + b) : (b += "\n"); break;
+				case "v": RTL ? (b = "\x0B" + b) : (b += "\x0B"); break;
+				case "f": RTL ? (b = "\x0C" + b) : (b += "\x0C"); break;
+				case "r": RTL ? (b = "\r" + b) : (b += "\r"); break;
+				case "<": RTL ? (b = "\x0F" + b) : (b += "\x0E"); break;
+				case ">": RTL ? (b = "\x0E" + b) : (b += "\x0F"); break;
+				case "d": RTL ? (b = "\x10" + b) : (b += "\x10"); break;
+				case "e": RTL ? (b = "\x1B" + b) : (b += "\x1B"); break;
+				case "c": var hex = String.fromCharCode(a[++i].charCodeAt(0) ^ 0x40); RTL ? (b = hex + b) : (b += hex); break;
+				case "i": p = !p; break;
+				case "j": var b6e = ""; while (e = (d = a[++i]) !== "-") { if (i >= j) {break;} b6e += d; }; RTL ? (b = base64decode(b6e) + b) : (b += base64decode(b6e)); break;
+				case "k":
+					sgn = (a[i+1] === "-") ? (++i, -1) : 1
+					var c5 = (a[++i] === "?") ? Math.floor(myRand.random()*256) : +(a[i]+a[++i]+a[++i]);
+					var hex = String.fromCharCode((c5 * sgn) & 255); RTL ? (b = hex + b) : (b += hex);
+				break;
+				case "o": var hex = String.fromCharCode(parseInt(a[++i]+a[++i]+a[++i],8)); RTL ? (b = hex + b) : (b += hex); break;
+				case "x": ++i; var hex3 = "", hex4 = 0;
+					if (a[i] === "(") {
+						var mark = a[i+1] === ":", hex1, hex2;
+						mark && ++i;
+						l594:
+						while (a[++i] !== ")" && i < j) {
+							if (a[i] === ":") {
+								while (a[i + 1] !== ")") {
+									hex4 = (hex4 * 10 + (+a[++i])) % 81;
+								}
+								hex3 = hex3.repeat(hex4);
+								++i; break l594;
+							}
+							hex1 = String.fromCharCode(parseInt(a[i]+a[++i],16));
+							mark ? (hex2 = hex1) : (hex2 = "\x10" + hex1);
+							hex3 += hex2;
+						};
+					} else {
+						var hex3 = String.fromCharCode(parseInt(a[i]+a[++i],16));
+					}
+					RTL ? (b = hex3 + b) : (b += hex3); break;
+				case "y": ++i;
+					if (a[i] === ":") {
+						var hex1 = String.fromCharCode(parseInt(a[++i]+a[++i],16));
+						var hex2 = String.fromCharCode(parseInt(a[++i]+a[++i],16));
+						var hex3 = "\x0E\x1A" + hex1 + "\x10" + hex2 + "\x0F";
+						RTL ? (b = hex3 + b) : (b += hex3);
+					} else if (a[i] === "(") {
+						var hex4 = "\x0E";
+						while (a[++i] !== ")" && i < j) {
+							var hex1 = String.fromCharCode(parseInt(a[  i]+a[++i],16));
+							var hex2 = String.fromCharCode(parseInt(a[++i]+a[++i],16));
+							var hex3 = "\x1A" + hex1 + "\x10" + hex2;
+							hex4 += hex3;
+						};
+						hex4 += "\x0F"; RTL ? (b = hex4 + b) : (b += hex4);
+					} else {
+						var hex = String.fromCharCode(26)
+						a[i] === ";" || (hex += String.fromCharCode(parseInt(a[i]+a[++i],16)));
+						RTL ? (b = hex + b) : (b += hex);
+					}
+				break;
+				case "z": RTL ? (b = "\x1F" + b) : (b += "\x1F"); break;
+				case "\\": RTL ? (b = "\\" + b) : (b += "\\"); break;
+				case "\#": RTL ? (b = "\#" + b) : (b += "\#"); break;
+				case "*": RTL ? (b = "\x7F" + b) : (b += "\x7F"); break;
+				case "0": case "1": case "2": case "3": case "4": case "5": case "6": case "7": case "8": case "9":
+					e = a[i], e2 = a[++i], e3 = a[++i];
+					ez = e3.repeat(+e2+e*10);
+					RTL ? (b = ez + b) : (b += ez);
+				break;
+				case "`": while (e = (d = a[++i]) !== "\n") { if (i >= j) {break;} b += d; }; break;
+				case "'": while (e = (d = a[++i]) !== "\n") { if (i >= j) {break;} b += d; }; b += "\r\n"; break;
+				case "{": ++r;
+					q[r] = RTL; RTL = true; s[r] = b; b = "";
+				break;
+				case "}": ++r;
+					q[r] = RTL; RTL = false; s[r] = b; b = "";
+				break;
+				case ":":
+				    d = a[++i];
+					try {
+					e = a[i+1].charCodeAt(0) & 63;
+					e2 = a[i+2].charCodeAt(0) & 63;
+					e3 = a[i+3].charCodeAt(0) & 63;
+					e4 = a[i+4].charCodeAt(0) & 63;
+					e5 = a[i+5].charCodeAt(0) & 63;
+					} catch (err) {}
+				    switch (d) {
+						case " ": break;
+						case '!': regsTable[e] = e2 * 4096 + e3 * 64 + e4; i += 4; break;
+						case '"': regsTable[e] = regsTable[e2]; i += 2; break;
+						case "#": regsTable[e] = (myRand.random() * 65536) | 0; ++i; break;
+						case "$": q[++r] = regsTable[e]; ++i; break;
+						case "%": regsTable[e] = q[r--]; ++i; break;
+						case "&": temp = regsTable[e - 33]; regsTable[e] = regsTable[e2]; regsTable[e2] = temp; i += 2; break;
+						case "'": regs8b[e * 2] = regs8b[e2 * 2]; i += 2; break;
+						case "(": regs8b[e * 2] = regs8b[e2 * 2 + 1]; i += 2; break;
+						case ")": regs8b[e * 2 + 1] = regs8b[e2 * 2]; i += 2; break;
+						case "*": regs8b[e * 2 + 1] = regs8b[e2 * 2 + 1]; i += 2; break;
+						case "+":
+							var hex3 = String.fromCharCode(regs8b[e * 2]);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case ",":
+							var hex3 = String.fromCharCode(regs8b[e*2+1]);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "-":
+							var hex3 = regsTable[e];
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case ".":
+							var hex3 = ("     "+regsTable[e]).slice(-6);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "/":
+							var hex3 = (65536+regsTable[e]).toString(16).slice(-4);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "0":
+							var temp = (regsTable[e] & 65535) + (regsTable[e2] & 65535);
+							r_flag = +((temp >> 16) !== 0);
+							regsTable[e] = temp;
+							i += 2;
+						break;
+						case "1": regsTable[e] |= regsTable[e2]; i += 2; break;
+						case "2":
+							var temp = (regsTable[e] & 65535) + (regsTable[e2] & 65535) + r_flag & 1;
+							r_flag = +((temp >> 16) !== 0);
+							regsTable[e] = temp;
+							i += 2;
+						break;
+						case "3":
+							var temp = (regsTable[e] & 65535) - (regsTable[e2] & 65535) - r_flag & 1;
+							r_flag = +((temp >> 16) !== 0);
+							regsTable[e] = temp;
+							i += 2;
+						break;
+						case "4": regsTable[e] &= regsTable[e2]; i += 2; break;
+						case "5":
+							var temp = (regsTable[e] & 65535) - (regsTable[e2] & 65535);
+							r_flag = +((temp >> 16) !== 0);
+							regsTable[e] = temp;
+							i += 2;
+						break;
+						case "6": regsTable[e] ^= regsTable[e2]; i += 2; break;
+						case "7":
+							var temp  = (regsTable[e] & 65535) - (regsTable[e2] & 65535);
+							var temp2 = regsTable[e] - regsTable[e2];
+							r_flag = (temp >> 16) | ((temp2 >> 16) << 1) | ((temp === 0) << 2);
+							i += 2
+						break;
+						case "8": i += regsTable[e] + 1; break
+						case "9":
+							var temp = regsTable[e];
+							var temp2 = temp;
+							temp ^= temp >> 1;
+							temp ^= temp >> 2;
+							temp ^= temp >> 4;
+							temp ^= temp >> 8;
+							r_flag = (temp & 1) | ((temp2 === 0) << 2);
+						break;
+						case ":": ++i; (r_flag & 1) && (i += regsTable[e]); break;
+						case ";": ++i; (r_flag & 1) || (i += regsTable[e]); break;
+						case "<": ++i; (r_flag & 4) && (i += regsTable[e]); break;
+						case "=": ++i; (r_flag & 4) || (i += regsTable[e]); break;
+						case ">": ++i; (r_flag & 2) && (i += regsTable[e]); break;
+						case "?": ++i; (r_flag & 2) || (i += regsTable[e]); break;
+						case "@": ++i; ((r_flag & 2) !== (r_flag & 1)) && (i += regsTable[e]); break;
+						case "A": ++i; ((r_flag & 2) === (r_flag & 1)) && (i += regsTable[e]); break;
+						case "B": ++i; ((r_flag & 2) !== (r_flag & 1) || (r_flag & 4)) && (i += regsTable[e]); break;
+						case "C": ++i; ((r_flag & 2) === (r_flag & 1) && (r_flag & 4)) && (i += regsTable[e]); break;
+						case "D": q[++r] = ++i; i += regsTable[e]; break;
+						case "E": i = q[r--]; break;
+						case "F":
+							var temp = regsTable[e] * regsTable[e2];
+							regsTable[e] = temp >> 16;
+							regsTable[e2] = temp & 65535;
+						break;
+						case "G":
+							var temp = regsTable[e] % regsTable[e2];
+							var temp2 = (regsTable[e] - temp) / regsTable[e2];
+							regsTable[e] = temp2;
+							regsTable[e2] = temp;
+						break;
+						case "H": regsTable[e] <<= (regs8b[e2 * 2] & 15); i += 2; break;
+						case "I": regsTable[e] = (regsTable[e] & 65535) >> (regs8b[e2 * 2] & 15); i += 2; break;
+						case "J": regsTable[e] >>= (regs8b[e2 * 2] & 15); i += 2; break;
+						case "K":
+							var temp = regsTable[e]; i += 2;
+							temp += temp << 16;
+							regsTable[e] = temp >> (16 - (regs8b[e2 * 2] & 15));
+						break;
+						case "L":
+							var temp = regsTable[e]; i += 2;
+							temp += temp << 16;
+							regsTable[e] = temp >> (regs8b[e2 * 2] & 15);
+						break;
+						case "M": regsTable[e] = -regsTable[e]; ++i; break;
+						case "N": regsTable[e] = ~regsTable[e]; ++i; break;
+						case "O": ++regsTable[e]; ++i; break;
+						case "P": --regsTable[e]; ++i; break;
+						case "Q": ++regs8b[e2 * 2]; ++i; break;
+						case "R": --regs8b[e2 * 2]; ++i; break;
+						case "S": ++regs8b[e2 * 2 + 1]; ++i; break;
+						case "T": --regs8b[e2 * 2 + 1]; ++i; break;
+						case "U": regsTable[e] = q[regsTable[e2]]; i += 2; break;
+						case "V": q[regsTable[e]] = regsTable[e2]; i += 2; break;
+						case "W": regsTable[e] = q[r-regsTable[e2]]; i += 2; break;
+						case "X": q[r-regsTable[e]] = regsTable[e2]; i += 2; break;
+						case "Y": regsTable[e] = r; ++i; break;
+						case "Z": r = regsTable[e]; ++i; break;
+						case "[": regsTable[e] = parseInt("input a hexadecimal:", 16); ++i; break;
+						case "\\": regsTable[e] = +prompt("input a number:"); ++i; break;
+						case "]": regs8b[2 * e] = String.fromCharCode(255 & prompt("input a number:")); ++i; break;
+						case "^": regs8b[2*e+1] = String.fromCharCode(255 & prompt("input a number:")); ++i; break;
+						case "_":
+							var hex3 = 65535&regsTable[e];
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "`":
+							var hex3 = ("    "+(65535&regsTable[e])).slice(-5);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "a": 
+						    var hex3 = (256+regs8b[2*e]).toString(16).slice(-2);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "b": 
+						    var hex3 = (256+regs8b[2*e+1]).toString(16).slice(-2);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "c":
+							var hex3 = ("   "+regs8b[2*e]).slice(-4);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "d":
+							var hex3 = ("   "+regs8b[2*e+1]).slice(-4);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "e":
+							var hex3 = ("  "+(regs8b[2*e]&255)).slice(-3);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "f":
+							var hex3 = ("  "+(regs8b[2*e+1]&255)).slice(-3);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "g": regsTable[e] = regs8b[2*e]; ++i; break;
+						case "h": regs8b[2 * e] = e2 * 64 + e3; i += 3; break;
+						case "i": regs8b[2*e+1] = e2 * 64 + e3; i += 3; break;
+						case "j":
+							var temp = (regsTable[e] & 65535) * (regsTable[e2] & 65535);
+							regsTable[e] = temp >> 16;
+							regsTable[e2] = temp & 65535;
+						break;
+						case "k":
+							var temp = (regsTable[e] & 65535) % (regsTable[e2] & 65535);
+							var temp2 = ((regsTable[e] & 65535) - temp) / (regsTable[e2] & 65535);
+							regsTable[e] = temp2;
+							regsTable[e2] = temp;
+						break;
+						case "p":
+						    var hex3 = String.fromCharCode(myRand.randint(32,126));
+							RTL ? (b = hex3 + b) : (b += hex3);
+							++i;
+						break;
+						case "q": regs8b[2 * e] = myRand.randint(32,126); ++i; break; 
+						case "r": 
+							q[++r] = timeData3; q[++r] = timeData2; q[++r] = timeData1;
+						break;
+						case "s":
+							temp1 = q[r--] & 65535;
+							temp2 = q[r--] & 65535;
+							temp3 = q[r--] & 65535;
+							var hex3 = tPadding2(temp3 >> 4, " ", 4) + "/" +
+							tPadding((temp3 & 15) + 1, " ") + "/" +
+							tPadding(temp2 >> 11, " ") + " " +
+							tPadding((temp2 >> 6) & 31, " ") + ":" +
+							tPadding(temp2 & 63, "0") + ":" +
+							tPadding(temp1 >> 10, "0") + "." +
+							tPadding2(temp1 & 1023, "0", 3);
+							RTL ? (b = hex3 + b) : (b += hex3);
+							// ++i;
+						break;
+						case "~": i = 1 / 0; break;
+					}
+				break;
+				case ";":
+					RTL = q[r]; q[r] ? (b += s[r]) : (b = s[r] + b); r--;
+				break;
+				case "=":
+				break;
+				case "\n": break;
+			}
+		} else if (c === "#" && p) {
+			var d;
+			if (a[i + 1] === "#") { i += 2; 
+				while (i < j && (d = a[i] !== "#" || a[i + 1] !== "#")) { ++i }
+				++i;
+			} else {
+				while (i < j && (d = a[++i] !== "\n")) {}
+				--i;
+			}
+		} else {
+			RTL ? (b = swapping(c) + b) : (b += c);
+		}
+	}
+	return b;
+},
+    ];
+    var getFunc = function () {
+	  beep.loadTime();
+	  var s = $("_func").selectedIndex;
+	  var t = $("_enc").selectedIndex;
+	  if ($("X1").value === "") {$("X1").value = 0;}
+	  if ($("Y1").value === "") {$("Y1").value = 0;}
+	  if (s === 9) {
+	    var fn = fn_list[s](+$("X1").value,+$("Y1").value,+$("attr1").value,+$("rep1").value,+$("rep2").value,+$("rep3").value);
+	  } else if (s >= 7) {
+		fn_list[s]($("data1").value);
+	  } else if (s === 0 || s === 6) {
+	    var fn = fn_list[s](+$("X1").value,+$("Y1").value,+$("attr1").value,+$("rep1").value);
+      } else {
+		if ($("_enc").selectedIndex === 2 && $("data1").value.substring(0,2) === "#!") {
+			var matched = data1.value.match(/^#!\s*initial color\s*=\s*(\w*)/)[1];
+			$("attr1").value = parseInt(matched);
+		}
+	    if ($("attr1").value === "") {$("attr1").value = 15;}
+	    var fn = fn_list[s](+$("X1").value,+$("Y1").value,decode[t]($("data1").value),+$("attr1").value,+$("rep1").value);
+	  }
+	  renderCMD()
+	}
+	
+	var blinkstate = [0xffff, 0xff00], isBlinking = true;
+	var renderCMD = function () {
+	  for (var y = 0; y < 25; ++y) {
+	    for (var x = 0; x < 80; ++x) {
+		  var xy80 = x+y*80;
+		  if ((1 & (blink_mem[(x>>3) + y*10] >> (x & 7))) && isBlinking) {
+		    drawChar(x, y, screen_memory[xy80] & blinkstate[states])
+		  } else {
+		    drawChar(x, y, screen_memory[xy80])
+		  }
+	    }
+	  }
+	}
+	var renderCMD_interval = function () {
+	  for (var x = 0; x < 80; ++x) {
+	    for (var y = 0; y < 25; ++y) {
+		  if (1 & (blink_mem[(x>>3) + y*10] >> (x & 7))) {
+		    drawChar(x, y, screen_memory[x+y*80] & blinkstate[states])
+		  }
+	    }
+	  }
+	}
+	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	var start = null;
+	var progress = 0;
+	var currFrame = +new Date();
+	var baseTime = currFrame;
+	var states = 0;
+	function step(timestamp) {
+	  if (isBlinking) {
+		currFrame = +new Date();
+		requestAnimationFrame(step);
+		var delta = currFrame-baseTime;
+		if (delta>640) {
+          states = (states + 1) % 2;
+          renderCMD_interval(states)
+          baseTime = currFrame - delta % 640;
+		}
+	  } else {
+		requestAnimationFrame(renderCMD);
+	  }
+	}
+	requestAnimationFrame(step);
+	var setBlink = function () {
+	  isBlinking = !isBlinking;
+	  if (isBlinking) {baseTime = +new Date(); requestAnimationFrame(step);}
+	}
+	
+</script>
+<script src="extra-script-1.js"></script>
+<script src="extra-script-2.js"></script>
+</body>
+</html>

@@ -104,6 +104,9 @@ start:
     ; call far ptr [bp-4]
     ; add sp, ax
     
+    hang:
+    jmp hang
+    
     add bp, ax
     mov sp, bp
     pop bp 

@@ -20,6 +20,13 @@ start:
     mov ax, ss
     mov ds, ax
     mov es, ax
+    
+    mov ax, 3
+	int 10h
+	mov ax, 1003h
+    mov bx, 0
+    int 10h
+    
     mov ax, return
     push ax
     xor ax, ax

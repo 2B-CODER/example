@@ -748,8 +748,10 @@ if (!String.prototype.repeat) {
 					var args = [0], argsPtr = 0, reargsPtr = 0, pp, ansiesc = true;
 					for (;i < len && ansiesc;) {
 						pp = str.charCodeAt(++i)
-						pp === 59 ? (args[++argsPtr] = 0) :
-						(pp >= 48 && pp <= 57) ? (args[argsPtr] = (args[argsPtr] * 10 + pp - 48) & 255) : ansiesc = false;
+						pp === 63 || (
+							pp === 59 ? (args[++argsPtr] = 0) :
+							(pp >= 48 && pp <= 57) ? (args[argsPtr] = (args[argsPtr] * 10 + pp - 48) & 255) : ansiesc = false
+						);
 					}
 					++argsPtr;
 					switch (pp) {

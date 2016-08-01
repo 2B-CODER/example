@@ -2,5 +2,5 @@
 
 var alloc = function (ID, src) {
   imgs[ID] = new Image();
-  imgs[ID].src = "variants/" + src.replace(/\.png$/, "") + ".png";
+  imgs[ID].src = "variants/" + src.replace(/\.png$/i, "") + ".png";
 }

@@ -1,4 +1,6 @@
 org 100h
+
+cld
 mov cx, 12
 mov si, offset source
 mov di, offset destination

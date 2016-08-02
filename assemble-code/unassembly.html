@@ -1,0 +1,30 @@
+<input id="input" oninput="$('output').innerHTML = unasmOP($('input').value);"
+type="number" style="width:100%" />
+<div id="output" style="white-space: pre; font-family: monospace; padding: 4px 0; font-size: 16px"></div>
+<script>
+var memPart = ["BX + SI", "BX + DI", "BP + SI", "BP + DI", "SI", "DI", "BP", "BX"];
+var reg16Part = ["AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI"];
+var reg8Part = ["AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI"];
+var d8 = " + d8";
+var d16 = " + d16";
+var $ = function (ID) { return document.getElementById(ID); }
+var unasmOP = function (byte) {
+	byte = byte & 255;
+	var h1 =   byte >> 6;
+	var h2 =   byte  & 7;
+	var h3 = ((byte >> 3) & 7) + 1;
+	var h4;
+	if (h1 === 3) {
+		h4 = reg16Part[h2];
+	} else if (h1 === 2) {
+		h4 = "[" + memPart[h2] + d16 + "]";
+	} else if (h1 === 1) {
+		h4 = "[" + memPart[h2] + d8 + "]";
+	} else if (h2 !== 6) {
+		h4 = "[" + memPart[h2] + "]";
+	} else {
+		h4 = "[d16]";
+	}
+	return "OP" + h3 + " " + h4;
+}
+</script>

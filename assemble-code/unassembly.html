@@ -4,7 +4,7 @@ type="number" style="width:100%" />
 <script>
 var memPart = ["BX + SI", "BX + DI", "BP + SI", "BP + DI", "SI", "DI", "BP", "BX"];
 var reg16Part = ["AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI"];
-var reg8Part = ["AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI"];
+var reg8Part = ["AL", "CL", "DL", "BL", "AH", "CH", "DH", "BH"];
 var d8 = " + d8";
 var d16 = " + d16";
 var $ = function (ID) { return document.getElementById(ID); }
@@ -15,7 +15,8 @@ var unasmOP = function (byte) {
 	var h3 = ((byte >> 3) & 7) + 1;
 	var h4;
 	if (h1 === 3) {
-		h4 = reg16Part[h2];
+		h4 = reg16Part[h2] + " or\n";
+		h4 += "OP" + h3 + " " + reg8Part[h2];
 	} else if (h1 === 2) {
 		h4 = "[" + memPart[h2] + d16 + "]";
 	} else if (h1 === 1) {

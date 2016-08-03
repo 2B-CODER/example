@@ -6,7 +6,7 @@ org 100h
 
 mov si, 81h
 cmp [si], 20h
-je main_loop
+jne main_loop
 inc si
 main_loop:
 mov dl, [si]

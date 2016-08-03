@@ -4,14 +4,14 @@
 
 org 100h
 
-mov si, 81h
+mov si, 81h   ; 00100h
 main_loop:
-mov dl, [si]
-cmp dl, 13
-jz exit
-mov ah, 2
-int 21h
-jmp main_loop
+mov dl, [si]  ; 00103h
+cmp dl, 13    ; 00105h
+jz exit       ; 00108h
+mov ah, 2     ; 0010Ah
+int 21h       ; 0010Ch
+jmp main_loop ; 0010Eh
 exit:
 ret
 

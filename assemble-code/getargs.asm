@@ -5,6 +5,9 @@
 org 100h
 
 mov si, 81h
+cmp [si], 20h
+je main_loop
+inc si
 main_loop:
 mov dl, [si]
 cmp dl, 13
@@ -15,24 +18,3 @@ inc si
 jmp main_loop
 exit:
 ret
-
-; hex view:
-; 00100h: db 0BEh
-; 00101h: db 081h
-; 00102h: db 000h
-; 00103h: db 08Ah
-; 00104h: db 014h
-; 00105h: db 080h
-; 00106h: db 0FAh
-; 00107h: db 00Dh
-; 00108h: db 074h "t"
-; 00109h: db 007h
-; 0010Ah: db 0B4h
-; 0010Bh: db 002h
-; 0010Ch: db 0CDh
-; 0010Dh: db 021h "!"
-; 0010Eh: db 046h "F"
-; 0010Fh: db 0EBh
-; 00110h: db 0F2h
-
-

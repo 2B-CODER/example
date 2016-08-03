@@ -4,14 +4,15 @@
 
 org 100h
 
-mov si, 81h   ; 00100h
+mov si, 81h
 main_loop:
-mov dl, [si]  ; 00103h
-cmp dl, 13    ; 00105h
-jz exit       ; 00108h
-mov ah, 2     ; 0010Ah
-int 21h       ; 0010Ch
-jmp main_loop ; 0010Eh
+mov dl, [si]
+cmp dl, 13
+jz exit
+mov ah, 2
+int 21h
+inc si
+jmp main_loop
 exit:
 ret
 
@@ -25,12 +26,13 @@ ret
 ; 00106h: db 0FAh
 ; 00107h: db 00Dh
 ; 00108h: db 074h "t"
-; 00109h: db 006h
+; 00109h: db 007h
 ; 0010Ah: db 0B4h
 ; 0010Bh: db 002h
 ; 0010Ch: db 0CDh
 ; 0010Dh: db 021h "!"
+; 0010Eh: db 046h "F"
 ; 0010Eh: db 0EBh
-; 0010Fh: db 0F3h
+; 0010Fh: db 0F2h
 
 

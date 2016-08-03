@@ -32,7 +32,7 @@ ret
 ; 0010Ch: db 0CDh
 ; 0010Dh: db 021h "!"
 ; 0010Eh: db 046h "F"
-; 0010Eh: db 0EBh
-; 0010Fh: db 0F2h
+; 0010Fh: db 0EBh
+; 00110h: db 0F2h
 
 

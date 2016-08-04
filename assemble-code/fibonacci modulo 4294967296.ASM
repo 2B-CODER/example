@@ -25,8 +25,10 @@ include 'win32ax.inc' ; you can simply switch between win32ax, win32wx, win64ax 
 	invoke	MessageBox,HWND_DESKTOP,outh,invoke GetCommandLine,MB_OK
 	pop  edx ecx eax
 	xadd eax, edx
+	jc exit
 	inc ecx
 	jmp next
+  exit:
 	invoke	ExitProcess,0
 	jmp start
 

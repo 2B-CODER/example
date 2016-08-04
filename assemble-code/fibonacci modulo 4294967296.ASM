@@ -7,8 +7,8 @@ include 'win32ax.inc' ; you can simply switch between win32ax, win32wx, win64ax 
 
   start:
 	xor eax, eax
-	xor ecx, ecx
-	xor edx, edx
+	mov ecx, eax
+	mov edx, eax
 	inc edx
   next:
 	mov esi, outh

@@ -328,6 +328,9 @@ var extraKFn2 = function (ev) {
 		if (event.ctrlKey && ev.keyCode === 50) {
 			_extraEsc[_extraELen++] = 0; return false;
 		}
+		if (ev.keyCode === 90 && !ev.ctrlKeyKey) {
+			_extraEsc.length = --_extraELen; return false;
+		}
 	}
 }
 var parseKey = function (ev) {

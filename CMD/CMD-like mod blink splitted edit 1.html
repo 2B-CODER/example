@@ -42,6 +42,12 @@
 <script type="text/javascript">
 <!--
 	var imgs = [], $ = function(id) { return document.getElementById(id); };
+	charMap[0] = 1;
+	var genChar = function () {
+	  for (var i = 0; i < 80; ++i) {
+		drawChar(i, 25, charMap[i]);
+	  }
+	}
 	var color_list = [0,0,0, 0,0,170, 0,170,0, 0,170,170, 170,0,0, 170,0,170, 170,170/*-85*/,0, 170,170,170, 85,85,85, 85,85,255, 85,255,85, 85,255,255, 255,85,85, 255,85,255, 255,255,85, 255,255,255];
 	var c1 = $('L1')
 	var ctx1 = c1.getContext("2d");
@@ -62,10 +68,7 @@
 		ctx1.clearRect(x*8, y*12, 8, 12);
 		ctx1.drawImage(imgs[d2], 8*character, 12*foreground, 8, 12, 8*x, 12*y, 8, 12)
 	  }
-	  for (var i = 0; i < 80; ++i) {
-		drawChar(i, 25, 0x0f00+i);
-		charMap[i] = [0x0f00+i];
-	  }
+	  genChar()
 	}
 	var screen_memory = new Int16Array(80*25), blink_mem = new Int8Array(10*25), xlat2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	var exportImg = function () {

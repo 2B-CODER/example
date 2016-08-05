@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  body {background-color: black;}
+  .div {
+    width: 640px;
+    height: 300px;
+    position: relative;
+    border: 2px solid white;
+  }
+  .div>canvas { position: absolute; }
+  .notice {
+	padding: 0;
+	background: #7F744C;
+	border: 2px #ffe070 solid;
+	color: #ffffff;
+	margin-bottom: 5px;
+	width: 700px;
+  }
+  .center { text-align: -webkit-center; }
+</style>
+<meta charset="utf-8" />
+<script src="head-script-1.js"></script>
+<script src="head-script-2.js"></script>
+</head>
+<body>
+
+<center style="color:#ccc">
+	<div class="div">
+		<canvas style="z-index: 2;" id="L1" width="640" height="300" onclick="getXY(event)"></canvas>
+		<canvas style="z-index: 1;" id="L2" width="640" height="300"></canvas>
+	</div>
+	<input type="button" value="import code" onclick="importImg()" style="width:300px;" /><!--
+	--><input type="button" value="export code" onclick="exportImg()" style="width:300px;" /><!--
+	--><br/>
+	<textarea id="data1" style="width:600px;height:400px;background-color:inherit;color:inherit"></textarea>
+</center>
+
+<script type="text/javascript">
+<!--
+	var imgs = [], $ = function(id) { return document.getElementById(id); };
+    imgs[0] = new Image();
+    imgs[0].src = "cp437-b.png";
+	imgs[0].onload = function() {
+      drawChar = function (x, y, data) {
+		var d2 = cPageTable[x+y*80];
+		var character  = data & 255;
+		var attribute  = (data >> 8) & 255;
+		var foreground = attribute & 15;
+		var background = attribute >> 4;
+		ctx2.fillStyle = "rgb("+color_list[3*background]+","+color_list[3*background+1]+","+color_list[3*background+2]+")";
+        ctx2.fillRect(x*8, y*12, 8, 12);
+		ctx1.clearRect(x*8, y*12, 8, 12);
+		ctx1.drawImage(imgs[d2], 8*character, 12*foreground, 8, 12, 8*x, 12*y, 8, 12)
+	  }
+	}
+	var screen_memory = new Int16Array(80*25), blink_mem = new Int8Array(10*25), xlat2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	var exportImg = function () {
+		var r, p1, p2, p3, p4, s = "";
+		for (var y = 0; y < 25; ++y) {
+		  for (var x = 0; x < 80; ++x) {
+			var xy80 = x+y*80;
+			// p4 = cPageTable[xy80];
+			// p4 === 0 && (p4 = "");
+			r = ((1 & blink_mem[(x>>3) + y*10] >> (x & 7)) << 16) | screen_memory[xy80] & 0xffff;
+			p3 = (r / 2704) | 0;
+			r %= 2704;
+			p2 = (r / 52) | 0;
+			p1 = r % 52;
+			s += /* p4 + */ xlat2.charAt(p1) + xlat2.charAt(p2) + xlat2.charAt(p3);
+		  }
+		}
+		$("data1").value = s;
+	  }
+//-->
+</script>
+<script src="extra-script-1.js"></script>
+<script src="extra-script-2.js"></script>
+</body>
+</html>

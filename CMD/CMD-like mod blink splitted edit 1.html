@@ -42,7 +42,7 @@
 <script type="text/javascript">
 <!--
 	var imgs = [], $ = function(id) { return document.getElementById(id); };
-	var charMap = new Int16Array(80);
+	var charMap = new Uint16Array(80);
 	charMap[0] = 0x0f01;
 	charMap[1] = 0x0f02;
 	charMap[2] = 0x0f03;
@@ -101,7 +101,7 @@
 		var Y = (evt.offsetY / 12) | 0;
 		var oldState, counter = 0;
 		console.log("X=%d, Y=%d", X, Y);
-		if ((oldState = getCData(X, Y)) === data) { return; }
+		if ((oldState = getCData(X, Y) & 65535) === data & 65535) { return; }
 		var posStack = [], posPtr = 0, status = 0;
 		drawChar(X, Y, data);
 		for (; posPtr >= 0; ++counter) {

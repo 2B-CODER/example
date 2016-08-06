@@ -43,7 +43,10 @@
 <!--
 	var imgs = [], $ = function(id) { return document.getElementById(id); };
 	var charMap = new Int16Array(80);
-	charMap[0] = 1;
+	charMap[0] = 0x0f01;
+	charMap[1] = 0x0f02;
+	charMap[2] = 0x0f03;
+	charMap[3] = 0x0f04;
 	var genChar = function () {
 	  for (var i = 0; i < 80; ++i) {
 		drawChar(i, 25, charMap[i]);

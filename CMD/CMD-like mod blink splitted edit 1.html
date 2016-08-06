@@ -96,13 +96,12 @@
 	var getXY = function (evt, dir, data) {
 		var X = (evt.offsetX / 8) | 0;
 		var Y = (evt.offsetY / 12) | 0;
-		var oldState;
+		var oldState, counter = 0;
 		console.log("X=%d, Y=%d", X, Y);
 		if ((oldState = getCData(X, Y)) === data) { return; }
 		var posStack = [], posPtr = 0, status = 0;
 		drawChar(X, Y, data);
-		posStack.length = 0;
-		for (; posPtr >= 0;) {
+		for (; posPtr >= 0; ++counter) {
 			var Xn = X + Xd[dir];
 			var Yn = Y + Yd[dir]
 			if (status >= 4) {
@@ -123,6 +122,8 @@
 				dir++; status++;
 			}
 		}
+		posStack.length = 0;
+		console.log("iterations: %d", counter);
 	};
 	var getCData = function (x, y) {
 		return screen_memory[x+y*80];

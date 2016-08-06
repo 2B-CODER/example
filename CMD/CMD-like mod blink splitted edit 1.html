@@ -28,11 +28,11 @@
 
 <div style="padding: 0 -webkit-calc(50% - 320px); padding: 0 calc(50% - 320px);">
 	<div class="div">
-		<canvas style="z-index: 2;" id="L1" width="640" height="312" onclick="getXY(event)"></canvas>
+		<canvas style="z-index: 2;" id="L1" width="640" height="312" onclick="getXY(event, 0)"></canvas>
 		<canvas style="z-index: 1;" id="L2" width="640" height="312"></canvas>
 	</div>
 </div>
-<center>
+<center style="color:#77dd22">
 	<input type="button" value="import code" onclick="importImg()" style="width:300px;" /><!--
 	--><input type="button" value="export code" onclick="exportImg()" style="width:300px;" /><!--
 	--><br/>
@@ -67,6 +67,9 @@
         ctx2.fillRect(x*8, y*12, 8, 12);
 		ctx1.clearRect(x*8, y*12, 8, 12);
 		ctx1.drawImage(imgs[d2], 8*character, 12*foreground, 8, 12, 8*x, 12*y, 8, 12)
+		if (!(y >= 25 && x >= 80 && x < 0)) {
+			screen_memory[x+y*80] = data;
+		}
 	  }
 	  genChar()
 	}
@@ -88,11 +91,17 @@
 		}
 		$("data1").value = s;
 	}
-	var getXY = function () {
-		var X = (event.offsetX / 8) | 0;
-		var Y = (event.offsetY / 12) | 0;
-		drawChar(X, Y, 0xf000)
+	var Xd = [1,0,-1,0,1,0,-1,0,1,0,-1,0,1,0,-1,0,1];
+	var Yd = [0,1,0,-1,0,1,0,-1,0,1,0,-1,0,1,0,-1,0];
+	var getXY = function (evt, dir) {
+		var X = (evt.offsetX / 8) | 0;
+		var Y = (evt.offsetY / 12) | 0;
+		var posStack = [], posPtr;
+		drawChar(X, Y, 0xf000);
+		posStack.length = 0;
 	};
+	var getCData = function (x, y) {
+	}
 //-->
 </script>
 <script src="extra-script-1.js"></script>

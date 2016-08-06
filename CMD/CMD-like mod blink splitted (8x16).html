@@ -898,7 +898,36 @@ if (!String.prototype.repeat) {
 		  }
 		}
 		$("data1").value = s;
-	  },fillPattern];
+	  },fillPattern, function (X, Y, data) {
+		// var X = (evt.offsetX / 8) | 0;
+		// var Y = (evt.offsetY / 12) | 0;
+		var oldState, counter = 0, dir = 0;
+		// console.log("X=%d, Y=%d", X, Y);
+		if ((oldState = screen_memory[X+Y*80] & 65535) === data & 65535) { return; }
+		var posStack = [], posPtr = 0, status = 0;
+		drawChar(X, Y, screen_memory[X+Y*80] = data);
+		for (; posPtr >= 0;) {
+			var Xn = X + Xd[dir], Yn = Y + Yd[dir], XnYn80 = Xn+80*Yn;
+			if (status >= 4) {
+				status = posStack[--posPtr];
+				dir = posStack[--posPtr];
+				Y = posStack[--posPtr];
+				X = posStack[--posPtr];
+			} else if (screen_memory[XnYn80] === oldState && Xn >= 0 && Yn >= 0 && Xn < 80 && Yn < 25) {
+				drawChar(Xn, Yn, screen_memory[XnYn80] = data);
+				posStack[posPtr++] = X;
+				posStack[posPtr++] = Y;
+				posStack[posPtr++] = (dir + 1) % 4;
+				posStack[posPtr++] = status++;
+				status = 0;
+				X += Xd[dir];
+				Y += Yd[dir]; 
+			} else {
+				dir++; status++;
+			}
+		}
+		posStack.length = 0;
+	  }];
     }
     ctx2.fillStyle="#000000";
 	ctx2.fillRect(0,0,640,300);
@@ -1256,12 +1285,12 @@ function(a) {
 	  if ($("Y1").value === "") {$("Y1").value = 0;}
 	  if (s === 9) {
 	    var fn = fn_list[s](+$("X1").value,+$("Y1").value,+$("attr1").value,+$("rep1").value,+$("rep2").value,+$("rep3").value);
-	  } else if (s >= 7) {
+	  } else if (s === 7 || s === 8) {
 		fn_list[s]($("data1").value);
-	  } else if (s === 0 || s === 6) {
+	  } else if (s === 0 || s === 6 || s === 10) {
 	    var fn = fn_list[s](+$("X1").value,+$("Y1").value,+$("attr1").value,+$("rep1").value);
       } else {
-		if ($("_enc").selectedIndex === 2 && $("data1").value.substring(0,2) === "#!") {
+	  	if ($("_enc").selectedIndex === 2 && $("data1").value.substring(0,2) === "#!") {
 			var matched = data1.value.match(/^#!\s*initial color\s*=\s*(\w*)/)[1];
 			$("attr1").value = parseInt(matched);
 		}

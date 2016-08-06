@@ -42,6 +42,7 @@
 <script type="text/javascript">
 <!--
 	var imgs = [], $ = function(id) { return document.getElementById(id); };
+	var charMap = new Int16Array(80);
 	charMap[0] = 1;
 	var genChar = function () {
 	  for (var i = 0; i < 80; ++i) {
@@ -53,7 +54,6 @@
 	var ctx1 = c1.getContext("2d");
 	var c2 = $('L2')
 	var ctx2 = c2.getContext("2d");
-	var charMap = new Int16Array(80);
     imgs[0] = new Image();
     imgs[0].src = "cp437-a.png";
 	imgs[0].onload = function() {
@@ -88,6 +88,11 @@
 		}
 		$("data1").value = s;
 	}
+	var getXY = function () {
+		var X = (event.offsetX / 8) | 0;
+		var Y = (event.offsetY / 12) | 0;
+		drawChar(X, Y, 0xf000)
+	};
 //-->
 </script>
 <script src="extra-script-1.js"></script>

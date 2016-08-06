@@ -28,7 +28,7 @@
 
 <div style="padding: 0 -webkit-calc(50% - 320px); padding: 0 calc(50% - 320px);">
 	<div class="div">
-		<canvas style="z-index: 2;" id="L1" width="640" height="312" onclick="getXY(event, 0)"></canvas>
+		<canvas style="z-index: 2;" id="L1" width="640" height="312" onclick="getXY(event, 0, 0xf000)"></canvas>
 		<canvas style="z-index: 1;" id="L2" width="640" height="312"></canvas>
 	</div>
 </div>
@@ -93,12 +93,36 @@
 	}
 	var Xd = [1,0,-1,0,1,0,-1,0,1,0,-1,0,1,0,-1,0,1];
 	var Yd = [0,1,0,-1,0,1,0,-1,0,1,0,-1,0,1,0,-1,0];
-	var getXY = function (evt, dir) {
+	var getXY = function (evt, dir, data) {
 		var X = (evt.offsetX / 8) | 0;
 		var Y = (evt.offsetY / 12) | 0;
-		var posStack = [], posPtr;
-		drawChar(X, Y, 0xf000);
+		var oldState;
+		console.log("X=%d, Y=%d", X, Y);
+		if ((oldState = getCData(X, Y)) === data) { return; }
+		var posStack = [], posPtr = 0, status = 0;
+		drawChar(X, Y, data);
 		posStack.length = 0;
+		for (; posPtr >= 0;) {
+			var Xn = X + Xd[dir];
+			var Yn = Y + Yd[dir]
+			if (status >= 4) {
+				status = posStack[--posPtr];
+				dir = posStack[--posPtr];
+				Y = posStack[--posPtr];
+				X = posStack[--posPtr];
+			} else if (getCData(X + Xd[dir], Y + Yd[dir]) === oldState && Xn >= 0 && Yn >= 0 && Xn < 80 && Yn < 25) {
+				drawChar(Xn, Yn, data);
+				posStack[posPtr++] = X;
+				posStack[posPtr++] = Y;
+				posStack[posPtr++] = (dir + 1) % 4;
+				posStack[posPtr++] = status++;
+				status = 0;
+				X += Xd[dir];
+				Y += Yd[dir]; 
+			} else {
+				dir++; status++;
+			}
+		}
 	};
 	var getCData = function (x, y) {
 		return screen_memory[x+y*80];

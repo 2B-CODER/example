@@ -112,7 +112,7 @@
 				dir = posStack[--posPtr];
 				Y = posStack[--posPtr];
 				X = posStack[--posPtr];
-			} else if (getCData(X + Xd[dir], Y + Yd[dir]) === oldState && Xn >= 0 && Yn >= 0 && Xn < 80 && Yn < 25) {
+			} else if (getCData(Xn, Yn) === oldState && Xn >= 0 && Yn >= 0 && Xn < 80 && Yn < 25) {
 				drawChar(Xn, Yn, data);
 				posStack[posPtr++] = X;
 				posStack[posPtr++] = Y;

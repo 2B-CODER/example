@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript">
+// <![CDATA[
+var db, tx, store, random_like_name = "innerData%u28faC9Weh", rez;
+var request = indexedDB.open("data", 4);
+request.onupgradeneeded = function (e) {
+	var db = request.result;
+	if (!db.objectStoreNames.contains("data")){
+		var store = db.createObjectStore(random_like_name, {keyPath: "ID"});
+	}
+}
+var op = function () {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+}
+request.onsuccess = function () {
+	db = request.result;
+	op();
+}
+var getData = function(ID) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	var get = store.get(ID);
+	get.onsuccess = function () {
+		rez = get.result.data;
+	}
+}
+var putData = function(ID, data) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	store.put({"ID": ID, "data": data});
+}
+var deleteData = function(ID) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	store.delete(ID);
+}
+// ]]>
+</script>
+</head>
+<body>
+</body>
+</html>

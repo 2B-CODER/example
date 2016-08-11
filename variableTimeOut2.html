@@ -1,9 +1,13 @@
 <script>
 var initDate = +new Date();
+var lastUpdate = d;
+var timeStatus = 0;
 
 var subf = function() {
-  var d = (+new Date())-initDate, b;
-  var x = (b = d > 2000) ? 2000 : d;
+  var delta = (+new Date())-lastUpdate, b;
+  status += delta;
+  var x = (b = timeStatus > 2000) ? 2000 : (b = timeStatus < 0) ? 0 : timeStatus;
+
   document.write((155*((3e3-x)*x*x)/4e9 + .5) | 0, "<br/>"); // 3e3 = 1.5 * time (2000 (ms))
   b || requestAnimationFrame(subf);
 }

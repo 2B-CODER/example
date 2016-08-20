@@ -14,7 +14,7 @@ var encode = function(bArr) {
     diff >= 4 && (s += table.charAt(sum % 85));
     (i+4) % 48 || (s += "\n");
   }
-  return s;
+  return s + "~\n";
 }
 
 function onChange(event) {

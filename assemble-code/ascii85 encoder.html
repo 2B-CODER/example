@@ -7,7 +7,7 @@ var encode = function(bArr) {
   var s = "", diff, sum;
   for (var i = 0, l = bArr.length; i < l; i += 4) {
     diff = l - i;
-    sum = ((((((bArr[i] << 8) | bArr[i]) << 8) | bArr[i]) << 8) | bArr[i]) >>> 0;
+    sum = ((((((bArr[i] << 8) | bArr[i+1]) << 8) | bArr[i+2]) << 8) | bArr[i+3]) >>> 0;
     diff >= 1 && (s += table.charAt(sum / 52200625) + table.charAt(sum / 614125 % 85));
     diff >= 2 && (s += table.charAt(sum / 7225 % 85));
     diff >= 3 && (s += table.charAt(sum / 85 % 85));

@@ -15,7 +15,8 @@ var encode = function(bArr) {
     diff >= 4 && (s += table.charAt(sum % 85));
     (i+4) % 48 || (s += " " + (i!==44?">":"") + ">~~tmp.bin\n");
   }
-  return s + "~\n";
+  i % 48 || (s += "echo ");
+  return s + "~" + (i>=48?">":"") + ">~~tmp.bin\n";
 }
 
 function onChange(event) {

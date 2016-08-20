@@ -4,8 +4,8 @@
 
 org 100h
 
-initial:
 pushf
+initial:
 
 lea di, $src
 mov cx, 5

@@ -1,0 +1,21 @@
+Fractal1 {
+fractal:
+  title="Fractal1" width=2000 height=500 layers=1
+  credits="Administrator;8/23/2016"
+layer:
+  caption="Background" opacity=100
+mapping:
+  center=0/0 magn=3.125
+formula:
+  maxiter=1000 filename="sp.ufm" entry="JuliaTricorn" p_bailout=100.0
+  p_n=2/0 f_fu=ident p_seed=-1.7384670952682/0.015774980034999
+inside:
+  transfer=none
+outside:
+  transfer=linear
+gradient:
+  smooth=yes index=0 color=8716288 index=100 color=16121855 index=200
+  color=46591 index=300 color=156
+opacity:
+  smooth=no index=0 opacity=255
+}

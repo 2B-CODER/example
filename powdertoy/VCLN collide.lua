@@ -31,4 +31,25 @@ local function funcUpdate(i,x,y,s,nt)
     end
 end
 
-elements.property(vcln, "Update", funcUpdate) 
+elements.property(vcln, "Update", funcUpdate)
+
+local vcln2 = elements.allocate("mymod", "VCLN2")
+elements.element(vcln2, elements.element(elements.DEFAULT_PT_DMND))
+elements.property(vcln2, "Name", "VCL#")
+elements.property(vcln2, "Color", 0xffc0c0c0)
+
+local function funcUpdate2(i,x,y,s,nt)
+    tmpvx2 = 0; tmpvy2 = 0; parts = 0
+    for r in sim.neighbors(x,y,1,1) do
+        if sim.partProperty(r, "type") == elem.DEFAULT_PT_PHOT then
+            parts = parts + 1; tmpvx2 = tmpvx2 + sim.partProperty(r, "vx"); tmpvy2 = tmpvy2 + sim.partProperty(r, "vy"); tpt.delete(r)
+        end
+    end
+    if (parts ~= 0) then
+        tpt.set_property("vx", tmpvx2/parts, i)
+        tpt.set_property("vy", tmpvy2/parts, i)
+        tpt.set_property("type", vcln, i)
+    end
+end
+
+elements.property(vcln2, "Update", funcUpdate2)

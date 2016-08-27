@@ -5,6 +5,7 @@ elements.property(vcln, "Loss", 1)
 elements.property(vcln, "AirLoss", 1)
 elements.property(vcln, "Collision", -1)
 elements.property(vcln, "Color", 0xffffffff)
+elements.property(vcln, "Properties", 131088)
 
 local function funcUpdate(i,x,y,s,nt)
     tmpvx = tpt.get_property("vx", i)

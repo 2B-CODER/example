@@ -5,7 +5,7 @@ elements.property(vcln, "Loss", 1)
 elements.property(vcln, "AirLoss", 1)
 elements.property(vcln, "Collision", -1)
 elements.property(vcln, "Color", 0xffffffff)
-elements.property(vcln, "Properties", 131088)
+elements.property(vcln, "Properties", 8519696)
 
 local function funcUpdate(i,x,y,s,nt)
     tmpvx = tpt.get_property("vx", i)
@@ -15,7 +15,14 @@ local function funcUpdate(i,x,y,s,nt)
         if (rand < 1) then tmpvx = -tmpvx; tmpvy = -tmpvy; end
         tpt.set_property("vx", tmpvy, i)
         tpt.set_property("vy", -tmpvx, i)
-	j = tpt.create(((x-tmpvy-4)%604)+4, ((y+tmpvx-4)%376)+4, "VCLN")
+        ctype1 = tpt.get_property("ctype", i)
+        if ctype1 ~= 0 then
+            ctype2 = tpt.get_property("tmp", i)
+	    j = tpt.create(((x-tmpvy-4)%604)+4, ((y+tmpvx-4)%376)+4, ctype1)
+            tpt.set_property("ctype", ctype2, j)
+        else
+            j = tpt.create(((x-tmpvy-4)%604)+4, ((y+tmpvx-4)%376)+4, vcln)
+        end
         tpt.set_property("vx", -tmpvy, j)
         tpt.set_property("vy", tmpvx, j)
     end

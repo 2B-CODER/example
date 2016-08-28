@@ -12,7 +12,7 @@ local function funcUpdate(i,x,y,s,nt)
     tmpvy = tpt.get_property("vy", i)
     rand = math.random()
     if (2*rand % 1 < 0.01) then
-        if (rand < 1) then tmpvx = -tmpvx; tmpvy = -tmpvy; end
+        if (rand < 0.5) then tmpvx = -tmpvx; tmpvy = -tmpvy; end
         tpt.set_property("vx", tmpvy, i)
         tpt.set_property("vy", -tmpvx, i)
         ctype1 = tpt.get_property("ctype", i)

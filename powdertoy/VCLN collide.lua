@@ -18,8 +18,10 @@ local function funcUpdate(i,x,y,s,nt)
         ctype1 = tpt.get_property("ctype", i)
         if ctype1 ~= 0 then
             ctype2 = tpt.get_property("tmp", i)
+            lif = tpt.get_property("tmp", i)
 	    j = tpt.create(((x-tmpvy-4)%604)+4, ((y+tmpvx-4)%376)+4, ctype1)
             tpt.set_property("ctype", ctype2, j)
+            tpt.set_property("life", lif, j)
         else
             j = tpt.create(((x-tmpvy-4)%604)+4, ((y+tmpvx-4)%376)+4, vcln)
         end

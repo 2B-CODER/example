@@ -1,0 +1,23 @@
+2 {
+fractal:
+  title="2" width=640 height=480 layers=1
+  credits="Administrator;8/30/2016"
+layer:
+  caption="Background" opacity=100 precision=10
+mapping:
+  center=0.43813294675031368641655/0.75916830459222271707855
+  magn=2.4371293E12
+formula:
+  maxiter=2500 filename="sam.ufm" entry="Pol6Mand" p_start=0/0 p_a=0/0
+  p_b=1/0 p_c=2/0 p_d=1/0 p_f=0/0 p_g=0/0 p_h=1/0 p_bailout=1E10
+inside:
+  transfer=none
+outside:
+  density=0.1 transfer=linear filename="Standard.ucl" entry="Smooth"
+  p_power=5/0 p_bailout=128.0
+gradient:
+  smooth=yes rotation=1 index=0 color=6555392 index=64 color=13331232
+  index=168 color=16777197 index=257 color=43775 index=343 color=512
+opacity:
+  smooth=no index=0 opacity=255
+}

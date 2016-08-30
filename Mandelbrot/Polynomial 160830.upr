@@ -1,6 +1,6 @@
 2 {
 fractal:
-  title="2" width=640 height=480 layers=1
+  title="2nd power Minibrot" width=640 height=480 layers=1
   credits="Administrator;8/30/2016"
 layer:
   caption="Background" opacity=100 precision=10
@@ -10,6 +10,31 @@ mapping:
 formula:
   maxiter=2500 filename="sam.ufm" entry="Pol6Mand" p_start=0/0 p_a=0/0
   p_b=1/0 p_c=2/0 p_d=1/0 p_f=0/0 p_g=0/0 p_h=1/0 p_bailout=1E10
+inside:
+  transfer=none
+outside:
+  density=0.1 transfer=linear filename="Standard.ucl" entry="Smooth"
+  p_power=5/0 p_bailout=128.0
+gradient:
+  smooth=yes rotation=1 index=0 color=6555392 index=64 color=13331232
+  index=168 color=16777197 index=257 color=43775 index=343 color=512
+opacity:
+  smooth=no index=0 opacity=255
+}
+
+3 {
+fractal:
+  title="3rd power Minibrot" width=640 height=480 layers=1
+  credits="Administrator;8/30/2016"
+layer:
+  caption="Background" opacity=100 method=multipass
+mapping:
+  center=0.43813294672165511841484695/0.75916830471683603460443345
+  magn=1.0525917E15
+formula:
+  maxiter=10000 filename="sam.ufm" entry="Pol6Mand" p_start=0/0
+  p_a=0/0 p_b=1/0 p_c=2/0 p_d=1/0 p_f=0/0 p_g=0/0 p_h=1/0
+  p_bailout=1E10
 inside:
   transfer=none
 outside:

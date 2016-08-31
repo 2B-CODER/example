@@ -1,6 +1,6 @@
 # example
 
-public link (公共链接): https://yunpan.cn/cqt6evxQmgGVK and (和) https://git123hub.github.com/index.html
+public link (公共链接): https://yunpan.cn/cqt6evxQmgGVK and (和) https://git123hub.github.io/index.html
 
 my password (密码): `forge_source1`
 

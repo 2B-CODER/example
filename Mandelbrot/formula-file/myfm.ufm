@@ -1,0 +1,478 @@
+myfm {
+init:
+  z=0
+  c=#pixel
+loop:
+  z=sqr(z)+c
+  z=sqr(z)+c
+  z=sqr(z)+c
+bailout:
+  |z| < @k && real(c) < -1
+default:
+  center=(-1.76,0)
+  magn=50.0
+param k
+  default=0.048
+endparam
+}
+
+myfmJ {
+init:
+  z=#pixel
+  c=@seed
+loop:
+  z=sqr(z)+c
+  z=sqr(z)+c
+  z=sqr(z)+c
+bailout:
+  |z| < @k && |#pixel| < @k
+default:
+  center=(0,0)
+  magn=10.0
+param k
+  default=0.048
+endparam
+param seed
+  default=(-1.76, 0)
+endparam
+}
+
+myfm2 {
+init:
+  z=0
+  c=#pixel
+loop:
+  z=sqr(z)+c
+  z=sqr(z)+c
+  z=sqr(z)+c
+bailout:
+  |z| < 1e4
+default:
+  center=(-1.76,0)
+  magn=50.0
+}
+
+myfm3 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = z^@x2+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm3J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm3J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = z^@x2+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm3"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+myfm4 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = z^@x2-c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm4J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm4J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = z^@x2-c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm4"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+myfm5 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = 2*z^@x2+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm5J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm5J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = 2*z^@x2+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param x2
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm5"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+myfm6 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = conj(z^@x1)+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm6J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm6J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = conj(z^@x1)+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm6"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+myfm7 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = conj(z^@x1)+c
+  z = z^@x1+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm7J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm7J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = conj(z^@x1)+c
+  z = z^@x1+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm7"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+
+myfm8 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = z^@x1-c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm8J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm8J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = z^@x1-c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(2, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm8"
+  x1 = x1
+  x2 = x2
+  b = b
+}
+
+myfm9 {
+init:
+  z=0
+  c=#pixel
+
+loop:
+  z = z^@x1+c
+  z = -z^@x1+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+
+switch:
+  type = "myfm9J"
+  x1 = x1
+  x2 = x2
+  s = #pixel
+  b = b
+}
+
+myfm9J {
+init:
+  z=#pixel
+  c=@s
+
+loop:
+  z = z^@x1+c
+  z = -z^@x1+c
+
+bailout:
+  |z| < @b
+
+default:
+  param x1
+    default=(3, 0)
+  endparam
+  param b
+    default=1e5
+  endparam
+  param s
+    default=(0, 0)
+  endparam
+
+switch:
+  type = "myfm9"
+  x1 = x1
+  x2 = x2
+  b = b
+}

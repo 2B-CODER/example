@@ -1,0 +1,121 @@
+Polynom1 {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = z^3 + @seed * z
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param seed
+    caption = "Julia seed"
+    default = (3, 0)
+  endparam
+switch:
+  type = "Polynom2"
+  power = power
+  bailout = bailout
+}
+
+Polynom2 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-#pixel/3)
+loop:
+  z = z^3 + #pixel * z
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom1"
+  seed = #pixel
+  power = power
+  bailout = bailout
+}
+
+Polynom3 {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+  s = @seed
+loop:
+  z = conj(z^3 + s * z)
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param seed
+    caption = "Julia seed"
+    default = (3, 0)
+  endparam
+switch:
+  type = "Polynom4"
+  power = power
+  bailout = bailout
+}
+
+Polynom4 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-#pixel/3)
+  c = #pixel
+loop:
+  z = conj(z^3 + #pixel * z)
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom3"
+  seed = #pixel
+  power = power
+  bailout = bailout
+}

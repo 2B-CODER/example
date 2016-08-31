@@ -190,3 +190,74 @@ switch:
   power = power
   bailout = bailout
 }
+
+Polynom7 {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+  s = @seed
+loop:
+  float zr = abs(real(z))
+  float zi = -imag(z)
+  z = zr + zi*1i
+  z = z^3 + s * z
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param seed
+    caption = "Julia seed"
+    default = (3, 0)
+  endparam
+switch:
+  type = "Polynom8"
+  power = power
+  bailout = bailout
+}
+
+Polynom8 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = conj(sqrt(-#pixel/3))
+  c = #pixel
+loop:
+  float zr = abs(real(z))
+  float zi = -imag(z)
+  z = zr + zi*1i
+  z = z^3 + c * z
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param seed
+    caption = "Julia seed"
+    default = (3, 0)
+  endparam
+switch:
+  type = "Polynom7"
+  seed = #pixel
+  power = power
+  bailout = bailout
+}

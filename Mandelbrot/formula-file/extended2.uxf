@@ -100,7 +100,7 @@ default:
 
 checkerboardPattern {
 transform:
-  p = #pixel / @squaresize
+  p = (#pixel - @center) / @squaresize
   a = ceil(p) - p
   bool upX = 0.5 > real(a)
   bool upY = 0.5 > imag(a)
@@ -109,5 +109,8 @@ transform:
 default:
   complex param squaresize
     default = 1
+  endparam
+  complex param center
+    default = 0
   endparam
 }

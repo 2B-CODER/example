@@ -36,4 +36,78 @@ default:
   endparam
 }
 
+clip_quadrant {
+transform:
+  bool upX = @Xmin < real(#pixel)
+  bool upY = @Ymin < imag(#pixel)
+  if @isDown
+    upY = !upY
+  endif
+  if @isLeft
+    upX = !upX
+  endif
+  bool in = upX && upY
+  if @isOuter
+    in = !in
+  endif 
+  #solid = in 
+default:
+  float param Xmin
+    default = 0
+  endparam
+  float param Ymin
+    default = 0
+  endparam
+  bool param isDown
+    default = false
+  endparam
+  bool param isLeft
+    default = false
+  endparam
+  bool param isOuter
+    default = false
+  endparam
+}
 
+clip_hack_01 {
+transform:
+  bool upX = @X && (@Xmin < real(#pixel))
+  bool upY = @Y && (@Ymin < imag(#pixel))
+  bool in = upX != upY
+  if @isOuter
+    in = !in
+  endif 
+  #solid = in 
+default:
+  float param Xmin
+    default = 0
+  endparam
+  float param Ymin
+    default = 0
+  endparam
+  bool param X
+    caption = "x > 0 ?"
+    default = true
+  endparam
+  bool param Y
+    caption = "y > 0 ?"
+    default = true
+  endparam
+  bool param isOuter
+    default = false
+  endparam
+}
+
+checkerboardPattern {
+transform:
+  p = #pixel / @squaresize
+  a = ceil(p) - p
+  bool upX = 0.5 > real(a)
+  bool upY = 0.5 > imag(a)
+  bool in = upX != upY
+  #solid = in 
+default:
+  complex param squaresize
+    default = 1
+  endparam
+}

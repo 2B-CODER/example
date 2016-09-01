@@ -1,0 +1,48 @@
+EmbeddedBifurcation {
+transform:
+  int iter = 0
+  while iter < @maxiters
+    if cabs(#pixel) < 1 / @circlesize
+      #pixel = (#pixel ^ 2) * @circlesize ^ 2 * 4 + @bifurc_position / @circlesize ^ 2 / 4
+    else
+      #pixel = #pixel
+    endif
+    iter = iter + 1
+  endwhile
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param bifurc_position
+    default = (0.0, 0.0)
+  endparam
+  int param maxiters
+    default = 100
+  endparam
+}
+
+EmbeddedReverseBifurcation {
+transform:
+  int iter = 0
+  while iter < @maxiters
+    if cabs(#pixel) > @circlesize && cabs(#pixel) < (@circlesize * @magn) ^ 2 * 16
+      #pixel = #pixel ^ 2 / (@magn * @circlesize ^ 2) + @bifurc_position * @circlesize ^ 2 * @magn
+    else
+      #pixel = #pixel
+    endif
+    iter = iter + 1
+  endwhile
+default:
+  param circlesize
+    default = 2.0
+  endparam
+  param magn
+    default = 16.0
+  endparam
+  param bifurc_position
+    default = (0.0, 0.0)
+  endparam
+  int param maxiters
+    default = 100
+  endparam
+}

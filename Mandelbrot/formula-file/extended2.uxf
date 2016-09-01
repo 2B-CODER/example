@@ -1,0 +1,39 @@
+clipX {
+transform:
+  bool in = @Xmin >= real(#pixel) || @Xmax < real(#pixel)
+  if @isinner
+    in = !in
+  endif
+  #solid = in
+default:
+  param Xmin
+    default = -0.5
+  endparam
+  param Xmax
+    default = 0.5
+  endparam
+  bool param isinner
+    default = false
+  endparam
+}
+
+clipY {
+transform:
+  bool in = @Xmin >= imag(#pixel) || @Xmax < imag(#pixel)
+  if @isinner
+    in = !in
+  endif
+  #solid = in
+default:
+  param Xmin
+    default = -0.5
+  endparam
+  param Xmax
+    default = 0.5
+  endparam
+  bool param isinner
+    default = false
+  endparam
+}
+
+

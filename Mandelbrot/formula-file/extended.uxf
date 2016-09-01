@@ -1,0 +1,353 @@
+AddSquare {
+transform:
+  if @enablevalue
+    #pixel = sqr(#pixel) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower {
+transform:
+  if @enablevalue
+    #pixel = (#pixel ^ @c) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower_2 {
+transform:
+  if @enablevalue
+    #pixel = ((-#pixel) ^ @c) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower_3 {
+transform:
+  if @enablevalue
+    #pixel = (-(#pixel ^ @c)) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower_4 {
+transform:
+  if @enablevalue
+    #pixel = (-((-#pixel) ^ @c)) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower_5 {
+transform:
+  if @enablevalue
+    #pixel = (#pixel ^ (1/@c)) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+AddPower_6 {
+transform:
+  if @enablevalue
+    #pixel = (-((-#pixel) ^ (1/@c))) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  param c
+    default = 2.0
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+Tile {
+transform:
+  #pixel = #pixel - round(#pixel * @n) / @n
+default:
+  param n
+    default = 1.0
+  endparam
+}
+
+Rotate {
+transform:
+    #pixel = #pixel * exp(@angle*#pi/(0,-180))
+default:
+  param angle
+    caption = "Ðý×ª½Ç¶È"
+    default = 0.0
+  endparam
+}
+
+ZoomOut {
+transform:
+    #pixel = #pixel * @zoom
+default:
+  param zoom
+    default = 1.0
+  endparam
+}
+
+ZoomIn {
+transform:
+    #pixel = #pixel / @zoom
+default:
+  param zoom
+    default = 1.0
+  endparam
+}
+
+Embed {
+transform:
+  if cabs(#pixel) < 1 / @circlesize
+    #pixel = #pixel ^ 2 * @circlesize ^ 2 * 4
+  else
+    #pixel = #pixel
+  endif
+default:
+  param circlesize
+    default = 16.0
+  endparam
+}
+
+exponentialMap {
+transform:
+  if @enablevalue
+    #pixel = exp(#pixel) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+regularizeExponentialMap {
+transform:
+  if @enablevalue
+    #pixel = exp(#pixel * #pi) + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+logarithmMap {
+transform:
+    #pixel = log(#pixel) / #pi
+}
+
+Embed2 {
+transform:
+  if cabs(#pixel - @position) < 1 / @circlesize
+    #pixel = (#pixel - @position) ^ 2 * @circlesize ^ 2 * 4 + @position
+  else
+    #pixel = #pixel
+  endif
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param position
+    default = (0.0, 0.0)
+  endparam
+}
+
+Embed_rotational {
+transform:
+  if cabs(#pixel - @position) < 1 / @circlesize
+    #pixel = (#pixel - @position) ^ 2 * @circlesize ^ 2 * 4 + @position
+  elseif cabs(#pixel + @position) < 1 / @circlesize
+    #pixel = (#pixel + @position) ^ 2 * @circlesize ^ 2 * 4 - @position
+  else
+    #pixel = #pixel
+  endif
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param position
+    default = (0.0, 0.0)
+  endparam
+}
+
+Embed_rotational_center {
+transform:
+  if cabs(#pixel) < 1 / @circlesize
+    #pixel = #pixel ^ 2 * @circlesize ^ 2 * 4
+  elseif cabs(#pixel - @position) < 1 / @circlesize
+    #pixel = (#pixel - @position) ^ 2 * @circlesize ^ 2 * 4 + @position
+  elseif cabs(#pixel + @position) < 1 / @circlesize
+    #pixel = (#pixel + @position) ^ 2 * @circlesize ^ 2 * 4 - @position
+  else
+    #pixel = #pixel
+  endif
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param position
+    default = (0.0, 0.0)
+  endparam
+}
+
+Embed_rotational_center_iterated {
+transform:
+  int iter = 0
+  while iter < @maxiters
+    if cabs(#pixel) < 1 / @circlesize
+      #pixel = #pixel ^ 2 * @circlesize ^ 2 * 4
+    elseif cabs(#pixel - @position) < 1 / @circlesize
+      #pixel = (#pixel - @position) ^ 2 * @circlesize ^ 2 * 4 + @position
+    elseif cabs(#pixel + @position) < 1 / @circlesize
+      #pixel = (#pixel + @position) ^ 2 * @circlesize ^ 2 * 4 - @position
+    else
+      #pixel = #pixel
+    endif
+    iter = iter + 1
+  endwhile
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param position
+    default = (0.0, 0.0)
+  endparam
+  int param maxiters
+    default = 100
+  endparam
+}
+
+half_circle {
+transform:
+    bool a = false
+    if (real(#pixel - @position) < 0 && (|#pixel - @position| < sqr(@radius)))
+      a = true
+    endif
+    #solid = a
+default:
+    param radius
+       default = 1.0
+    endparam
+    param position
+       default = (0.0, 0.0)
+    endparam
+}
+
+uxf-01 {
+transform:
+    complex z1 = #pixel - @position
+    bool a = false
+    if (abs(real(z1)) - abs(imag(z1)) > 0 && |z1| < 4 && (cabs(z1) - 0.35) % 0.55 > 0.3)
+      a = true
+    endif
+    if (|z1| < 0.1225)
+      a = true
+    endif
+    #solid = a
+default:
+    param position
+       default = (0.0, 0.0)
+    endparam
+}
+
+uxf-02 {
+transform:
+   A2 = #pixel
+   C2 = ((A2-8)*SQRT(27*A2^2-176*A2+1472)/(384*SQRT(3))-(27*A2^2-288*A2+1600)/3456)^(1/3)
+   #pixel = C2+(3*A2+8)/(72*C2)-2/3
+}
+
+uxf-03 {
+transform:
+   A2 = #pixel
+   C2 = -((-((A2-8)*SQRT(27*A2^2-176*A2+1472)/(384*SQRT(3))-(27*A2^2-288*A2+1600)/3456))^(1/3))
+   #pixel = C2+(3*A2+8)/(72*C2)-2/3
+}

@@ -1,0 +1,27 @@
+DistanceEstimatorLog(OUTSIDE) {
+;
+; Distance-estimator coloring algorithm for Mandelbrot and
+; other z^n fractal types (Phoenix, Julia). This coloring
+; algorithm estimates the distance to the boundary of the
+; fractal (for example the Mandelbrot set) and colors points
+; accordingly.
+;
+; Written by Damien M. Jones
+;
+init:
+  complex dz = (0,0)
+loop:
+  dz = @power * #z^(@power-1) * dz + 1
+final:
+  #index = -log((@power*log(cabs(#z)) * cabs(#z) / cabs(dz))^(1/@power))
+default:
+  title = "Distance Estimator"
+  helpfile = "Uf*.chm"
+  helptopic = "Html/coloring/standard/distanceestimator.html"
+  param power
+    caption = "Exponent"
+    default = 2.0
+    hint = "This should be set to match the exponent of the \
+            formula you are using. For Mandelbrot, this is usually 2."
+  endparam
+}

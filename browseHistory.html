@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head></head>
+<body>
+<p>最近访问日期:
+<pre id="historyB"></pre>
+</p>
+<script type="text/javascript">
+// <![CDATA[
+var db, tx, store, random_like_name = "innerData%u28faC9Weh", rez, update = false, historyA = [], historyS = "";
+var request = indexedDB.open("data", 4);
+request.onupgradeneeded = function (e) {
+	var db = request.result;
+	if (!db.objectStoreNames.contains("data")){
+		var store = db.createObjectStore(random_like_name, {keyPath: "ID"});
+		update = true;
+	}
+	// alert("initialized");
+}
+var op = function () {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	var get1 = store.get("History");
+	get1.onsuccess = function () {
+		rez = get1.result;
+		var rdata = rez.data;
+		historyA[0] = +new Date();
+		historyS += new Date(historyA[0]).toString() + "\n";
+		for (var it = 1; it <= 50; ++it) {
+			historyA[it] = rdata[(rez.ptr + 50 - it) % 50];
+			if (historyA[it] == null) {
+				break;
+			}
+			historyS += new Date(historyA[it]).toString() + "\n";
+		}
+		rdata[rez.ptr] = historyA[0];
+		rez.ptr = (rez.ptr + 1) % 50;
+		document.getElementById("historyB").innerHTML = historyS;
+		db.transaction(random_like_name, "readwrite").objectStore(random_like_name).put(rez)
+	}
+}
+request.onsuccess = function () {
+	db = request.result;
+	update && db.transaction(random_like_name, "readwrite").objectStore(random_like_name).put({ "ID": "History", "ptr": 0, data: [] });
+	op();
+}
+/*
+var getData = function(ID) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	var get = store.get(ID);
+	get.onsuccess = function () {
+		rez = get.result.data;
+	}
+}
+var putData = function(ID, data) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	store.put({"ID": ID, "data": data});
+}
+var deleteData = function(ID) {
+	tx = db.transaction(random_like_name, "readwrite");
+	store = tx.objectStore(random_like_name);
+	store.delete(ID);
+}
+*/
+// ]]>
+</script>
+</body>
+</html>

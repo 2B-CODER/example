@@ -2,13 +2,13 @@ ucl-0160903a {
 final:
 int it = 0
 complex p = #pixel
-while it < 120 && ((sin(real(p)) <= imag(p)) == (sin(real(p)) <= -imag(p)))
+while it < @maxiter && ((sin(real(p)) <= imag(p)) == (sin(real(p)) <= -imag(p)))
   it = it+1
   p = p * 2
 endwhile
 if it == 0 && (real(p) < imag(p)) == (real(p) < -imag(p))
   it = -1
-  while it < 120 && ((sin(real(p)) <= imag(p)) != (sin(real(p)) <= -imag(p)))
+  while it < @maxiter && ((sin(real(p)) <= imag(p)) != (sin(real(p)) <= -imag(p)))
   it = it+1
   p = p / 2
 endwhile
@@ -18,4 +18,9 @@ if s > 10
   s = 20-s
 endif
 #color = rgb(s/10, s/10, s/10)
+default:
+int param maxiter
+  min = 0
+  default = 200
+endparam
 }

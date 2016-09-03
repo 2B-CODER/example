@@ -1,0 +1,20 @@
+ucl-1 {
+final:
+  int iter = 0
+  float b = 0
+  px = #pixel
+  x = (0, 0)
+  p = (0, 0)
+  while iter<256 && |x| < 4
+    p = x
+    x = sqr(x) + px
+    iter = iter + 1
+  endwhile
+  float g = (2.0 - cabs(p)) / abs(cabs(p) - cabs(x))
+  if iter == 256
+    iter = 255
+    g = 255
+    b = 255
+  endif
+  #color=rgb(iter/255, g, b)
+}

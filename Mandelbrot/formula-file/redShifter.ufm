@@ -44,6 +44,13 @@ $ENDIF
             give more interesting shapes around the set. Values less than 4 \
             will distort the fractal."
   endparam
+
+switch:
+  type = "positshiftJulia"
+  a = a
+  power = power
+  bailout = bailout
+  seed = #pixel
 }
 
 negatshift {
@@ -92,6 +99,12 @@ $ENDIF
             give more interesting shapes around the set. Values less than 4 \
             will distort the fractal."
   endparam
+switch:
+  type = "negatshiftJulia"
+  a = a
+  power = power
+  bailout = bailout
+  seed = #pixel
 }
 
 positshiftconj {
@@ -140,6 +153,12 @@ $ENDIF
             give more interesting shapes around the set. Values less than 4 \
             will distort the fractal."
   endparam
+switch:
+  type = "positshiftconjJulia"
+  a = a
+  power = power
+  bailout = bailout
+  seed = #pixel
 }
 
 negatshiftconj {
@@ -188,4 +207,230 @@ $ENDIF
             give more interesting shapes around the set. Values less than 4 \
             will distort the fractal."
   endparam
+switch:
+  type = "nagatshiftconjJulia"
+  a = a
+  power = power
+  bailout = bailout
+  seed = #pixel
+}
+
+positshiftJulia {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = @a*sqr(z) + z^@power + @seed
+bailout:
+  |z| <= @bailout
+default:
+  title = "a*z^2 + z^p + c (Julia)"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param seed
+    caption = "Julia seed"
+    default = (0,0)
+    hint = "Use this parameter to create many different Julia sets. A good \
+            way to set this parameter is with the Switch, Eyedropper, or \
+            Explore features."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Julia formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Julia figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Julia sets. Use (2, 0) \
+            for the standard Julia set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+switch:
+  type = "positshift"
+  a = a
+  power = power
+  bailout = bailout
+; start = (0, 0)
+}
+
+negatshiftJulia {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = @a*sqr(z) - z^@power + @seed
+bailout:
+  |z| <= @bailout
+default:
+  title = "a*z^2 - z^p + c (Julia)"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param seed
+    caption = "Julia seed"
+    default = (0,0)
+    hint = "Use this parameter to create many different Julia sets. A good \
+            way to set this parameter is with the Switch, Eyedropper, or \
+            Explore features."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Julia formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Julia figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Julia sets. Use (2, 0) \
+            for the standard Julia set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+switch:
+  type = "negatshift"
+  a = a
+  power = power
+  bailout = bailout
+; start = (0, 0)
+}
+
+positshiftconjJulia {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = conj(@a*sqr(z) + z^@power) + @seed
+bailout:
+  |z| <= @bailout
+default:
+  title = "conj(a*z^2 + z^p) + c (Julia)"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param seed
+    caption = "Julia seed"
+    default = (0,0)
+    hint = "Use this parameter to create many different Julia sets. A good \
+            way to set this parameter is with the Switch, Eyedropper, or \
+            Explore features."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Julia formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Julia figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Julia sets. Use (2, 0) \
+            for the standard Julia set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+switch:
+  type = "positshiftconj"
+  a = a
+  power = power
+  bailout = bailout
+; start = (0, 0)
+}
+
+negatshiftconjJulia {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = conj(@a*sqr(z) - z^@power) + @seed
+bailout:
+  |z| <= @bailout
+default:
+  title = "conj(a*z^2 - z^p) + c (Julia)"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param seed
+    caption = "Julia seed"
+    default = (0,0)
+    hint = "Use this parameter to create many different Julia sets. A good \
+            way to set this parameter is with the Switch, Eyedropper, or \
+            Explore features."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Julia formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Julia figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Julia sets. Use (2, 0) \
+            for the standard Julia set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+switch:
+  type = "negatshiftconj"
+  a = a
+  power = power
+  bailout = bailout
+; start = (0, 0)
 }

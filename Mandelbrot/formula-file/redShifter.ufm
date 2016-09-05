@@ -208,7 +208,7 @@ $ENDIF
             will distort the fractal."
   endparam
 switch:
-  type = "nagatshiftconjJulia"
+  type = "negatshiftconjJulia"
   a = a
   power = power
   bailout = bailout

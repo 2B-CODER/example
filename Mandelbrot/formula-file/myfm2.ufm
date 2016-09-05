@@ -360,3 +360,102 @@ $ENDIF
 ;   power = power
 ;   bailout = bailout
 }
+
+Polynom12 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-#pixel/3)
+loop:
+  z = conj(z^3 + #pixel * z + @b)
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+  complex param b
+    default = (1, 0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom14"
+  a = #pixel
+  b = b
+  power = power
+  bailout = bailout
+}
+
+Polynom13 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-@a/3)
+loop:
+  z = conj(z^3 + @a * z + #pixel)
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+  complex param a
+    default = (1, 0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom14"
+  a = a
+  b = #pixel
+  power = power
+  bailout = bailout
+}
+
+Polynom14 {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = conj(z^3 + @a*z + @b)
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  title = "conj(z^3 + a*z + b)"
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param a
+    caption = "Julia seed (a)"
+    default = (0, 0)
+  endparam
+  complex param b
+    caption = "Julia seed (b)"
+    default = (1, 0)
+  endparam
+; switch:
+;   type = "Polynom2"
+;   power = power
+;   bailout = bailout
+}

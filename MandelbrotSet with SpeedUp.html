@@ -1,0 +1,60 @@
+<canvas id="myCanvas" width="801" height="801"></canvas>
+<script type="text/javascript">
+
+var ctx = document.getElementById("myCanvas").getContext("2d")
+
+var cabs = function(x) {
+    return Math.sqrt(x[0]*x[0]+x[1]*x[1]);
+}
+
+var nextstep = function(x,y) {
+    return [x[0]*x[0]-x[1]*x[1]+y[0],2*x[0]*x[1]+y[1]];
+}
+
+var final = function(x,prev,iter) {
+    return iter + (2 - cabs(prev)) / Math.abs(cabs(prev) - cabs(x));
+}
+
+var bailoutTest = function(x,y) {
+    return cabs(x) <= y;
+}
+
+var realIter = function(c,r) {
+    var z = [0,0], i = 0, prev;
+    while(bailoutTest(z,r) && i < 3000) {
+        ++i;
+        prev = z;
+        z = nextstep(z,c);
+    }
+    if(i === 3000) {
+        return NaN;
+    }
+    return final(z,prev,i);
+}
+
+var makePixel = function(x,y,v){
+    if(!isNaN(v)) {
+        var red = Math.round(Math.abs((v*20+255)%510-255));
+        var green = Math.round(Math.abs(((v*15+85)+255)%510-255));
+        var blue = Math.round(Math.abs(((v*30+171)+255)%510-255));
+        ctx.fillStyle="rgb("+[red,green,blue]+")";
+    } else {ctx.fillStyle="#000000";}
+    ctx.fillRect(x,y,1,1);
+}
+
+var cx = 0;
+setInterval(function(){
+for(cy = 0; cy < 801; ++cy) {
+x = (cx - 400) / 320 - 0.764;
+y = (cy - 400) / 320 + 0.0000008;
+var re = x-0.25;
+var re2 = x+1;
+var re3 = ((0.5+re)*re+i2);
+var i2 = y*y;
+makePixel(cx,cy,(re3*re3 <= 0.25*(re*re+i2) || re2*re2+i2 <= 0.0625) ? NaN : realIter([x,y],2))
+}
+++cx
+if(cx === 801) {clearInterval(1);}
+},0)
+
+</script>

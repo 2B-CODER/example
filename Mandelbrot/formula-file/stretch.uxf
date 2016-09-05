@@ -1,0 +1,21 @@
+X_stretch {
+transform:
+  re = real(#pixel) / @factor
+  im = imag(#pixel)
+  #pixel = re + flip(im)
+default:
+float param factor
+  default = 1.0
+endparam
+}
+
+Y_stretch {
+transform:
+  re = real(#pixel)
+  im = imag(#pixel) / @factor
+  #pixel = re + flip(im)
+default:
+float param factor
+  default = 1.0
+endparam
+}

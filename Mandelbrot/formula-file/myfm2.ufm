@@ -261,3 +261,65 @@ switch:
   power = power
   bailout = bailout
 }
+
+Polynom9 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-#pixel/3)
+loop:
+  z = z^3 + #pixel * z + @b
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+  complex param b
+    default = (1, 0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom10"
+  a = #pixel
+  power = power
+  bailout = bailout
+}
+
+Polynom10 {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = sqrt(-@a/3)
+loop:
+  z = z^3 + @a * z + #pixel
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  magn = 0.5
+  complex param a
+    default = (1, 0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+switch:
+  type = "Polynom9"
+  b = #pixel
+  power = power
+  bailout = bailout
+}

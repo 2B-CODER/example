@@ -287,8 +287,9 @@ $IFDEF VER40
 $ENDIF
   endparam
 switch:
-  type = "Polynom10"
+  type = "Polynom11"
   a = #pixel
+  b = b
   power = power
   bailout = bailout
 }
@@ -318,8 +319,44 @@ $IFDEF VER40
 $ENDIF
   endparam
 switch:
-  type = "Polynom9"
+  type = "Polynom11"
+  a = a
   b = #pixel
   power = power
   bailout = bailout
+}
+
+Polynom11 {
+;
+; Generic Julia set.
+;
+init:
+  z = #pixel
+loop:
+  z = z^3 + @a*z + @b
+bailout:
+  |z| <= @bailout
+default:
+  center = (0, 0)
+  title = "z^3 + a*z + b"
+  float param bailout
+    caption = "Bailout value"
+    default = 1E10
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+  endparam
+  complex param a
+    caption = "Julia seed (a)"
+    default = (0, 0)
+  endparam
+  complex param b
+    caption = "Julia seed (b)"
+    default = (1, 0)
+  endparam
+; switch:
+;   type = "Polynom2"
+;   power = power
+;   bailout = bailout
 }

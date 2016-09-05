@@ -1,0 +1,191 @@
+positshift {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = @start
+loop:
+  z = @a*sqr(z) + z^@power + #pixel
+bailout:
+  |z| <= @bailout
+default:
+  title = "a*z^2 + z^p + c"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param start
+    caption = "Starting point"
+    default = (0,0)
+    hint = "The starting point parameter can be used to distort the Mandelbrot \
+            set. Use (0, 0) for the standard Mandelbrot set."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Mandelbrot formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Mandelbrot figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Mandelbrot sets. Use (2, 0) \
+            for the standard Mandelbrot set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+}
+
+negatshift {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = @start
+loop:
+  z = @a*sqr(z) - z^@power + #pixel
+bailout:
+  |z| <= @bailout
+default:
+  title = "a*z^2 - z^p + c"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param start
+    caption = "Starting point"
+    default = (0,0)
+    hint = "The starting point parameter can be used to distort the Mandelbrot \
+            set. Use (0, 0) for the standard Mandelbrot set."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Mandelbrot formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Mandelbrot figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Mandelbrot sets. Use (2, 0) \
+            for the standard Mandelbrot set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+}
+
+positshiftconj {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = @start
+loop:
+  z = conj(@a*sqr(z) + z^@power) + #pixel
+bailout:
+  |z| <= @bailout
+default:
+  title = "conj(a*z^2 + z^p) + c"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param start
+    caption = "Starting point"
+    default = (0,0)
+    hint = "The starting point parameter can be used to distort the Mandelbrot \
+            set. Use (0, 0) for the standard Mandelbrot set."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Mandelbrot formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Mandelbrot figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Mandelbrot sets. Use (2, 0) \
+            for the standard Mandelbrot set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+}
+
+negatshiftconj {
+;
+; Generic Mandelbrot set.
+;
+init:
+  z = @start
+loop:
+  z = conj(@a*sqr(z) - z^@power) + #pixel
+bailout:
+  |z| <= @bailout
+default:
+  title = "conj(a*z^2 - z^p) + c"
+
+;$IFDEF VER50
+;  rating = recommended
+;$ENDIF
+  param start
+    caption = "Starting point"
+    default = (0,0)
+    hint = "The starting point parameter can be used to distort the Mandelbrot \
+            set. Use (0, 0) for the standard Mandelbrot set."
+  endparam
+  param power
+    caption = "Power"
+    default = (3,0)
+    hint = "This parameter sets the exponent for the Mandelbrot formula. \
+            Increasing the real part to 3, 4, and so on, will add discs to \
+            the Mandelbrot figure. Non-integer real values and non-zero \
+            imaginary values will create distorted Mandelbrot sets. Use (2, 0) \
+            for the standard Mandelbrot set."
+  endparam
+  param a
+    default = (1,0)
+  endparam
+  float param bailout
+    caption = "Bailout value"
+    default = 128.0
+    min = 1.0
+$IFDEF VER40
+    exponential = true
+$ENDIF
+    hint = "This parameter defines how soon an orbit bails out while \
+            iterating. Larger values give smoother outlines; values around 4 \
+            give more interesting shapes around the set. Values less than 4 \
+            will distort the fractal."
+  endparam
+}

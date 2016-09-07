@@ -1,0 +1,280 @@
+aSunset {
+gradient: 
+title="Sunset" linked=no smooth=no 
+ index=0 color=6711039 index=98 color=10066431 index=237 color=10092543 index=399 color=13434879
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aTropics {
+gradient: 
+title="Tropics" linked=no smooth=no 
+ index=0 color=6711039 index=180 color=10066431 index=271 color=6737151 index=399 color=13434879
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aLoverly {
+gradient: 
+title="Loverly" linked=no smooth=no 
+ index=0 color=6710988 index=180 color=10066431 index=271 color=13421823 index=399 color=13434879
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aContrast {
+gradient: 
+title="Contrast" linked=no smooth=no 
+ index=0 color=6710988 index=180 color=10066431 index=271 color=13395507 index=399 color=16711680
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aDeep_Blue {
+gradient: 
+title="Deep_Blue" linked=no smooth=no 
+ index=0 color=16764108 index=180 color=16737894 index=271 color=13395507 index=399 color=16711680
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aCool {
+gradient: 
+title="Cool" linked=no smooth=no 
+ index=0 color=16764108 index=138 color=16737894 index=271 color=10066227 index=399 color=13434726
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aCooler {
+gradient: 
+title="Cooler" linked=no smooth=no 
+ index=0 color=16764108 index=138 color=16737894 index=271 color=16737996 index=399 color=16751052
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aOoh_La_La {
+gradient: 
+title="Ooh_La_La" linked=no smooth=no 
+ index=0 color=16764108 index=138 color=13369599 index=271 color=16737996 index=399 color=16751052
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aOh_Yeah {
+gradient: 
+title="Oh_Yeah" linked=no smooth=no 
+ index=0 color=16724991 index=138 color=13369599 index=271 color=16738047 index=399 color=16751052
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aLovin'_It {
+gradient: 
+title="Lovin'_It" linked=no smooth=no 
+ index=0 color=16724991 index=138 color=13369599 index=271 color=16738047 index=399 color=6684774
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aPurple_Passion {
+gradient: 
+title="Purple_Passion" linked=no smooth=no 
+ index=0 color=16751052 index=138 color=16724940 index=258 color=10027161 index=399 color=6684774
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aPrecious {
+gradient: 
+title="Precious" linked=no smooth=no 
+ index=0 color=10092543 index=138 color=16724940 index=258 color=6750207 index=399 color=6684774
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aSpring {
+gradient: 
+title="Spring" linked=no smooth=no 
+ index=0 color=10092543 index=138 color=3407769 index=258 color=6750207 index=399 color=6750105
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aSpring_Green {
+gradient: 
+title="Spring_Green" linked=no smooth=no 
+ index=0 color=3394611 index=138 color=3407769 index=204 color=6750207 index=399 color=39168
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aGrass {
+gradient: 
+title="Grass" linked=no smooth=no 
+ index=0 color=3394611 index=138 color=3407616 index=200 color=65280 index=399 color=39168
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aMinty_Fresh {
+gradient: 
+title="Minty_Fresh" linked=no smooth=no 
+ index=44 color=6723891 index=82 color=10092339 index=120 color=6723891 index=138 color=13434726 index=185 color=10092339 index=237 color=6723891 index=350 color=10092339 index=399 color=6736998
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aSmooooth {
+gradient: 
+title="Smooooth" linked=no smooth=no 
+ index=0 color=16764057 index=237 color=16763904 index=324 color=13408563 index=399 color=10053120
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aOpposites_Attract {
+gradient: 
+title="Opposites_Attract" linked=no smooth=no 
+ index=0 color=6724095 index=237 color=16763904 index=324 color=13408563 index=399 color=10053120
+opacity: 
+ index=2 opacity=255 index=399 opacity=255
+}
+aGood_Colors {
+gradient: 
+title="Good_Colors" linked=no smooth=no 
+ index=0 color=6724095 index=237 color=16763904 index=324 color=13421823 index=399 color=10053120
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aGoldy {
+gradient: 
+title="Goldy" linked=no smooth=no 
+ index=2 color=13434879 index=167 color=6750207 index=399 color=52428
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aBronzy {
+gradient: 
+title="Bronzy" linked=no smooth=no 
+ index=2 color=6724044 index=167 color=6750207 index=399 color=3394815
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aGolden_Cookie {
+gradient: 
+title="Golden_Cookie" linked=no smooth=no 
+ index=2 color=6724044 index=167 color=3368601 index=399 color=3394815
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aOven_Fresh {
+gradient: 
+title="Oven_Fresh" linked=no smooth=no 
+ index=2 color=3355545 index=167 color=3368601 index=399 color=3394815
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aCoolness {
+gradient: 
+title="Coolness" linked=no smooth=no 
+ index=2 color=3355545 index=167 color=3368601 index=399 color=13395507
+opacity: 
+ index=2 opacity=255 index=364 opacity=255 index=399 opacity=255
+}
+aDark8 {
+gradient: 
+title="Dark8" linked=no smooth=no 
+ index=0 color=4603726 index=0 color=4210752 index=91 color=11403065 index=167 color=16758585 index=219 color=9849343 index=287 color=8421504 index=399 color=4603726
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_01 {
+gradient: 
+title="ES_SeaDreams_01" linked=no smooth=no 
+ index=11 color=11105844 index=59 color=14990176 index=139 color=14802047 index=199 color=16184009 index=327 color=14676470 index=391 color=15462897
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_02 {
+gradient: 
+title="ES_SeaDreams_02" linked=no smooth=no 
+ index=11 color=11105844 index=119 color=14990176 index=219 color=16049574 index=387 color=16316137
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_03 {
+gradient: 
+title="ES_SeaDreams_03" linked=no smooth=no 
+ index=79 color=14596209 index=239 color=15985111 index=339 color=16382715
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_04 {
+gradient: 
+title="ES_SeaDreams_04" linked=no smooth=no 
+ index=19 color=16380873 index=107 color=12354601 index=247 color=15384152 index=395 color=16512431
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_05 {
+gradient: 
+title="ES_SeaDreams_05" linked=no smooth=no 
+ index=31 color=13013824 index=79 color=13938799 index=143 color=14862710 index=171 color=16514238 index=271 color=16176269 index=319 color=16174982 index=391 color=16313298
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_06 {
+gradient: 
+title="ES_SeaDreams_06" linked=no smooth=no 
+ index=19 color=15132920 index=71 color=14409459 index=279 color=14935173 index=379 color=14328870
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_07 {
+gradient: 
+title="ES_SeaDreams_07" linked=no smooth=no 
+ index=59 color=12947817 index=239 color=15131096 index=359 color=15858168
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_08 {
+gradient: 
+title="ES_SeaDreams_08" linked=no smooth=no 
+ index=7 color=16711680 index=99 color=16151922 index=175 color=16569582 index=391 color=15767604
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_09 {
+gradient: 
+title="ES_SeaDreams_09" linked=no smooth=no 
+ index=0 color=12632256 index=159 color=15567405 index=239 color=13645360 index=399 color=14527653
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_10 {
+gradient: 
+title="ES_SeaDreams_10" linked=no smooth=no 
+ index=19 color=16580914 index=139 color=16773304 index=199 color=14509669 index=387 color=13643825
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_11 {
+gradient: 
+title="ES_SeaDreams_11" linked=no smooth=no 
+ index=0 color=16324369 index=399 color=16119842
+opacity: 
+ index=399 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_12 {
+gradient: 
+title="ES_SeaDreams_12" linked=no smooth=no 
+ index=19 color=3216897 index=107 color=6243865 index=219 color=14598746 index=279 color=16185033 index=343 color=16579809 index=399 color=16119291
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_13 {
+gradient: 
+title="ES_SeaDreams_13" linked=no smooth=no 
+ index=19 color=15324114 index=99 color=16151922 index=119 color=16224398 index=199 color=16711680 index=279 color=16224398 index=299 color=16151922 index=379 color=15324114
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}
+aES_SeaDreams_14 {
+gradient: 
+title="ES_SeaDreams_14" linked=no smooth=no 
+ index=59 color=4925479 index=199 color=11235141 index=299 color=15647892 index=387 color=15848107
+opacity: 
+ index=0 opacity=240 index=199 opacity=242
+}
+aES_SeaDreams_15 {
+gradient: 
+title="ES_SeaDreams_15" linked=no smooth=no 
+ index=19 color=7164981 index=139 color=11707280 index=259 color=14998481 index=379 color=16446697
+opacity: 
+ index=0 opacity=255 index=399 opacity=255
+}

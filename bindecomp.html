@@ -11,7 +11,7 @@ return k;
 }
 var findMinibrotCenterFromBinaryDecomposition = function (bd, maxi) {
 var max = 0, min = -2, middle = -1, prevM, maxdecomp, mindecomp, middecomp, prevM;
-for (var i = 0; i < 52; ++i) {
+for (var i = 0; i < 55; ++i) {
 maxdecomp = FloatNumBinDecomp(max,maxi),
 mindecomp = FloatNumBinDecomp(min,maxi),
 middecomp = FloatNumBinDecomp(middle,maxi);
@@ -20,7 +20,7 @@ if (middecomp < bd) {max = prevM;} else if (middecomp > bd) {min = prevM;}
 middle = (max+min)/2;
 if (prevM === middle) {break;}
 }
-if (prevM !== middle) {return null}
+if (middecomp !== bd) {return null}
 return middle;
 }
 </script>

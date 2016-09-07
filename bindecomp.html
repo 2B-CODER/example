@@ -1,0 +1,12 @@
+<script>
+var FloatNumBinDecomp = function (c, maxi) {
+var z = 0, k = "", d = 0, s;
+for (var i = 0; i < maxi; ++i) {
+  z = z*z + c;
+  k += d;
+  s = z < 0 ? 1 : 0;
+  d ^= s;
+}
+return k;
+}
+</script>

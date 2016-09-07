@@ -20,7 +20,7 @@ if (middecomp < bd) {max = prevM;} else if (middecomp > bd) {min = prevM;}
 middle = (max+min)/2;
 if (prevM === middle) {break;}
 }
-if (middecomp !== bd) {return null}
+if (middecomp.join("") !== bd.join("")) {return null}
 return middle;
 }
 </script>

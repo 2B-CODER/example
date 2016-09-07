@@ -1,0 +1,49 @@
+<style>a {text-decoration: none}</style>
+<div id="sresult"></div>
+<script>
+//<![CDATA[
+var arr = [];
+var max = 20;
+for (var i = 0; i < max; arr[i] = ++i) {}
+var nextseq = function (id) {
+  var snum = arr[id];
+  var sdif = snum - arr[id-1];
+  var index = arr.indexOf(sdif);
+  var sn3;
+  if (index >= 0 && index + 1 < id) {
+    var sn2 = arr[id-1] + arr[index + 1];
+    var si2 = arr.indexOf(sn2 - snum);
+    if (sn2 > max) { return null; }
+    arr[id++] = sn2;
+    while((sn3 = snum + arr[++si2]) <= max) {
+      arr[id++] = snum + arr[si2];
+    }
+    arr.length = id;
+    return arr;
+  } else {
+    return null;
+  }
+}
+var arrToHTML = function (arr) {
+  return "<a href='https://git123hub.github.io/Mandelbrot-Web.html?#!q=" + arr.join("_1/2-&gt;") + "'>" + arr.join(" ") + "</a>";
+}
+var nextElem = function () {
+  var l = arr.length - 1;
+  if (!nextseq(l)) { arr.length = l; }
+  return arr;
+}
+var mainFunc = function () {
+  var count = 0, HTML = "list of cardioids from &quot;tip&quot; (up to period "+max+"): <br />";
+  while (arr.length) {
+    if(arr[arr.length-1] !== 2*arr[arr.length-2]) {
+      ++count;
+      HTML += arrToHTML(arr) + "<br />";
+    }
+    nextElem();
+  }
+  HTML += count + " match(es).";
+  document.getElementById("sresult").innerHTML = HTML;
+};
+mainFunc();
+//]]>
+</script>

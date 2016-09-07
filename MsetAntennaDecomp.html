@@ -45,7 +45,7 @@ var decomposition = function (a) {
   return a.join(" ") + " = (" + a.slice(0, ++i).join(" ") + ") (" + b.join(" ") + ")";
 }
 var mainFunc = function () {
-  var count = 0, tmp, HTML = "list of primary bulb/minibrots from &quot;tip&quot; (up to period "+max+"): <br />";
+  var count = 0, tmp, HTML = "list of non-primary bulb/minibrots decomposition from &quot;tip&quot; (up to period "+max+"): <br />";
   while (arr.length) {
     if(tmp = decomposition(arr)) {
       ++count;

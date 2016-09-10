@@ -1,0 +1,17 @@
+<meta charset="utf-8" />
+您当前时间是：<span id="time"></span>
+<script>
+var refresh = function () {
+var date = new Date();
+var hours = date.getHours();
+var mins = date.getMinutes();
+var secs = date.getSeconds();
+function checkTime(i) {i<10 && (i="0" + i); return i}
+if (date.getMonth() >= 3 && date.getMonth() <= 8) {
+  if (hours < 12) {document.getElementById("time").innerHTML = (hours + 1) % 24 + ":" + checkTime(mins) + ":" + checkTime(secs)}
+  else {document.getElementById("time").innerHTML = (hours + 23) % 24 + ":" + checkTime(mins) + ":" + checkTime(secs)}
+}
+}
+refresh()
+setInterval(refresh, 500)
+</script>

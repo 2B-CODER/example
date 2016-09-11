@@ -240,6 +240,22 @@ default:
   endparam
 }
 
+Embed3 {
+transform:
+  if cabs(#pixel) < 1 / @circlesize
+    #pixel = (#pixel) ^ 2 * @circlesize ^ 2 * 4 + @position
+  else
+    #pixel = #pixel
+  endif
+default:
+  param circlesize
+    default = 16.0
+  endparam
+  param position
+    default = (0.0, 0.0)
+  endparam
+}
+
 Embed_rotational {
 transform:
   if cabs(#pixel - @position) < 1 / @circlesize

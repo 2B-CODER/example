@@ -114,3 +114,115 @@ default:
     default = 0
   endparam
 }
+
+clip_hack_02 {
+transform:
+  float p = imag(#pixel)
+  if @bparam2
+    p = -p
+  endif 
+  bool in = real(#pixel) < (@Zmin - p)
+  if @isOuter
+    in = !in
+  endif 
+  #solid = in 
+default:
+  float param Zmin
+    default = 0
+  endparam
+  bool param isOuter
+    default = false
+  endparam
+  bool param bparam2
+    default = false
+  endparam
+}
+
+clip_hack_03 {
+transform:
+  p = (#pixel - @center) / @squaresize
+  a = ceil(p) - p
+  bool upX = 0.5 > real(a)
+  bool upY = 0.5 > imag(a)
+  bool in = upX && upY
+  if @isOuter
+    in = !in
+  endif 
+  #solid = in 
+default:
+  complex param squaresize
+    default = 1
+  endparam
+  complex param center
+    default = 0
+  endparam
+  bool param isOuter
+    default = false
+  endparam
+}
+
+uxf_Func11 {
+transform:
+  if @enablevalue
+    #pixel = @xfunc(@xfunc2(#pixel)) + #pixel + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  title = "fn(fn(pixel)) + pixel"
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  func xfunc
+    default = sin()
+  endfunc
+  func xfunc2
+    default = sqr()
+  endfunc
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+uxf_Func12 {
+transform:
+  if @enablevalue
+    #pixel = @xfunc(#pixel) * #pixel + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  title = "fn(pixel) * pixel"
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  func xfunc
+    default = sin()
+  endfunc
+  bool param enablevalue
+    default = false
+  endparam
+}
+
+uxf_Func13 {
+transform:
+  if @enablevalue
+    #pixel = @xfunc(#pixel) / #pixel + @add
+  else
+    #pixel = #pixel
+  endif
+default:
+  title = "fn(pixel) / pixel"
+  param add
+    caption = "Increment Value"
+    default = (0, 0)
+  endparam
+  func xfunc
+    default = sin()
+  endfunc
+  bool param enablevalue
+    default = false
+  endparam
+}

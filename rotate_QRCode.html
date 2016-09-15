@@ -1,0 +1,44 @@
+<body style="margin: 0">
+<iframe style="width:100%; height:100%; border: none" id="page"></iframe>
+<img id="QR_1" src="https://git123hub.github.io/repo-1/QR-14739458a.svg" width="100" height="100" style="left:  50px; bottom:  40px; position: fixed; transform: rotate(0deg);" />
+<img id="QR_2" src="https://git123hub.github.io/repo-1/QR-14739458b.svg" width="100" height="100" style="left: 150px; bottom:  40px; position: fixed; transform: rotate(90deg);" />
+<img id="QR_3" src="https://git123hub.github.io/repo-1/QR-14739458c.svg" width="100" height="100" style="left: 150px; bottom: -60px; position: fixed; transform: rotate(180deg);" />
+<img id="QR_4" src="https://git123hub.github.io/repo-1/QR-14739458d.svg" width="100" height="100" style="left:  50px; bottom: -60px; position: fixed; transform: rotate(270deg);" />
+<script>
+var angle   =   0;
+var centerX = 100;
+var centerY = -10;
+var currTime = +new Date, prevTime;
+var incrementAngle = 30
+var deg2rad = function (x) {
+  return x * Math.PI / 180;
+}
+var $ = function (id) {
+  return document.getElementById(id);
+}
+var css_regenerate = function () {
+  prevTime = currTime;
+  currTime = +new Date;
+  angle = (angle + (currTime - prevTime) * incrementAngle / 1000) % 360;
+  var cos = Math.cos(deg2rad(angle))*50;
+  var sin = Math.sin(deg2rad(angle))*50;
+  $("QR_1").style.left      = centerX - cos + sin;
+  $("QR_1").style.bottom    = centerY + sin + cos;
+  $("QR_1").style.transform = "rotate(" + angle + "deg)";
+  $("QR_2").style.left      = centerX + cos + sin;
+  $("QR_2").style.bottom    = centerY - sin + cos;
+  $("QR_2").style.transform = "rotate(" + (angle + 90) + "deg)";
+  $("QR_3").style.left      = centerX + cos - sin;
+  $("QR_3").style.bottom    = centerY - sin - cos;
+  $("QR_3").style.transform = "rotate(" + (angle + 180) + "deg)";
+  $("QR_4").style.left      = centerX - cos - sin;
+  $("QR_4").style.bottom    = centerY + sin - cos;
+  $("QR_4").style.transform = "rotate(" + (angle + 270) + "deg)";
+  requestAnimationFrame(css_regenerate)
+}
+css_regenerate();
+if (location.href.match(/\?([\s\S]*)/)) {
+  $("page").src = location.href.match(/\?([\s\S]*)/)[1];
+}
+</script>
+</body>

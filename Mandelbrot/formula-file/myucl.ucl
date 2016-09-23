@@ -18,3 +18,44 @@ final:
   endif
   #color=rgb(iter/255, g, b)
 }
+
+inverseSmooth(OUTSIDE) {
+;
+; This coloring method provides smooth iteration
+; colors for Mandelbrot and other z^2 formula types
+; (Phoenix, Julia).  Results on other types may be
+; unpredictable, but might be interesting.
+;
+; Thanks to F. Slijkerman for some tweaks.
+; Thanks to Linas Vepstas for the math.
+;
+; Written by Damien M. Jones
+;
+init:
+  complex il = 1/log(@power)		; Inverse log (power).
+  float lp = log(log(@bailout))		; log(log bailout).
+
+final:
+  #index = 0.05 * real(#numiter + il*lp + il*log(log(cabs(#z))))
+
+default:
+  title = "inverse Smooth"
+  helpfile = "Uf*.chm"
+  helptopic = "Html/coloring/standard/smooth.html"
+
+  param power
+    caption = "Exponent"
+    default = (2,0)
+    hint = "This should be set to match the exponent of the \
+            formula you are using. For Mandelbrot, this is usually 2."
+  endparam
+  param bailout
+    caption = "Bail-out value"
+    default = 128.0
+    min = 1
+    hint = "This should be set to match the bail-out value in \
+            the Formula tab. This formula works best with bail-out \
+            values higher than 100."
+  endparam
+}
+

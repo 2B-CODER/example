@@ -36,7 +36,7 @@ init:
   float lp = log(log(@bailout))		; log(log bailout).
 
 final:
-  #index = 0.05 * real(#numiter - il*lp + il*log(log(cabs(#z))))
+  #index = 0.05 * real(#numiter + il*lp + il*log(log(cabs(#z))))
 
 default:
   title = "Inverse Smooth"

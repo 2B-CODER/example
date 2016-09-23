@@ -39,7 +39,7 @@ final:
   #index = 0.05 * real(#numiter + il*lp + il*log(log(cabs(#z))))
 
 default:
-  title = "inverse Smooth"
+  title = "Inverse Smooth"
   helpfile = "Uf*.chm"
   helptopic = "Html/coloring/standard/smooth.html"
 

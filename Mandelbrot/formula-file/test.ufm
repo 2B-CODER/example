@@ -1,0 +1,35 @@
+test {
+init:
+z=#pixel
+loop:
+z = Sqrt(Sinh(z^2))  + (0.065+0.122i)
+bailout:
+|z| < 100000000
+}
+test-2 {
+init:
+z = 0
+loop:
+z = (z+@a)^@p1*(z+@b)^@p2 + #pixel
+bailout:
+|z| < @bailout
+default:
+param a
+  default = (0.5, 0)
+endparam
+param b
+  default = (0, 0)
+endparam
+param p1
+  caption="1st power"
+  default = (2, 0)
+endparam
+param p2
+  caption="2nd power"
+  default = (3, 0)
+endparam
+float param bailout
+  default = 1e10
+endparam
+}
+

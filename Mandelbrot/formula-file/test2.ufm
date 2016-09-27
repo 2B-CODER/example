@@ -1,0 +1,15 @@
+test {
+init:
+z = #pixel
+loop:
+z = sqr(z) + 0.25
+bailout:
+|z| <= @bailout && |z-0.5| >= @err
+default:
+float param bailout
+  default = 4
+endparam
+float param err
+  default = 0.01
+endparam
+}

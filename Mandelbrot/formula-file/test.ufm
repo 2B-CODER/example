@@ -32,4 +32,55 @@ float param bailout
   default = 1e10
 endparam
 }
-
+test-3 {
+init:
+z = 0
+loop:
+z = (z+@a)^@p1*conj((z+@b)^@p2) + #pixel
+bailout:
+|z| < @bailout
+default:
+param a
+  default = (0.5, 0)
+endparam
+param b
+  default = (0, 0)
+endparam
+param p1
+  caption="1st power"
+  default = (2, 0)
+endparam
+param p2
+  caption="2nd power"
+  default = (2, 0)
+endparam
+float param bailout
+  default = 1e10
+endparam
+}
+test-4 {
+init:
+z = 0
+loop:
+z = conj((z+@a)^@p1)*conj((z+@b)^@p2) + #pixel
+bailout:
+|z| < @bailout
+default:
+param a
+  default = (0.5, 0)
+endparam
+param b
+  default = (0, 0)
+endparam
+param p1
+  caption="1st power"
+  default = (2, 0)
+endparam
+param p2
+  caption="2nd power"
+  default = (3, 0)
+endparam
+float param bailout
+  default = 1e10
+endparam
+}

@@ -1,0 +1,23 @@
+<!-- <DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<canvas id="mycanvas" width="801" height="601"></canvas>
+</body>
+<script type="text/javascript">
+var ctx = document.getElementById("mycanvas").getContext("2d");
+
+function bazon_rule (x, y, mod) {
+  var cind = x * x - y * y;
+  cind = (cind % mod + mod) % mod / mod * 510;
+  cind = Math.round(cind > 255 ? 510 - cind : cind);
+  return "#" + (0x1000000 + cind * 0x10101).toString(16).slice(1);
+}
+
+for (var y = 600; y >= 0; y--) {
+  for (var x = 800; x >= 0; x--) {
+    ctx.fillStyle = bazon_rule(x - 400, y - 300, 480);
+    ctx.fillRect(x, y, 1, 1);
+  }
+}
+</script>
+</html>

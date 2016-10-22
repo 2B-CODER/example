@@ -1,0 +1,100 @@
+2 {
+fractal:
+  title="2nd power Minibrot" width=640 height=480 layers=1
+  credits="Administrator;8/30/2016"
+layer:
+  caption="Background" opacity=100 precision=10
+mapping:
+  center=0.43813294675031368641655/0.75916830459222271707855
+  magn=2.4371293E12
+formula:
+  maxiter=2500 filename="sam.ufm" entry="Pol6Mand" p_start=0/0 p_a=0/0
+  p_b=1/0 p_c=2/0 p_d=1/0 p_f=0/0 p_g=0/0 p_h=1/0 p_bailout=1E10
+inside:
+  transfer=none
+outside:
+  density=0.1 transfer=linear filename="Standard.ucl" entry="Smooth"
+  p_power=5/0 p_bailout=128.0
+gradient:
+  smooth=yes rotation=1 index=0 color=6555392 index=64 color=13331232
+  index=168 color=16777197 index=257 color=43775 index=343 color=512
+opacity:
+  smooth=no index=0 opacity=255
+}
+
+3 {
+fractal:
+  title="3rd power Minibrot" width=640 height=480 layers=1
+  credits="Administrator;8/30/2016"
+layer:
+  caption="Background" opacity=100 method=multipass
+mapping:
+  center=0.43813294672165511841484695/0.75916830471683603460443345
+  magn=1.0525917E15
+formula:
+  maxiter=10000 filename="sam.ufm" entry="Pol6Mand" p_start=0/0
+  p_a=0/0 p_b=1/0 p_c=2/0 p_d=1/0 p_f=0/0 p_g=0/0 p_h=1/0
+  p_bailout=1E10
+inside:
+  transfer=none
+outside:
+  density=0.1 transfer=linear filename="Standard.ucl" entry="Smooth"
+  p_power=5/0 p_bailout=128.0
+gradient:
+  smooth=yes rotation=1 index=0 color=6555392 index=64 color=13331232
+  index=168 color=16777197 index=257 color=43775 index=343 color=512
+opacity:
+  smooth=no index=0 opacity=255
+}
+
+4thPowerEJS {
+fractal:
+  title="4th power EJS" width=640 height=480 layers=1
+  credits="Administrator;9/11/2016"
+layer:
+  caption="Background" opacity=100 method=multipass
+mapping:
+  center=-0.522649447777535893161419512/0.716490813531169778714148769
+  magn=9.4214088E16
+formula:
+  maxiter=10000 percheck=off filename="sam.ufm" entry="Pol6Mand"
+  p_start=0/0 p_a=1/0 p_b=4/0 p_c=4/0 p_d=0/0 p_f=0/0 p_g=0/0 p_h=1/0
+  p_bailout=1E10
+inside:
+  transfer=none
+outside:
+  density=0.05 transfer=linear filename="Standard.ucl" entry="Smooth"
+  p_power=6/0 p_bailout=128.0
+gradient:
+  smooth=yes rotation=1 index=0 color=6555392 index=64 color=13331232
+  index=168 color=16777197 index=257 color=43775 index=343 color=512
+opacity:
+  smooth=no index=0 opacity=255
+}
+
+MSetPolynom {
+fractal:
+  title="Mandelbrot Polynomial" width=640 height=480 layers=1
+  credits="Administrator;10/22/2016"
+layer:
+  caption="Background" opacity=100 method=multipass precision=5
+mapping:
+  center=0.499195832083769738/-0.0442990871296144762615
+  magn=3.246172E9
+formula:
+  maxiter=4000 percheck=off filename="sdc.ufm" entry="sdc-poly8"
+  p_version=0 p_mode=Mandelbrot p_switchMode=Julia p_form="p*fn(z)"
+  p_method=z p_bailout=4 p_seed=0.0/0.0 p_z0=0.0/0.0 p_test=z
+  p_epsilon=1E-12 p_p1=0/0 f_fn1=ident p_p2=-1/0.5 f_fn2=ident
+  p_p3=2/0 f_fn3=ident p_p4=1/0 f_fn4=ident p_p5=0/0 f_fn5=ident
+  p_p6=0/0 f_fn6=ident p_p7=0/0 f_fn7=ident p_p8=0/0 f_fn8=ident
+inside:
+  transfer=none
+outside:
+  density=0.5 transfer=linear
+gradient:
+  smooth=yes index=0 color=8716288 index=100 color=16121855 index=200
+  color=46591 index=300 color=156
+opacity:
+  smooth=no index=0 opacity=255
+}

@@ -1,0 +1,34 @@
+<input type="file" onchange="onChange(event);" />
+<textarea style="width:99.5%; height:80%" id="result"></textarea>
+<script type="text/javascript">
+
+var encode = function(bArr) {
+  var table="#$'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]_`abcdefghijklmnopqrstuvwxyz{}";
+  var s = "", diff, sum;
+  for (var i = 0, l = bArr.length; i < l; i += 4) {
+    i % 48 || (s += "echo ");
+    diff = l - i;
+    sum = ((((((bArr[i] << 8) | bArr[i+1]) << 8) | bArr[i+2]) << 8) | bArr[i+3]) >>> 0;
+    diff >= 1 && (s += table.charAt(sum / 52200625) + table.charAt(sum / 614125 % 85));
+    diff >= 2 && (s += table.charAt(sum / 7225 % 85));
+    diff >= 3 && (s += table.charAt(sum / 85 % 85));
+    diff >= 4 && (s += table.charAt(sum % 85));
+    (i+4) % 48 || (s += " " + (i!==44?">":"") + ">~~tmp.bin\n");
+  }
+  i % 48 || (s += "echo ");
+  return s + "~" + (i>=48?">":"") + ">~~tmp.bin\n";
+}
+
+function onChange(event) {
+  var file = event.target.files[0];
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var buffer = event.target.result;
+    var bArr = new Uint8Array(buffer);
+    document.getElementById("result").value = encode(bArr);
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+</script>

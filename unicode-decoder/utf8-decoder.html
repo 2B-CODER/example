@@ -1,0 +1,39 @@
+<input type="file" onchange="onChange(event);" />
+<textarea style="width:99.5%; height:80%" id="result"></textarea>
+<script type="text/javascript">
+
+var encode = function(bin) {
+  var hg, lw
+  for (var i = 0, l = bin.length, s = "", tmp; i < l;) {
+    if ((tmp = bin[i]) < 128) {
+      s += String.fromCharCode(tmp);
+      ++i;
+    } else if (tmp < 224) {
+      s += String.fromCharCode((tmp - 192 << 6) + (bin[i+1] - 128));
+      i += 2;
+    } else if (tmp < 240) {
+      s += String.fromCharCode((tmp << 12) + (bin[i+1] - 128 << 6) + (bin[i+2] - 128));
+      i += 3;
+    } else {
+      hg = 0xd7c0 + (tmp - 240 << 8) + (bin[i+1] - 128 << 2) + (bin[i+2] >> 4 & 3);
+      lw = 0xdc00 + ((bin[i+2] & 15) << 6) + (bin[i+3] - 128);
+      s += String.fromCharCode(hg, lw)
+      i += 4;
+    }
+  }
+  return s;
+}
+
+function onChange(event) {
+  var file = event.target.files[0];
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var buffer = event.target.result;
+    var bArr = new Uint8Array(buffer);
+    document.getElementById("result").value = encode(bArr);
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+</script>
